@@ -4,6 +4,8 @@
 # [ ] Allow to accept manual color vectors. Perhaps this will be a named list of groups/annotations representing named vectors for colors
 # [ ] Accept annotation as a top-level attribute. This can be entered at the main-plot or an annotation method.
 # [ ] Colorize and label legend better. Allow for placement in main plotting space. Maybe sides 1.5, 2.5, 3.5, 4.5/0.5?
+# [ ] Give an option for changing main-space widths (so some columns can be bigger/smaller).
+
 
 
 
@@ -84,7 +86,7 @@ as.ndendrogram <- function(d) {
 
 plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=F, 
                              scale.x=NULL, scale.y=NULL,
-                             pos.x=0, pos.y=0) {
+                             pos.x=0, pos.y=0, ...) {
   
   if (horiz) {
     d$nodes$xx <- d$nodes$x
@@ -127,8 +129,8 @@ plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=
   if (type == 'triangle') {
     
     f = !xy.df$leaf
-    segments(xy.df$x[f], xy.df$y[f], xy.df$x[xy.df$to1[f]], xy.df$y[xy.df$to1[f]])
-    segments(xy.df$x[f], xy.df$y[f], xy.df$x[xy.df$to2[f]], xy.df$y[xy.df$to2[f]])
+    segments(xy.df$x[f], xy.df$y[f], xy.df$x[xy.df$to1[f]], xy.df$y[xy.df$to1[f]], ...)
+    segments(xy.df$x[f], xy.df$y[f], xy.df$x[xy.df$to2[f]], xy.df$y[xy.df$to2[f]], ...)
     
   } else if (type == 'square') {
     
@@ -142,11 +144,11 @@ plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=
       y2 = xy.df$y[xy.df[f,to_name]]
       
       if (horiz) {
-        segments(x1, y2, x2, y2)
-        segments(x1, y1, x1, y2)
+        segments(x1, y2, x2, y2, ...)
+        segments(x1, y1, x1, y2, ...)
       } else {
-        segments(x1, y1, x2, y1)
-        segments(x2, y1, x2, y2)
+        segments(x1, y1, x2, y1, ...)
+        segments(x2, y1, x2, y2, ...)
       }    
     }
     
@@ -736,7 +738,7 @@ nheatmap_names <- function(nh, side, percent=0.1, cutoff=T, cex=0.8,
 
 
 nheatmap_dend <- function(nh, side, percent=0.1, cutoff=T, cex=0.8, 
-  show_bounding_box = F) {
+  show_bounding_box = F, ...) {
   
   
   list2env(nheatmap_boundaries(nh, side, percent=percent, show_bounding_box = show_bounding_box), environment())
@@ -774,7 +776,7 @@ nheatmap_dend <- function(nh, side, percent=0.1, cutoff=T, cex=0.8,
                          scale.x=scale.xy, 
                          scale.y=width, 
                          flip.y=T,
-                         horiz=F)
+                         horiz=F, ...)
         
       } else if (side == 3) {
         plot.ndendrogram(d, add=T, 
@@ -782,19 +784,19 @@ nheatmap_dend <- function(nh, side, percent=0.1, cutoff=T, cex=0.8,
                          scale.x=scale.xy, 
                          scale.y=width, 
                          flip.y=F,
-                         horiz=F)
+                         horiz=F, ...)
         
       } else if (side == 2) {
         plot.ndendrogram(d, add=T, 
                          pos.x = xy1, pos.y=pos.xy-0.5, 
                          scale.y=scale.xy, 
-                         scale.x=width, horiz=T, flip.x=T)
+                         scale.x=width, horiz=T, flip.x=T, ...)
         
       } else if (side == 4) {
         plot.ndendrogram(d, add=T, 
                          pos.x = xy0, pos.y=pos.xy-0.5, 
                          scale.y=scale.xy, 
-                         scale.x=width, horiz=T, flip.y=F)
+                         scale.x=width, horiz=T, flip.y=F, ...)
       }
     }
   }
