@@ -41,6 +41,7 @@ value.df[row.names(row.df), row.names(column.df)] ## should return no errors.
 
 *Note:* `row.df` and `column.df` are not required, but are almost certainly necessary to annotate the plot with layers (where the magic lives).
 
+---
 ### Invocation
 This function is modular, so it relies on multiple commands to build a complete plot. The main command is `nheatmap()`, which will produce the unannotated plot. The output of this will be saved and passed into subsequent commands to add layers to the annotation.
 
@@ -53,6 +54,7 @@ nh <- nheatmap_annotate(nh, side=1, aname='anotherColumn')
 ```
 
 
+---
 ### Common plotting principles
 
 
@@ -71,6 +73,7 @@ This means that all sides have margin space for layers corresponding to 20% of t
 Layers are added under the same principle, with proportion describing the width/height of that layer in regard to the axis.
 
 
+---
 ### Grouping
 
 Sometimes, you want to show heatmaps where some attributes are grouped together and won't inter-mingle with other groups upon clustering. This is a core-feature of nheatmap, and allows the user to highlight multiple layers of groups in the data for each axis.
@@ -81,6 +84,7 @@ Groups are derived from attribute columns in the `row.df` and `column.df`. As th
 
 Group layers can be added using the `nheatmap_group()` function. Multiple group layers may be plotted, if multiple group attributes were specified.
 
+---
 ### Other layers
 
 Several other layer functions allow building a custom plot.
@@ -91,6 +95,7 @@ Several other layer functions allow building a custom plot.
 
 `nheatmap_text()` adds text labels to an axis. Useful to show gene names, symbols (or both!). A r-base character related options.
 
+---
 ### Colors
 Colors will automatically be provided from default hcl.colors palettes. For all layers, colors can be specified as a named vector, with the names corresponding to attribute conditions. This can be easily made with `setNames()`:
 ```
