@@ -60,7 +60,12 @@ nh = nheatmap_names(nh, 2, "symbol", cex=0.5)
 nh = nheatmap_dend(nh, 4, lwd=1)
 
 dev.off()
+fix_svg('test/test.svg')
 
+svglite::svglite("test/legend.svg", 4.9, 5.4)
+nheatmap_legend(nh)
+dev.off()
+fix_svg('test/legend.svg')
 
 
 
