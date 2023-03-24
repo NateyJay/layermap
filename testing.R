@@ -42,3 +42,49 @@ nheatmap_legend(nh)
 
 x = data.matrix(UScitiesD, rownames.force = TRUE)
 x
+
+
+
+
+# ND data -----------------------------------------------------------------
+
+columns <- read.delim("+Table-test.df.txt")
+columns <- columns[columns$treatment %in% c("Nitrate", "Drought", "ABA"),]
+row.names(columns) <- columns$experiment
+columns$treatment <- factor(columns$treatment, levels=c("Nitrate", "Drought", "ABA"))
+
+rows <- read.delim('+Table-all_sDEGs-lfc0-p0.01.txt')
+rows <- rows[rows$Nitrate != "-",]
+row.names(rows) <- rows$gene_id
+rows = rows[1:30,]
+
+df <- read.delim('+Table-experimental_lfc.txt')
+df <- df[row.names(rows), row.names(columns)]
+df <- as.matrix(df)
+df[is.na(df)] <- 0
+df[df > 3] <- 3
+df[df < -3] <-3
+
+
+
+
+nh = nheatmap(df, zero_centered_colors = T,
+                  columns=columns, rows=rows,
+                  column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
+              cluster_cols=T,
+              group_gap = 0.02,
+              plot_margin = c(0.2,0.4,0.2,0.2))
+
+nh = nheatmap_group(nh, 3, 'treatment', labels=F, percent=0.05, label_just = 'left')
+nh = nheatmap_annotate(nh, 3, 'tissue', percent=0.05, label_just = 'left')
+
+nh = nheatmap_group(nh, 4, 'PlantTFDB', labels=F, percent=0.05, label_just = 'right')
+nh = nheatmap_group(nh, 4, 'Nit_GOs', labels=F, percent=0.05, label_just = 'right')
+
+nh = nheatmap_names(nh, 2)
+nh = nheatmap_names(nh, 2, "symbol")
+nh = nheatmap_dend(nh, 2, lwd=0.5)
+
+
+
+
