@@ -99,5 +99,9 @@ color_vector = setNames(colors, conditions)
 Any unnamed colors will be substituted from palettes.
 
 
+# Examples
+
+
+
 
 
