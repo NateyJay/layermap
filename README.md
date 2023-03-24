@@ -15,6 +15,8 @@ This package is meant to address a couple of what I see as a couple common probl
 * **No tiers of organization**, usually relying on clustering/not clustering as the only form of ordering.
 
 ## Basic structure
+
+<p align="center"><img src="images/DataStructures.png" alt="data_structures" width="800" /></p>
 Heatmaps are complicated - **there is no avoiding that**. Instead, nheatmap tries to fit all essential data for plotting into 3 tables. These are:
 
 * **value.df** - a matrix or dataframe which contains only numerical data. This makes up the "heat" portion of the plot, with **rownames** and **colnames** as essential keys to connect to attribute tables.
