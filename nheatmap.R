@@ -7,7 +7,7 @@
 # [ ] Give an option for changing main-space widths (so some columns can be bigger/smaller).
 
 
-
+require(stringr)
 
 as.ndendrogram <- function(d) {
   require(dendextend)
@@ -167,39 +167,73 @@ plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=
 # plot_margin=c(0.2,0.2,0.2,0.2)
 # dim_reference="din"
 
+
 nheatmap <- function(input.df, xlim=NULL, ylim=NULL,
-                     palette='PuOr', reverse_palette=T,
-                     zero_centered_colors=F,
-                     cluster_cols=F, cluster_rows=T,
-                     group_cols=NULL, group_rows=NULL,
-                     ann_cols=NULL, ann_rows=NULL,
-                     group_gap=0.02, border='grey25',
-                     plot_margin=c(0.2,0.2,0.2,0.2),
-                     dim_reference="din") {
+                         columns=NULL, rows=NULL,
+                         column_groups=c(), row_groups=c(),
+                         palette='PuOr', reverse_palette=T,
+                         zero_centered_colors=F,
+                         cluster_cols=F, cluster_rows=T,
+                         group_gap=0.02, border='grey25',
+                         plot_margin=c(0.2,0.2,0.2,0.2),
+                         dim_reference="din") {
 
   par(mar=c(0.3,0.3,0.3,0.3), xpd=T)
 
-  if (class(input.df) == 'table') {
+  if (class(input.df)[1] == 'table') {
     header = colnames(input.df)
-    mat = as.data.frame(matrix(input_df, nrow(input_df)), row.names=row.names(input_df))
+    mat = as.data.frame(matrix(input.df, nrow(input.df)), row.names=row.names(input.df))
     colnames(mat) = header
     input.df <- mat
   }
 
   df <- as.data.frame(input.df)
 
-  groups <- list()
-  if (!is.null(group_rows)) {
-    groups$rows <- group_rows
+  if (any(!column_groups %in% colnames(columns))) {
+    bad_names <- paste(column_groups[which(!column_groups %in% colnames(columns))], collapse=', ')
+    stop(str_c("column_groups not found in columns header -> ", bad_names))
+  }
+
+  if (any(!row_groups %in% colnames(rows))) {
+    bad_names <- paste(row_groups[which(!row_groups %in% colnames(rows))], collapse=', ')
+    stop(str_c("row_groups not found in rows header -> ", bad_names))
+  }
+
+  for (g in column_groups) {
+    if (class(columns[[g]]) == 'logical') {
+      columns[[g]][columns[[g]] == F] <- 'False'
+      columns[[g]][columns[[g]] == T] <- 'True'
+    }
+
+  }
+
+  for (g in row_groups) {
+    if (class(rows[[g]]) == 'logical') {
+      rows[[g]][rows[[g]] == F] <- 'False'
+      rows[[g]][rows[[g]] == T] <- 'True'
+    }
+  }
+
+  # columns[,column_groups] <- as.character(columns[,column_groups])
+  # rows[,row_groups] <- as.character(rows[,row_groups])
+
+
+  groups = list()
+  if (!is.null(rows) & length(row_groups) > 0) {
+    groups$rows <- rows[,row_groups,drop=F]
+
   } else {
     groups$rows <- data.frame(row.names=rownames(df), group_order = rep(1, nrow(df)))
   }
 
-  if (!is.null(group_cols)) {
-    groups$cols <- group_cols
+  if (!is.null(columns) & length(column_groups) > 0) {
+    groups$cols <- columns[, column_groups,drop=F]
+
   } else {
     groups$cols <- data.frame(row.names=colnames(df), group_order = rep(1, ncol(df)))
+
   }
+
 
 
 
@@ -333,7 +367,7 @@ nheatmap <- function(input.df, xlim=NULL, ylim=NULL,
 
   if (zero_centered_colors) {
     max_dist_from_zero = max(abs(m.df$value), na.rm=T)
-    m.df$color_i <- round((m.df$value + max_dist_from_zero) / (max_dist_from_zero*2) * (color_n -1))
+    m.df$color_i <- round((m.df$value + max_dist_from_zero) / (max_dist_from_zero*2) * (color_n -1)) + 1
 
   } else {
     m.df$color_i <- round((m.df$value - min(m.df$value, na.rm=T)) / (max(m.df$value, na.rm=T)-min(m.df$value, na.rm=T)) * (color_n-1)) +1
@@ -386,6 +420,8 @@ nheatmap <- function(input.df, xlim=NULL, ylim=NULL,
              ylim=ylim,
              xmax=xmax,
              ymax=ymax,
+             columns=columns,
+             rows=rows,
              # xrange=xrange,
              # yrange=yrange,
              gap.x=gap.x,
@@ -399,6 +435,8 @@ nheatmap <- function(input.df, xlim=NULL, ylim=NULL,
              din_ratio=din_ratio)
 
 }
+
+
 
 
 
@@ -475,16 +513,63 @@ nheatmap_boundaries <- function(nh, side, percent, show_bounding_box=F, din_adju
   return(ls)
 }
 
+
+nh_label <- function(nh, x_vec, y_vec, side, text, just, offset=0.9, cex) {
+  if (side %in% c(2,4)) {
+    offset = strheight("G", font=2, cex=cex) * offset * nh$din_ratio
+    x = mean(x_vec)
+    srt= 90
+
+    if (just == 'left') {
+      y = min(y_vec) - offset
+      adj = c(1, 0.5)
+    } else if (just == 'right') {
+      y = max(y_vec) + offset
+      adj = c(0, 0.5)
+    }
+
+  } else if (side %in% c(1,3)) {
+    offset = strwidth("G", font=2, cex=cex) * offset
+    y = mean(y_vec)
+    srt= 0
+
+    if (just == 'left') {
+      x = min(x_vec) - offset
+      adj = c(1, 0.5)
+    } else if (just == 'right') {
+      x = max(x_vec) + offset
+      x = x + 1
+      adj = c(0, 0.5)
+    }
+  }
+
+  text(x, y, text, srt=srt, adj=adj, font=2, cex=cex)
+
+
+}
+
 # gname='cat'; side= 2;palette= 'terrain'; label_just = 'left'
-nheatmap_group <- function(nh, gname, side, col= NULL, palette="Zissou 1", percent=0.1, cex=0.8, show_bounding_box=F, label_just='right', labels=T) {
-  box.p = 0.5
-  text.p = 0.25
+nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", percent=NULL, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
+
+  if (labels) {
+    box.p = 0.5
+    text.p = 0.25
+    if (is.null(percent)) {
+      percent=0.1
+    }
+  } else {
+    box.p = 0
+    text.p = 0.25
+    if (is.null(percent)) {
+      percent=0.1
+    }
+  }
 
   list2env(nheatmap_boundaries(nh, side, percent=percent, show_bounding_box = show_bounding_box), environment())
 
   if (side == 1) {
     box.y1 = xy0
-    box.y2 = xy0 - abs(xy1-xy0) * box.p
+    box.y2 = xy0 - abs(xy1-xy0) * (1-box.p)
     text.y = xy1 + abs(xy1-xy0) * text.p
     gr = nh$groups$cols
 
@@ -498,15 +583,18 @@ nheatmap_group <- function(nh, gname, side, col= NULL, palette="Zissou 1", perce
     box.x1 = xy0 - abs(xy1-xy0) * box.p
     box.x2 = xy1
     text.x = xy0 - abs(xy1-xy0) * text.p
+    # half.x = xy0 - abs(xy1-xy0) * half.p
     gr = nh$groups$rows
 
   } else if (side == 4) {
-    box.x1 = xy0 + abs(xy1-xy0) * box.p
+    box.x1 = xy0 + abs(xy1-xy0) * (1-box.p)
     box.x2 = xy0
     text.x = xy1 - abs(xy1-xy0) * text.p
+    # half.x = xy0 + abs(xy1-xy0) * half.p
     gr = nh$groups$rows
 
   }
+
 
 
   conditions = unique(gr[[gname]])
@@ -522,56 +610,77 @@ nheatmap_group <- function(nh, gname, side, col= NULL, palette="Zissou 1", perce
 
   missing = conditions[!conditions %in% names(col)]
 
-  col = c(col, setNames(hcl.colors(length(missing), palette), missing))
+  if (length(missing) == 1) {
+    col = c(col, setNames(hcl.colors(2, palette)[1], missing))
+  } else {
+    col = c(col, setNames(hcl.colors(length(missing), palette), missing))
+  }
   col = col[names(col) %in% conditions]
 
+  ## Finding groups which are identical and consecutive
+  last_cond = ''
+  gis = c()
+  clumped_groups = list()
+  for (gi in unique(gr$group_order)) {
+    cond = unique(gr[gr$group_order == gi, gname])
 
+    if (cond == last_cond) {
+      gis = c(gis, gi)
 
+    } else {
+      clumped_groups[[length(clumped_groups)+1]] <- gis
+      gis = c(gi)
 
-
-  if (side %in% c(1,3)) {
-
-    for (gi in unique(gr$group_order)) {
-      g.df <- gr[gr$group_order == gi,]
-      cond = g.df[[gname]][1]
-
-      rect(min(g.df$x), box.y1, max(g.df$x)+1, box.y2, col=col[cond])
-      if (labels) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=cex) }
     }
+    last_cond = cond
+  }
+  clumped_groups[[length(clumped_groups)+1]] <- gis
 
-    if (label_just == 'right') {
-      x1 = max(gr$x)+nh$gap.x+1; y1 = mean(c(box.y1,box.y2))
-      text(x1, y1, gname, adj=c(0,0.5), font=2, cex=cex)
-      points(x1-nh$gap.x*0.5, y1, pch=-9668, cex=0.5)
 
-    } else if (label_just == 'left') {
-      x1 = min(gr$x)-nh$gap.x; y1=mean(c(box.y1,box.y2))
-      text(x1, y1, gname, adj=c(1,0.5), font=2, cex=cex)
-      points(x1+nh$gap.x*0.5, y1, pch=-9658, cex=0.5)
+  ## Plotting
+  if (side %in% c(1,3)) {
+    x_vec = gr$x
+    y_vec = c(box.y1, box.y2)
+
+    half.y = mean(c(box.y1, box.y2))
+    for (clump_i in seq_along(clumped_groups)) {
+      clump = clumped_groups[[clump_i]]
+
+      g.df <- gr[gr$group_order %in% clump,]
+      cond = g.df[[gname]][1]
+      segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col='black', lwd=3, lend=1)
+      segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col=col[cond], lwd=2.5, lend=1)
+      if (labels) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=cex) }
+
+      for (gi in clump){
+        g.df <- gr[gr$group_order == gi,]
+        rect(min(g.df$x), box.y1, max(g.df$x)+1, box.y2, col=col[cond])
+      }
     }
 
   } else if (side %in% c(2,4)) {
+    y_vec = gr$y
+    x_vec = c(box.x1, box.x2)
+    half.x = mean(c(box.x1, box.x2))
 
-    for (gi in unique(gr$group_order)) {
-      g.df <- gr[gr$group_order == gi,]
+    for (clump_i in seq_along(clumped_groups)) {
+      clump = clumped_groups[[clump_i]]
+
+      g.df <- gr[gr$group_order %in% clump,]
       cond = g.df[[gname]][1]
+      segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col='black', lwd=3, lend=1)
+      segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col=col[cond], lwd=2.5, lend=1)
+      if (labels) { text(text.x, mean(c(min(g.df$y), max(g.df$y)+1)), srt=90, cond, cex=cex) }
 
-      rect(box.x1, min(g.df$y), box.x2, max(g.df$y)+1, col=col[cond])
-      if (labels) { text(text.x, mean(c(min(g.df$y), max(g.df$y)+1)), srt=90, cond, cex=cex)}
-    }
-
-    if (label_just == 'right') {
-      x1 = mean(c(box.x1,box.x2)); y1 = max(gr$y)+nh$gap.y
-      text(x1, y1, gname, adj=c(0,0.5), srt=90, font=2, cex=cex)
-      points(x1, y1-nh$gap.y*0.5, pch=-9660, cex=0.5)
-
-    } else if (label_just == 'left') {
-      x1 = mean(c(box.x1,box.x2)); y1 = min(gr$y)-nh$gap.y
-      text(x1, y1, gname, adj=c(1,0.5), srt=90, font=2, cex=cex)
-      points(x1, y1+nh$gap.y*0.5, pch=-9650, cex=0.5)
+      for (gi in clump){
+        g.df <- gr[gr$group_order == gi,]
+        rect(box.x1, min(g.df$y), box.x2, max(g.df$y)+1, col=col[cond])
+      }
     }
   }
 
+
+  nh_label(nh, x_vec, y_vec, side=side, text=gname, just=label_just, cex=cex.label)
 
   nh$legend[[gname]] = col
   nh$boundaries <- boundaries
@@ -579,13 +688,20 @@ nheatmap_group <- function(nh, gname, side, col= NULL, palette="Zissou 1", perce
 }
 
 
-nheatmap_annotate <- function(nh, side, a.df, col=NULL, percent=0.05, palette='Viridis',
-                              show_bounding_box=F, type='rect', label_just='right') {
+nheatmap_annotate <- function(nh, side, aname, a.df=NULL, col=NULL, percent=0.05, palette='Viridis',
+                              show_bounding_box=F, type='rect', label_just='right', cex.label=0.8) {
 
   list2env(nheatmap_boundaries(nh, side, percent=percent, show_bounding_box = show_bounding_box), environment())
 
+  if (is.null(a.df)) {
+    if (side %in% c(1,3)) {
+      a.df <- nh$columns
+    } else if (side %in% c(2,4)) {
+      a.df <- nh$rows
+      }
+  }
 
-  aname=names(a.df)[1]
+  # aname=names(a.df)[1]
 
   conditions = unique(a.df[[aname]])
 
@@ -604,8 +720,10 @@ nheatmap_annotate <- function(nh, side, a.df, col=NULL, percent=0.05, palette='V
 
 
   if (side %in% c(2,4)) {
-
     gr = nh$groups$rows
+    y_vec = gr$y
+    x_vec = c(xy1, xy0)
+
     col_ordered <- col[a.df[match(rownames(gr), rownames(a.df)),1]]
 
     xy_mean = mean(c(xy1,xy0))
@@ -616,21 +734,23 @@ nheatmap_annotate <- function(nh, side, a.df, col=NULL, percent=0.05, palette='V
       points(rep(xy_mean, nrow(gr)), gr$y + 0.5, col=col_ordered, pch=19)
     }
 
-    if (label_just == 'right') {
-      x1 = mean(c(xy0,xy1)); y1 = max(gr$y)+nh$gap.y
-      text(x1, y1, aname, adj=c(0,0.5), font=2, srt=90, cex=cex)
-      points(x1, y1-nh$gap.y*0.5, pch=-9660, cex=0.5)
-
-    } else if (label_just == 'left') {
-      x1 = mean(c(xy0,xy1)); y1 = min(gr$y)-nh$gap.y
-      text(x1, y1, aname, adj=c(1,0.5), font=2, srt=90, cex=cex)
-      points(x1, y1+nh$gap.y*0.5, pch=-9650, cex=0.5)
-    }
+    # if (label_just == 'right') {
+    #   x1 = mean(c(xy0,xy1)); y1 = max(gr$y)+nh$gap.y
+    #   text(x1, y1, aname, adj=c(0,0.5), font=2, srt=90, cex=cex)
+    #   points(x1, y1-nh$gap.y*0.5, pch=-9660, cex=0.5)
+    #
+    # } else if (label_just == 'left') {
+    #   x1 = mean(c(xy0,xy1)); y1 = min(gr$y)-nh$gap.y
+    #   text(x1, y1, aname, adj=c(1,0.5), font=2, srt=90, cex=cex)
+    #   points(x1, y1+nh$gap.y*0.5, pch=-9650, cex=0.5)
+    # }
 
   } else if (side %in% c(1,3)) {
-
     gr = nh$groups$cols
-    col_ordered <- col[a.df[match(rownames(gr), rownames(a.df)),1]]
+    x_vec = gr$x
+    y_vec = c(xy1, xy0)
+
+    col_ordered <- col[a.df[match(rownames(gr), rownames(a.df)),aname]]
 
     xy_mean = mean(c(xy1,xy0))
 
@@ -641,17 +761,22 @@ nheatmap_annotate <- function(nh, side, a.df, col=NULL, percent=0.05, palette='V
 
     }
 
-    if (label_just == 'right') {
-      x1 = max(gr$x)+nh$gap.x+1; y1 = mean(c(xy0,xy1))
-      text(x1, y1, aname, adj=c(0,0.5), font=2, cex=cex)
-      points(x1-nh$gap.x*0.5, y1, pch=-9668, cex=0.5)
+    # if (label_just == 'right') {
+    #   label_string = paste(-9668, aname, 'new')
+    #   x1 = max(gr$x)+nh$gap.x+1; y1 = mean(c(xy0,xy1))
+    #   text(x1, y1, label_string, adj=c(0,0.5), font=2, cex=cex)
 
-    } else if (label_just == 'left') {
-      x1 = min(gr$x)-nh$gap.x; y1 = mean(c(xy0,xy1))
-      text(x1,y1, aname, adj=c(1,0.5), font=2, cex=cex)
-      points(x1+nh$gap.x*0.5, y1, pch=-9658, cex=0.5)
-    }
+      # x1 = max(gr$x)+nh$gap.x+1; y1 = mean(c(xy0,xy1))
+      # text(x1, y1, aname, adj=c(0,0.5), font=2, cex=cex)
+      # points(x1-nh$gap.x*0.5, y1, pch=-9668, cex=0.5)
+
+    # } else if (label_just == 'left') {
+    #   x1 = min(gr$x)-nh$gap.x; y1 = mean(c(xy0,xy1))
+    #   text(x1,y1, aname, adj=c(1,0.5), font=2, cex=cex)
+    #   points(x1+nh$gap.x*0.5, y1, pch=-9658, cex=0.5)
+    # }
   }
+  nh_label(nh, x_vec, y_vec, side=side, text=aname, just=label_just, cex=cex.label)
   nh$boundaries <- boundaries
   nh$legend[[aname]] = col
   return(nh)
@@ -714,29 +839,44 @@ nheatmap_legend <- function(nh, add=F) {
 
 }
 
-nheatmap_names <- function(nh, side, percent=0.1, cutoff=T, cex=0.8,
+nheatmap_names <- function(nh, side, aname=F, names=NULL, percent=0.1, cutoff=T, cex=0.8,
                            show_bounding_box = F) {
 
   list2env(nheatmap_boundaries(nh, side, percent=percent, show_bounding_box = show_bounding_box), environment())
 
-  if (side == 1) {
+  if (side %in% c(1,3)) {
     gr = nh$groups$cols
+    ar = nh$columns
+  } else if (side %in% c(2,4)) {
+    gr = nh$groups$rows
+    ar = nh$rows
+  }
+
+  if (!is.null(names)) {
+    gr[[aname]] <- names[match(row.names(gr), row.names(names)), aname]
+  }
+
+
+  if (aname == F) {
     labels = row.names(gr)
+
+  # }  else if (!aname %in% colnames(names)) {
+  #   stop(paste(aname, 'not found in column names'))
+
+  } else {
+    labels = ar[match(row.names(gr), row.names(ar)), aname]
+  }
+
+  if (side == 1) {
     text(gr$x+0.5, xy0, labels, cex=cex, srt=90, adj=c(1,0.5))
 
   } else if (side == 3) {
-    gr = nh$groups$cols
-    labels = row.names(gr)
     text(gr$x+0.5, xy0, labels, cex=cex, srt=90, adj=c(0,0.5))
 
   } else if (side == 2) {
-    gr = nh$groups$rows
-    labels = row.names(gr)
     text(xy0, gr$y+0.5, labels, cex=cex, srt=0, adj=c(1,0.5))
 
   } else if (side == 4) {
-    gr = nh$groups$rows
-    labels = row.names(gr)
     text(xy0, gr$y+0.5, labels, cex=cex, srt=0, adj=c(0,0.5))
 
   }
@@ -822,48 +962,6 @@ nheatmap_dend <- function(nh, side, percent=0.1, cutoff=T, cex=0.8,
 
 
 
-
-# nh <- nheatmap(e.df,
-#                group_rows=data.frame(row.names=rownames(e.df),
-#                                      GroupA=rep_len(c("these","are","tests",'tests','tests'), nrow(e.df)),
-#                                      GroupB=rep_len(c("GroupB2","GroupB1"), nrow(e.df))),
-#                group_cols=data.frame(row.names=colnames(e.df),
-#                                      ColGroupA=rep_len(c("ColA1","ColA1", "ColA2"), ncol(e.df))))
-
-# nh <- nheatmap_group(nh, 'GroupA', 4)
-# nh <- nheatmap_group(nh, 'GroupA', 2)
-# nh <- nheatmap_group(nh, 'ColGroupA', 1, 'Inferno')
-# nh <- nheatmap_group(nh, 'ColGroupA', 3, 'Inferno')
-#
-# nh <- nheatmap_names(nh, 2, cex=0.3)
-# nh <- nheatmap_names(nh, 3, cex=0.3)
-# nh <- nheatmap_names(nh, 4, cex=0.3)
-# nh <- nheatmap_names(nh, 1, cex=0.3)
-#
-# nh <-nheatmap_dend(nh, 1, show_bounding_box = F)
-# nh <-nheatmap_dend(nh, 2, show_bounding_box = F)
-# nh <-nheatmap_dend(nh, 3, show_bounding_box = F)
-# nh <-nheatmap_dend(nh, 4, show_bounding_box = F)
-
-# nh <- nheatmap_annotate(nh, 1,
-#                   a.df = data.frame(row.names=colnames(e.df),
-#                                         annA=rep_len(c("A","B","C","C"), ncol(e.df))),
-#                   show_bounding_box = F)
-#
-# nh <- nheatmap_annotate(nh, 2,
-#                   a.df = data.frame(row.names=rownames(e.df),
-#                                     annA=rep_len(c("A","B","C","C"), nrow(e.df))),
-#                   show_bounding_box = F)
-#
-# nh <- nheatmap_annotate(nh, 3,
-#                   a.df = data.frame(row.names=colnames(e.df),
-#                                     annA=rep_len(c("A","B","C","C"), ncol(e.df))),
-#                   show_bounding_box = F)
-#
-# nh <- nheatmap_annotate(nh, 4,
-#                         a.df = data.frame(row.names=rownames(e.df),
-#                                           annA=rep_len(c("A","B","C","C"), nrow(e.df))),
-#                         show_bounding_box = F)
 
 
 
