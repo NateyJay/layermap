@@ -54,16 +54,21 @@ nh <- nheatmap_annotate(nh, side=1, aname='anotherColumn')
 
 
 ### Common plotting principles
-***Sides***
+
+
+<p align="center"><img src="images/Margins.png" alt="margins" width="500" /></p>
+
+***Sides***  
 Layer-functions add a layer feature next to the plot, with the side corresponding to r-plotting sides:
 `(1-bottom, 2-left, 3-top, 4-right)`  
 Sides make it important to give the correct attribute names for the sides:
 `(sides 1,3 ~ column.df, sides 2,4 ~ row.df)`
 
-***Proportion***
+***Proportion***  
 The general plotting area and layers are spatially defined in terms of proportion. In the initial plot invocation, this is given by the option default `plot_margin=c(0.2,0.2,0.2,0.2)`. 
-This means that all sides have margin space for layers corresponding to 20% of the total plot dimension on that axis.l
+This means that all sides have margin space for layers corresponding to 20% of the total plot dimension on that axis. 
 
+Layers are added under the same principle, with proportion describing the width/height of that layer in regard to the axis.
 
 
 ### Grouping
@@ -85,6 +90,44 @@ Several other layer functions allow building a custom plot.
 `nheatmap_annotate()` adds colored category annotations. These are unlabeled and generally useful to see how clustering relates to categories.
 
 `nheatmap_text()` adds text labels to an axis. Useful to show gene names, symbols (or both!). A r-base character related options.
+
+### Colors
+Colors will automatically be provided from default hcl.colors palettes. For all layers, colors can be specified as a named vector, with the names corresponding to attribute conditions. This can be easily made with `setNames()`:
+```
+color_vector = setNames(colors, conditions)
+```
+Any unnamed colors will be substituted from palettes.
+
+
+# Examples
+
+```
+column.df <- read.delim("test/columns.txt")
+column.df$treatment <- factor(column.df$treatment, levels=c("Nitrate", "Drought", "ABA"))
+
+row.df <- read.delim("test/rows.txt")
+value.df <- read.delim("test/values.txt")
+
+nh = nheatmap(value.df, zero_centered_colors = T,
+                  column.df=column.df, row.df=row.df,
+                  column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
+              cluster_cols=T,
+              group_gap = 0.02,
+              plot_margin = c(0.1,0.5,0.4,0.2))
+
+nh = nheatmap_group(nh, 3, 'treatment', labels=T, prop=0.1, label_just = 'left',
+                    col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')))
+nh = nheatmap_annotate(nh, 3, 'tissue', prop=0.05, label_just = 'left',
+                       col=setNames('red', 'Root'))
+
+nh = nheatmap_group(nh, 4, 'PlantTFDB', labels=F, prop=0.05, label_just = 'left')
+nh = nheatmap_group(nh, 4, 'Nit_GOs', labels=F, prop=0.05, label_just = 'left')
+
+nh = nheatmap_names(nh, 2, prop=0.15, cex=0.5)
+nh = nheatmap_names(nh, 2, "symbol", cex=0.5)
+nh = nheatmap_dend(nh, 4, lwd=1)
+```
+
 
 
 
