@@ -1,7 +1,5 @@
 <p align="left"><img src="images/Logo.png" alt="main logo" width="500" /></p>
 
-
-# nheatmap
 A modular heatmap library for R-base graphics
  
 ## But why?
