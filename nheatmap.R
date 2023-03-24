@@ -4,7 +4,7 @@
 # [ ] Allow to accept manual color vectors. Perhaps this will be a named list of groups/annotations representing named vectors for colors
 # [ ] Accept annotation as a top-level attribute. This can be entered at the main-plot or an annotation method.
 # [ ] Colorize and label legend better. Allow for placement in main plotting space. Maybe sides 1.5, 2.5, 3.5, 4.5/0.5?
-# [ ] Give an option for changing main-space widths (so some columns can be bigger/smaller).
+# [ ] Give an option for changing main-space widths (so some column.df can be bigger/smaller).
 
 
 require(stringr)
@@ -168,8 +168,8 @@ plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=
 # dim_reference="din"
 
 
-nheatmap <- function(input.df, xlim=NULL, ylim=NULL,
-                         columns=NULL, rows=NULL,
+nheatmap <- function(value.df, xlim=NULL, ylim=NULL,
+                         column.df=NULL, row.df=NULL,
                          column_groups=c(), row_groups=c(),
                          palette='PuOr', reverse_palette=T,
                          zero_centered_colors=F,
@@ -180,54 +180,54 @@ nheatmap <- function(input.df, xlim=NULL, ylim=NULL,
 
   par(mar=c(0.3,0.3,0.3,0.3), xpd=T)
 
-  if (class(input.df)[1] == 'table') {
+  if (class(value.df)[1] == 'table') {
     header = colnames(input.df)
     mat = as.data.frame(matrix(input.df, nrow(input.df)), row.names=row.names(input.df))
     colnames(mat) = header
-    input.df <- mat
+    value.df <- mat
   }
 
-  df <- as.data.frame(input.df)
+  df <- as.data.frame(value.df)
 
-  if (any(!column_groups %in% colnames(columns))) {
-    bad_names <- paste(column_groups[which(!column_groups %in% colnames(columns))], collapse=', ')
-    stop(str_c("column_groups not found in columns header -> ", bad_names))
+  if (any(!column_groups %in% colnames(column.df))) {
+    bad_names <- paste(column_groups[which(!column_groups %in% colnames(column.df))], collapse=', ')
+    stop(str_c("column_groups not found in column.df header -> ", bad_names))
   }
 
-  if (any(!row_groups %in% colnames(rows))) {
-    bad_names <- paste(row_groups[which(!row_groups %in% colnames(rows))], collapse=', ')
-    stop(str_c("row_groups not found in rows header -> ", bad_names))
+  if (any(!row_groups %in% colnames(row.df))) {
+    bad_names <- paste(row_groups[which(!row_groups %in% colnames(row.df))], collapse=', ')
+    stop(str_c("row_groups not found in row.df header -> ", bad_names))
   }
 
   for (g in column_groups) {
-    if (class(columns[[g]]) == 'logical') {
-      columns[[g]][columns[[g]] == F] <- 'False'
-      columns[[g]][columns[[g]] == T] <- 'True'
+    if (class(column.df[[g]]) == 'logical') {
+      column.df[[g]][column.df[[g]] == F] <- 'False'
+      column.df[[g]][column.df[[g]] == T] <- 'True'
     }
 
   }
 
   for (g in row_groups) {
-    if (class(rows[[g]]) == 'logical') {
-      rows[[g]][rows[[g]] == F] <- 'False'
-      rows[[g]][rows[[g]] == T] <- 'True'
+    if (class(row.df[[g]]) == 'logical') {
+      row.df[[g]][row.df[[g]] == F] <- 'False'
+      row.df[[g]][row.df[[g]] == T] <- 'True'
     }
   }
 
-  # columns[,column_groups] <- as.character(columns[,column_groups])
-  # rows[,row_groups] <- as.character(rows[,row_groups])
+  # column.df[,column_groups] <- as.character(column.df[,column_groups])
+  # row.df[,row_groups] <- as.character(row.df[,row_groups])
 
 
   groups = list()
-  if (!is.null(rows) & length(row_groups) > 0) {
-    groups$rows <- rows[,row_groups,drop=F]
+  if (!is.null(row.df) & length(row_groups) > 0) {
+    groups$rows <- row.df[,row_groups,drop=F]
 
   } else {
     groups$rows <- data.frame(row.names=rownames(df), group_order = rep(1, nrow(df)))
   }
 
-  if (!is.null(columns) & length(column_groups) > 0) {
-    groups$cols <- columns[, column_groups,drop=F]
+  if (!is.null(column.df) & length(column_groups) > 0) {
+    groups$cols <- column.df[, column_groups,drop=F]
 
   } else {
     groups$cols <- data.frame(row.names=colnames(df), group_order = rep(1, ncol(df)))
@@ -360,7 +360,7 @@ nheatmap <- function(input.df, xlim=NULL, ylim=NULL,
   m.df <- df
   m.df$rows <- rownames(m.df)
   m.df <- reshape2::melt(m.df, id.vars='rows')
-  colnames(m.df)[2] <- 'columns'
+  colnames(m.df)[2] <- 'column.df'
 
   color_n = 100
   color_scale = hcl.colors(color_n, palette=palette, rev=reverse_palette)
@@ -379,11 +379,11 @@ nheatmap <- function(input.df, xlim=NULL, ylim=NULL,
 
 
   m.df$y <- groups$rows$y[match(m.df$rows, rownames(groups$rows))]
-  m.df$x <- groups$cols$x[match(m.df$columns, rownames(groups$cols))]
+  m.df$x <- groups$cols$x[match(m.df$column.df, rownames(groups$cols))]
 
 
   ## getting id's for each box
-  m.df$box.x = groups$cols$group_order[match(m.df$columns, rownames(groups$cols))]
+  m.df$box.x = groups$cols$group_order[match(m.df$column.df, rownames(groups$cols))]
   m.df$box.y = groups$rows$group_order[match(m.df$rows, rownames(groups$rows))]
   m.df$box <- str_c(m.df$box.x, m.df$box.y, sep=',')
   m.df$box.y <- NULL
@@ -420,8 +420,8 @@ nheatmap <- function(input.df, xlim=NULL, ylim=NULL,
              ylim=ylim,
              xmax=xmax,
              ymax=ymax,
-             columns=columns,
-             rows=rows,
+             column.df=column.df,
+             row.df=row.df,
              # xrange=xrange,
              # yrange=yrange,
              gap.x=gap.x,
@@ -441,7 +441,7 @@ nheatmap <- function(input.df, xlim=NULL, ylim=NULL,
 
 
 
-nheatmap_boundaries <- function(nh, side, percent, show_bounding_box=F, din_adjusted=T) {
+nheatmap_boundaries <- function(nh, side, prop, show_bounding_box=F, din_adjusted=T) {
 
   if (din_adjusted) {
     din_ratio = nh$din_ratio
@@ -454,7 +454,7 @@ nheatmap_boundaries <- function(nh, side, percent, show_bounding_box=F, din_adju
     ## left
 
     xy0 = nh$boundaries[2]
-    xy1 = xy0 - nh$xmax * percent * din_ratio
+    xy1 = xy0 - nh$xmax * prop * din_ratio
     xy0 = xy0 - nh$gap.x
 
     if (show_bounding_box) {rect(xy1, min(nh$plotting.df$y), xy0, max(nh$plotting.df$y)+1)}
@@ -468,7 +468,7 @@ nheatmap_boundaries <- function(nh, side, percent, show_bounding_box=F, din_adju
     ## bot
 
     xy0 = nh$boundaries[1]
-    xy1 = xy0 - nh$ymax * percent
+    xy1 = xy0 - nh$ymax * prop
     xy0 = xy0 - nh$gap.y
 
     if (show_bounding_box) {rect(min(nh$plotting.df$x), xy1, max(nh$plotting.df$x)+1, xy0)}
@@ -482,7 +482,7 @@ nheatmap_boundaries <- function(nh, side, percent, show_bounding_box=F, din_adju
     ## right
 
     xy0 = nh$boundaries[4]
-    xy1 = xy0 + nh$xmax * percent * din_ratio
+    xy1 = xy0 + nh$xmax * prop * din_ratio
     xy0 = xy0 + nh$gap.x
 
     if (show_bounding_box) {rect(xy0, min(nh$plotting.df$y), xy1, max(nh$plotting.df$y)+1)}
@@ -496,7 +496,7 @@ nheatmap_boundaries <- function(nh, side, percent, show_bounding_box=F, din_adju
     ## top
 
     xy0 = nh$boundaries[3]
-    xy1 = xy0 + nh$ymax * percent
+    xy1 = xy0 + nh$ymax * prop
     xy0 = xy0 + nh$gap.y
 
     if (show_bounding_box) {rect(min(nh$plotting.df$x), xy1, max(nh$plotting.df$x)+1, xy0)}
@@ -548,24 +548,47 @@ nh_label <- function(nh, x_vec, y_vec, side, text, just, offset=0.9, cex) {
 
 }
 
+nh_colorize <- function(col, conditions, palette) {
+
+  if (!is.null(col)) {
+    if (!any(names(col) %in% conditions)) {
+      message("Warning: no color names are found in group conditions... (all will be assigned from default palette)")
+    }
+
+  } else {
+    col = c()
+  }
+
+  missing = conditions[!conditions %in% names(col)]
+
+  if (length(missing) == 1) {
+    col = c(col, setNames(hcl.colors(2, palette)[1], missing))
+  } else {
+    col = c(col, setNames(hcl.colors(length(missing), palette), missing))
+  }
+  col = col[names(col) %in% conditions]
+  return(col)
+}
+
+
 # gname='cat'; side= 2;palette= 'terrain'; label_just = 'left'
-nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", percent=NULL, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
+nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", prop=NULL, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
 
   if (labels) {
     box.p = 0.5
     text.p = 0.25
-    if (is.null(percent)) {
-      percent=0.1
+    if (is.null(prop)) {
+      prop=0.1
     }
   } else {
     box.p = 0
     text.p = 0.25
-    if (is.null(percent)) {
-      percent=0.1
+    if (is.null(prop)) {
+      prop=0.1
     }
   }
 
-  list2env(nheatmap_boundaries(nh, side, percent=percent, show_bounding_box = show_bounding_box), environment())
+  list2env(nheatmap_boundaries(nh, side, prop=prop, show_bounding_box = show_bounding_box), environment())
 
   if (side == 1) {
     box.y1 = xy0
@@ -599,23 +622,8 @@ nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", perce
 
   conditions = unique(gr[[gname]])
 
-  if (!is.null(col)) {
-    if (!any(names(col) %in% conditions)) {
-      message("Warning: no color names are found in group conditions... (all will be assigned from default palette)")
-    }
 
-  } else {
-    col = c()
-  }
-
-  missing = conditions[!conditions %in% names(col)]
-
-  if (length(missing) == 1) {
-    col = c(col, setNames(hcl.colors(2, palette)[1], missing))
-  } else {
-    col = c(col, setNames(hcl.colors(length(missing), palette), missing))
-  }
-  col = col[names(col) %in% conditions]
+  col = nh_colorize(col, conditions, palette)
 
   ## Finding groups which are identical and consecutive
   last_cond = ''
@@ -650,11 +658,11 @@ nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", perce
       cond = g.df[[gname]][1]
       segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col='black', lwd=3, lend=1)
       segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col=col[cond], lwd=2.5, lend=1)
-      if (labels) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=cex) }
+      if (labels) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=cex.label) }
 
       for (gi in clump){
         g.df <- gr[gr$group_order == gi,]
-        rect(min(g.df$x), box.y1, max(g.df$x)+1, box.y2, col=col[cond])
+        rect(min(g.df$x), box.y1, max(g.df$x)+1, box.y2, col=col[as.vector(cond)])
       }
     }
 
@@ -688,36 +696,23 @@ nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", perce
 }
 
 
-nheatmap_annotate <- function(nh, side, aname, a.df=NULL, col=NULL, percent=0.05, palette='Viridis',
+nheatmap_annotate <- function(nh, side, aname, a.df=NULL, col=NULL, prop=0.05, palette='Viridis',
                               show_bounding_box=F, type='rect', label_just='right', cex.label=0.8) {
 
-  list2env(nheatmap_boundaries(nh, side, percent=percent, show_bounding_box = show_bounding_box), environment())
+  list2env(nheatmap_boundaries(nh, side, prop=prop, show_bounding_box = show_bounding_box), environment())
 
   if (is.null(a.df)) {
     if (side %in% c(1,3)) {
-      a.df <- nh$columns
+      a.df <- nh$column.df
     } else if (side %in% c(2,4)) {
-      a.df <- nh$rows
+      a.df <- nh$row.df
       }
   }
 
   # aname=names(a.df)[1]
 
   conditions = unique(a.df[[aname]])
-
-  if (!is.null(col)) {
-    if (!any(names(col) %in% conditions)) {
-      message("Warning: no color names are found in group conditions... (all will be assigned from default palette)")
-    }
-
-  } else {
-    col = c()
-  }
-
-  missing = conditions[!conditions %in% names(col)]
-  col = c(col, setNames(hcl.colors(length(missing), palette), missing))
-  col = col[names(col) %in% conditions]
-
+  col = nh_colorize(col, conditions, palette)
 
   if (side %in% c(2,4)) {
     gr = nh$groups$rows
@@ -839,17 +834,17 @@ nheatmap_legend <- function(nh, add=F) {
 
 }
 
-nheatmap_names <- function(nh, side, aname=F, names=NULL, percent=0.1, cutoff=T, cex=0.8,
+nheatmap_names <- function(nh, side, aname=F, names=NULL, prop=0.1, cutoff=T, cex=0.8,
                            show_bounding_box = F) {
 
-  list2env(nheatmap_boundaries(nh, side, percent=percent, show_bounding_box = show_bounding_box), environment())
+  list2env(nheatmap_boundaries(nh, side, prop=prop, show_bounding_box = show_bounding_box), environment())
 
   if (side %in% c(1,3)) {
     gr = nh$groups$cols
-    ar = nh$columns
+    ar = nh$column.df
   } else if (side %in% c(2,4)) {
     gr = nh$groups$rows
-    ar = nh$rows
+    ar = nh$row.df
   }
 
   if (!is.null(names)) {
@@ -891,11 +886,11 @@ nheatmap_names <- function(nh, side, aname=F, names=NULL, percent=0.1, cutoff=T,
 
 
 
-nheatmap_dend <- function(nh, side, percent=0.1, cutoff=T, cex=0.8,
+nheatmap_dend <- function(nh, side, prop=0.1, cutoff=T, cex=0.8,
   show_bounding_box = F, ...) {
 
 
-  list2env(nheatmap_boundaries(nh, side, percent=percent, show_bounding_box = show_bounding_box), environment())
+  list2env(nheatmap_boundaries(nh, side, prop=prop, show_bounding_box = show_bounding_box), environment())
 
   if (side %in% c(1,3)) {
     gr = nh$groups$cols
