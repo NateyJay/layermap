@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' width='352.80pt' height='388.80pt' viewBox='0 0 352.80 388.80'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHwzNTIuODB8MC4wMHwzODguODA='>
+<path d="M 0.00 0.00 h 352.80 v 388.80 H 0.00 L"/>
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHwzNTIuODB8MC4wMHwzODguODA=)'>
+</g>
+<defs>
+  <clipPath id='cpNC4zMnwzNDguNDh8NC4zMnwzODQuNDg='>
+<path d="M 4.32 4.32 h 344.16 v 380.16 H 4.32 L"/>
+  </clipPath>
+</defs>
+<g clip-path='url(#cpNC4zMnwzNDguNDh8NC4zMnwzODQuNDg=)'>
+<rect x='34.77' y='272.62' width='70.42' height='58.67' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #E5E5E5;' />
+<text x='69.98' y='305.86' text-anchor='middle' style='font-size: 12.00px; font-family: "Arial";' textLength='50.69px' lengthAdjust='spacingAndGlyphs'>treatment</text>
+<rect x='124.67' y='313.69' width='14.16' height='15.64' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #2E8B57;' />
+<text x='158.31' y='325.82' style='font-size: 12.00px; font-family: "Arial";' textLength='35.34px' lengthAdjust='spacingAndGlyphs'>Nitrate</text>
+<rect x='124.67' y='294.13' width='14.16' height='15.64' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #FF6347;' />
+<text x='158.31' y='306.26' style='font-size: 12.00px; font-family: "Arial";' textLength='24.02px' lengthAdjust='spacingAndGlyphs'>ABA</text>
+<rect x='124.67' y='274.58' width='14.16' height='15.64' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #3B99B1;' />
+<text x='158.31' y='286.71' style='font-size: 12.00px; font-family: "Arial";' textLength='42.70px' lengthAdjust='spacingAndGlyphs'>Drought</text>
+<rect x='34.77' y='155.29' width='70.42' height='97.78' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #E5E5E5;' />
+<text x='69.98' y='208.36' text-anchor='middle' style='font-size: 12.00px; font-family: "Arial";' textLength='31.34px' lengthAdjust='spacingAndGlyphs'>tissue</text>
+<rect x='124.67' y='235.47' width='14.16' height='15.64' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #FF0000;' />
+<text x='158.31' y='247.59' style='font-size: 12.00px; font-family: "Arial";' textLength='25.35px' lengthAdjust='spacingAndGlyphs'>Root</text>
+<rect x='124.67' y='215.91' width='14.16' height='15.64' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #4B0055;' />
+<text x='158.31' y='228.04' style='font-size: 12.00px; font-family: "Arial";' textLength='61.37px' lengthAdjust='spacingAndGlyphs'>W.Seedling</text>
+<rect x='124.67' y='196.36' width='14.16' height='15.64' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #007094;' />
+<text x='158.31' y='208.48' style='font-size: 12.00px; font-family: "Arial";' textLength='23.36px' lengthAdjust='spacingAndGlyphs'>Leaf</text>
+<rect x='124.67' y='176.80' width='14.16' height='15.64' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #00BE7D;' />
+<text x='158.31' y='188.93' style='font-size: 12.00px; font-family: "Arial";' textLength='31.36px' lengthAdjust='spacingAndGlyphs'>Shoot</text>
+<rect x='124.67' y='157.24' width='14.16' height='15.64' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #FDE333;' />
+<text x='158.31' y='169.37' style='font-size: 12.00px; font-family: "Arial";' textLength='42.01px' lengthAdjust='spacingAndGlyphs'>W.Plant</text>
+<rect x='34.77' y='96.62' width='70.42' height='39.11' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #E5E5E5;' />
+<text x='69.98' y='120.38' text-anchor='middle' style='font-size: 12.00px; font-family: "Arial";' textLength='58.69px' lengthAdjust='spacingAndGlyphs'>PlantTFDB</text>
+<rect x='124.67' y='118.13' width='14.16' height='15.64' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #3B99B1;' />
+<text x='158.31' y='130.26' style='font-size: 12.00px; font-family: "Arial";' textLength='29.34px' lengthAdjust='spacingAndGlyphs'>False</text>
+<rect x='124.67' y='98.58' width='14.16' height='15.64' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #F5191C;' />
+<text x='158.31' y='110.71' style='font-size: 12.00px; font-family: "Arial";' textLength='24.67px' lengthAdjust='spacingAndGlyphs'>True</text>
+<rect x='34.77' y='57.51' width='70.42' height='19.56' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #E5E5E5;' />
+<text x='69.98' y='70.96' text-anchor='middle' style='font-size: 12.00px; font-family: "Arial";' textLength='46.00px' lengthAdjust='spacingAndGlyphs'>Nit_GOs</text>
+<rect x='124.67' y='59.47' width='14.16' height='15.64' style='stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 10.00; stroke-width: 0.75; fill: #3B99B1;' />
+<text x='158.31' y='71.59' style='font-size: 12.00px; font-family: "Arial";' textLength='29.34px' lengthAdjust='spacingAndGlyphs'>False</text>
+</g>
+</svg>
