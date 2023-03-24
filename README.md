@@ -1,4 +1,4 @@
-<p align="left"><img src="images/Logo.png" alt="main logo" width="400" /></p>
+<p align="left"><img src="images/Logo.png" alt="main logo" width="500" /></p>
 
 
 # nheatmap
