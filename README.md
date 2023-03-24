@@ -14,14 +14,18 @@ This package is meant to address a couple of what I see as a couple common probl
 * **No flexiblity in the orientation**, or manner of annotated attributes (sides, different formats).
 * **No tiers of organization**, usually relying on clustering/not clustering as the only form of ordering.
 
-## Basic structure
+# Basics of nheatmap 
+
+### structure
 
 <p align="center"><img src="images/DataStructures.png" alt="data_structures" width="800" /></p>
-Heatmaps are complicated - **there is no avoiding that**. Instead, nheatmap tries to fit all essential data for plotting into 3 tables. These are:
+Heatmaps are complicated, there is no avoiding that. Instead, nheatmap tries to fit all essential data for plotting into 3 tables.  
 
-* **value.df** - a matrix or dataframe which contains only numerical data. This makes up the "heat" portion of the plot, with **rownames** and **colnames** as essential keys to connect to attribute tables.
-* **row.df** - a dataframe which contains all of the attributes for the rows of the plot. **Rows** of this dataframe correspond to the **rows** of the value.df. This can include an arbitrary number of columns, which make up the attributes. Usually, these are categorical data. 
-* **column.df** - Just like the row.df, except matching the columns of the plot. **Rows** of this dataframe correspond to the **columns** of the value.df
+These are:
+
+* `value.df` - a matrix or dataframe which contains only numerical data. This makes up the "heat" portion of the plot, with **rownames** and **colnames** as essential keys to connect to attribute tables.
+* `row.df` - a dataframe which contains all of the attributes for the rows of the plot. **Rows** of this dataframe correspond to the **rows** of the `value.df`. This can include an arbitrary number of columns, which make up the attributes. Usually, these are categorical data but it's not required in case your dataframe has other superfluous columns in it. 
+* `column.df` - Just like the `row.df`, except matching the columns of the plot. **Rows** of this dataframe correspond to the **columns** of the `value.df`
 
 You can easily test the assumptions for naming like this:
 ```
@@ -34,5 +38,15 @@ setequal(row.names(column.df), col.names(value.df))
 ## reordering the value.df based on names can also do this.
 value.df[row.names(row.df), row.names(column.df)] ## should return no errors.
 ```
+### grouping
+
+Sometimes, you want to show heatmaps where some attributes are grouped together and won't inter-mingle with other groups upon clustering. This is a core-feature of nheatmap, and allows the user to highlight multiple layers of groups in the data for each axis. 
+
+Groups are derived from attribute columns in the `row.df` and `column.df`. As these affect the actual plotting order and dimensions of the heatmap, these must be specified in the initial invocation of `nheatmap()` using the following options:
+* `row_groups` and/or `col_groups` - vectors of which columns for the respective dataframes should be grouped. These values must be found in the attributes columns of those dataframes.
+* `group_gap` - the distance (in proportion of plotting area) by which groups should be separated.
+
+
+
 
 
