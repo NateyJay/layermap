@@ -2,13 +2,15 @@
 % Please edit documentation in R/nheatmap.R
 \name{nheatmap_legend}
 \alias{nheatmap_legend}
-\title{empty for now}
+\title{Plot simple legend}
 \usage{
 nheatmap_legend(nh, add = F)
 }
 \arguments{
-\item{still}{empty}
+\item{nh}{- nheatmap object}
+
+\item{add}{- logical for whether this should plot a new window. Experimental.}
 }
 \description{
-empty for now
+Makes a simple heatmap color legend for a nheatmap object.
 }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/nheatmap.R
 \name{nheatmap_names}
 \alias{nheatmap_names}
-\title{empty for now}
+\title{Plot name layer}
 \usage{
 nheatmap_names(
   nh,
   side,
-  aname = F,
+  attribute = F,
   names = NULL,
   prop = 0.1,
   cutoff = T,
@@ -16,8 +16,15 @@ nheatmap_names(
 )
 }
 \arguments{
-\item{still}{empty}
+\item{nh}{- nheatmap object .}
+
+\item{side}{- value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).}
+
+\item{attribute}{- name for the attribute which will be plotted in the layer. Default is F, which plots the rownames.}
+}
+\value{
+nheatmap object
 }
 \description{
-empty for now
+Function for plotting an name layer based on column or row attributes.
 }

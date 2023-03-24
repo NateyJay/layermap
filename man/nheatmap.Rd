@@ -2,7 +2,7 @@
 % Please edit documentation in R/nheatmap.R
 \name{nheatmap}
 \alias{nheatmap}
-\title{empty for now}
+\title{Plot nheatmap}
 \usage{
 nheatmap(
   value.df,
@@ -24,8 +24,15 @@ nheatmap(
 )
 }
 \arguments{
-\item{still}{empty}
+\item{value.df}{- numerical dataframe or matrix with column name and row names.}
+
+\item{column.df}{- attribute dataframe which will be used for layer plotting functions on sides 1 and 3. Rownames correspond to value.df colnames.}
+
+\item{row.df}{- attribute dataframe which will be used for layer plotting functions on sides 2 and 4. Rownames correspond to value.df rownames.}
+}
+\value{
+nh object
 }
 \description{
-empty for now
+Backbone function for nheatmap. This makes the basic heatmap structure and plots it. Requires a dataframe of just numerical values with named rows/columns. Row and column attributes are provided through additional dataframes keyed to the value dataframe names.
 }

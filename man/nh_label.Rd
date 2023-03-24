@@ -2,13 +2,16 @@
 % Please edit documentation in R/nheatmap.R
 \name{nh_label}
 \alias{nh_label}
-\title{empty for now}
+\title{Plot label on annotate or group layers}
 \usage{
 nh_label(nh, x_vec, y_vec, side, text, just, offset = 0.9, cex)
 }
 \arguments{
-\item{still}{empty}
+\item{to}{be added}
+}
+\value{
+named color vector
 }
 \description{
-empty for now
+Utility for plotting labels on layers
 }

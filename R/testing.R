@@ -28,42 +28,42 @@
 #
 # # Nitrogen Drought data ---------------------------------------------------
 #
-# source(file.path("~/Google Drive/+Code_snippets/R_functions.R"))
-#
-#
-# column.df <- read.delim("test/columns.txt")
-# column.df$treatment <- factor(column.df$treatment, levels=c("Nitrate", "Drought", "ABA"))
-#
-# row.df <- read.delim("test/rows.txt")
-# value.df <- read.delim("test/values.txt")
-#
+source(file.path("~/Google Drive/+Code_snippets/R_functions.R"))
+
+
+column.df <- read.delim("test/columns.txt")
+column.df$treatment <- factor(column.df$treatment, levels=c("Nitrate", "Drought", "ABA"))
+
+row.df <- read.delim("test/rows.txt")
+value.df <- read.delim("test/values.txt")
+
 # svglite::svglite("test/test.svg", 4.9, 5.4)
-# nh = nheatmap(value.df, zero_centered_colors = T,
-#                   column.df=column.df, row.df=row.df,
-#                   column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
-#               cluster_cols=T,
-#               group_gap = 0.02,
-#               plot_margin = c(0.1,0.5,0.4,0.2))
-#
-# nh = nheatmap_group(nh, 3, 'treatment', labels=T, prop=0.1, label_just = 'left',
-#                     col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')))
-# nh = nheatmap_annotate(nh, 3, 'tissue', prop=0.05, label_just = 'left',
-#                        col=setNames('red', 'Root'))
-#
-# nh = nheatmap_group(nh, 4, 'PlantTFDB', labels=F, prop=0.05, label_just = 'left')
-# nh = nheatmap_group(nh, 4, 'Nit_GOs', labels=F, prop=0.05, label_just = 'left')
-#
-# nh = nheatmap_names(nh, 2, prop=0.15, cex=0.5)
-# nh = nheatmap_names(nh, 2, "symbol", cex=0.5)
-# nh = nheatmap_dend(nh, 4, lwd=1)
-#
+nh = nheatmap(value.df, zero_centered_colors = T,
+                  column.df=column.df, row.df=row.df,
+                  column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
+              cluster_cols=T,
+              group_gap = 0.02,
+              plot_margin = c(0.1,0.5,0.4,0.2))
+
+nh = nheatmap_group(nh, 3, 'treatment', labels=T, prop=0.1, label_just = 'left',
+                    col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')))
+nh = nheatmap_annotate(nh, 3, 'tissue', prop=0.05, label_just = 'left',
+                       col=setNames('red', 'Root'))
+
+nh = nheatmap_group(nh, 4, 'PlantTFDB', labels=F, prop=0.05, label_just = 'left')
+nh = nheatmap_group(nh, 4, 'Nit_GOs', labels=F, prop=0.05, label_just = 'left')
+
+nh = nheatmap_names(nh, 2, prop=0.15, cex=0.5)
+nh = nheatmap_names(nh, 2, "symbol", cex=0.5)
+nh = nheatmap_dend(nh, 4, lwd=1)
+
 # dev.off()
 # fix_svg('test/test.svg')
-#
+
 # svglite::svglite("test/legend.svg", 4.9, 5.4)
-# nheatmap_legend(nh)
+nheatmap_legend(nh)
 # dev.off()
 # fix_svg('test/legend.svg')
-#
-#
-#
+
+
+

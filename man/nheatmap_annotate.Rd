@@ -2,12 +2,12 @@
 % Please edit documentation in R/nheatmap.R
 \name{nheatmap_annotate}
 \alias{nheatmap_annotate}
-\title{empty for now}
+\title{Plot annotation layer}
 \usage{
 nheatmap_annotate(
   nh,
   side,
-  aname,
+  attribute,
   a.df = NULL,
   col = NULL,
   prop = 0.05,
@@ -19,8 +19,25 @@ nheatmap_annotate(
 )
 }
 \arguments{
-\item{still}{empty}
+\item{nh}{- nheatmap object .}
+
+\item{side}{- value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).}
+
+\item{attribute}{- name for the attribute which will be plotted in the layer.}
+
+\item{col}{- named color vector, where the names are conditions found in the attribute.}
+
+\item{prop}{- the proportion of plotting space reserved for this layer}
+
+\item{palette}{- hcl.colors palette to fill in unnamed conditions colors.}
+
+\item{cex.label}{- cex value for label characters.}
+
+\item{layer_just}{- the justification side for a layer label (right or left).}
+}
+\value{
+nheatmap object
 }
 \description{
-empty for now
+Function for plotting an annotation layer based on column or row attributes.
 }

@@ -191,13 +191,16 @@ plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=
 
 
 
-#' empty for now
+#' Plot nheatmap
 #'
-#' @description empty for now
+#' @description Backbone function for nheatmap. This makes the basic heatmap structure and plots it. Requires a dataframe of just numerical values with named rows/columns. Row and column attributes are provided through additional dataframes keyed to the value dataframe names.
 #'
-#' @param still empty
+#' @param value.df - numerical dataframe or matrix with column name and row names.
+#' @param row.df - attribute dataframe which will be used for layer plotting functions on sides 2 and 4. Rownames correspond to value.df rownames.
+#' @param column.df - attribute dataframe which will be used for layer plotting functions on sides 1 and 3. Rownames correspond to value.df colnames.
 #'
-#' @return
+#'
+#' @return nh object
 #' @export
 #'
 #' @examples
@@ -557,13 +560,14 @@ nheatmap_boundaries <- function(nh, side, prop, show_bounding_box=F, din_adjuste
 
 
 
-#' empty for now
+
+#' Plot label on annotate or group layers
 #'
-#' @description empty for now
+#' @description Utility for plotting labels on layers
 #'
-#' @param still empty
+#' @param to be added
 #'
-#' @return
+#' @return named color vector
 #' @export
 #'
 #' @examples
@@ -603,13 +607,15 @@ nh_label <- function(nh, x_vec, y_vec, side, text, just, offset=0.9, cex) {
 
 
 
-#' empty for now
+#' Build a named color vector
 #'
-#' @description empty for now
+#' @description Utility for getting named color vector used in nheatmap layer functions.
 #'
-#' @param still empty
+#' @param col - named color vector
+#' @param conditions - list of conditions to colorize
+#' @param palette - hcl.colors palette used to fill in unnamed colors
 #'
-#' @return
+#' @return named color vector
 #' @export
 #'
 #' @examples
@@ -639,17 +645,25 @@ nh_colorize <- function(col, conditions, palette) {
 
 
 
-#' empty for now
+#' Plot group layer
 #'
-#' @description empty for now
+#' @description Function for plotting a group layer based on column or row attributes.
 #'
-#' @param still empty
+#' @param nh - nheatmap object .
+#' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param attribute - name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
+#' @param col - named color vector, where the names are conditions found in the attribute.
+#' @param palette - hcl.colors palette to fill in unnamed conditions colors.
+#' @param prop - the proportion of plotting space reserved for this layer
+#' @param layer_just - the justification side for a layer label (right or left).
+#' @param cex_label - cex value for label characters.
+#' @param labels - logical for whether group labels should be plotted.
 #'
-#' @return
+#' @return nheatmap object
 #' @export
 #'
 #' @examples
-nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", prop=NULL, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
+nheatmap_group <- function(nh, side, attribute, col= NULL, palette="Zissou 1", prop=NULL, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
 
   if (labels) {
     box.p = 0.5
@@ -697,7 +711,7 @@ nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", prop=
 
 
 
-  conditions = unique(gr[[gname]])
+  conditions = unique(gr[[attribute]])
 
 
   col = nh_colorize(col, conditions, palette)
@@ -707,7 +721,7 @@ nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", prop=
   gis = c()
   clumped_groups = list()
   for (gi in unique(gr$group_order)) {
-    cond = unique(gr[gr$group_order == gi, gname])
+    cond = unique(gr[gr$group_order == gi, attribute])
 
     if (cond == last_cond) {
       gis = c(gis, gi)
@@ -732,7 +746,7 @@ nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", prop=
       clump = clumped_groups[[clump_i]]
 
       g.df <- gr[gr$group_order %in% clump,]
-      cond = g.df[[gname]][1]
+      cond = g.df[[attribute]][1]
       segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col='black', lwd=3, lend=1)
       segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col=col[cond], lwd=2.5, lend=1)
       if (labels) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=cex.label) }
@@ -752,7 +766,7 @@ nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", prop=
       clump = clumped_groups[[clump_i]]
 
       g.df <- gr[gr$group_order %in% clump,]
-      cond = g.df[[gname]][1]
+      cond = g.df[[attribute]][1]
       segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col='black', lwd=3, lend=1)
       segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col=col[cond], lwd=2.5, lend=1)
       if (labels) { text(text.x, mean(c(min(g.df$y), max(g.df$y)+1)), srt=90, cond, cex=cex) }
@@ -765,9 +779,9 @@ nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", prop=
   }
 
 
-  nh_label(nh, x_vec, y_vec, side=side, text=gname, just=label_just, cex=cex.label)
+  nh_label(nh, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
 
-  nh$legend[[gname]] = col
+  nh$legend[[attribute]] = col
   nh$boundaries <- boundaries
   return(nh)
 }
@@ -775,17 +789,25 @@ nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", prop=
 
 
 
-#' empty for now
+
+#' Plot annotation layer
 #'
-#' @description empty for now
+#' @description Function for plotting an annotation layer based on column or row attributes.
 #'
-#' @param still empty
+#' @param nh - nheatmap object .
+#' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param attribute - name for the attribute which will be plotted in the layer.
+#' @param col - named color vector, where the names are conditions found in the attribute.
+#' @param palette - hcl.colors palette to fill in unnamed conditions colors.
+#' @param prop - the proportion of plotting space reserved for this layer
+#' @param layer_just - the justification side for a layer label (right or left).
+#' @param cex.label - cex value for label characters.
 #'
-#' @return
+#' @return nheatmap object
 #' @export
 #'
 #' @examples
-nheatmap_annotate <- function(nh, side, aname, a.df=NULL, col=NULL, prop=0.05, palette='Viridis',
+nheatmap_annotate <- function(nh, side, attribute, a.df=NULL, col=NULL, prop=0.05, palette='Viridis',
                               show_bounding_box=F, type='rect', label_just='right', cex.label=0.8) {
 
   list2env(nheatmap_boundaries(nh, side, prop=prop, show_bounding_box = show_bounding_box), environment())
@@ -798,9 +820,9 @@ nheatmap_annotate <- function(nh, side, aname, a.df=NULL, col=NULL, prop=0.05, p
       }
   }
 
-  # aname=names(a.df)[1]
+  # attribute=names(a.df)[1]
 
-  conditions = unique(a.df[[aname]])
+  conditions = unique(a.df[[attribute]])
   col = nh_colorize(col, conditions, palette)
 
   if (side %in% c(2,4)) {
@@ -820,12 +842,12 @@ nheatmap_annotate <- function(nh, side, aname, a.df=NULL, col=NULL, prop=0.05, p
 
     # if (label_just == 'right') {
     #   x1 = mean(c(xy0,xy1)); y1 = max(gr$y)+nh$gap.y
-    #   text(x1, y1, aname, adj=c(0,0.5), font=2, srt=90, cex=cex)
+    #   text(x1, y1, attribute, adj=c(0,0.5), font=2, srt=90, cex=cex)
     #   points(x1, y1-nh$gap.y*0.5, pch=-9660, cex=0.5)
     #
     # } else if (label_just == 'left') {
     #   x1 = mean(c(xy0,xy1)); y1 = min(gr$y)-nh$gap.y
-    #   text(x1, y1, aname, adj=c(1,0.5), font=2, srt=90, cex=cex)
+    #   text(x1, y1, attribute, adj=c(1,0.5), font=2, srt=90, cex=cex)
     #   points(x1, y1+nh$gap.y*0.5, pch=-9650, cex=0.5)
     # }
 
@@ -834,7 +856,7 @@ nheatmap_annotate <- function(nh, side, aname, a.df=NULL, col=NULL, prop=0.05, p
     x_vec = gr$x
     y_vec = c(xy1, xy0)
 
-    col_ordered <- col[a.df[match(rownames(gr), rownames(a.df)),aname]]
+    col_ordered <- col[a.df[match(rownames(gr), rownames(a.df)),attribute]]
 
     xy_mean = mean(c(xy1,xy0))
 
@@ -846,34 +868,35 @@ nheatmap_annotate <- function(nh, side, aname, a.df=NULL, col=NULL, prop=0.05, p
     }
 
     # if (label_just == 'right') {
-    #   label_string = paste(-9668, aname, 'new')
+    #   label_string = paste(-9668, attribute, 'new')
     #   x1 = max(gr$x)+nh$gap.x+1; y1 = mean(c(xy0,xy1))
     #   text(x1, y1, label_string, adj=c(0,0.5), font=2, cex=cex)
 
       # x1 = max(gr$x)+nh$gap.x+1; y1 = mean(c(xy0,xy1))
-      # text(x1, y1, aname, adj=c(0,0.5), font=2, cex=cex)
+      # text(x1, y1, attribute, adj=c(0,0.5), font=2, cex=cex)
       # points(x1-nh$gap.x*0.5, y1, pch=-9668, cex=0.5)
 
     # } else if (label_just == 'left') {
     #   x1 = min(gr$x)-nh$gap.x; y1 = mean(c(xy0,xy1))
-    #   text(x1,y1, aname, adj=c(1,0.5), font=2, cex=cex)
+    #   text(x1,y1, attribute, adj=c(1,0.5), font=2, cex=cex)
     #   points(x1+nh$gap.x*0.5, y1, pch=-9658, cex=0.5)
     # }
   }
-  nh_label(nh, x_vec, y_vec, side=side, text=aname, just=label_just, cex=cex.label)
+  nh_label(nh, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
   nh$boundaries <- boundaries
-  nh$legend[[aname]] = col
+  nh$legend[[attribute]] = col
   return(nh)
 }
 
 
 
 
-#' empty for now
+#' Plot simple legend
 #'
-#' @description empty for now
+#' @description Makes a simple heatmap color legend for a nheatmap object.
 #'
-#' @param still empty
+#' @param nh - nheatmap object
+#' @param add - logical for whether this should plot a new window. Experimental.
 #'
 #' @return
 #' @export
@@ -939,17 +962,19 @@ nheatmap_legend <- function(nh, add=F) {
 
 
 
-#' empty for now
+#' Plot name layer
 #'
-#' @description empty for now
+#' @description Function for plotting an name layer based on column or row attributes.
 #'
-#' @param still empty
+#' @param nh - nheatmap object .
+#' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param attribute - name for the attribute which will be plotted in the layer. Default is F, which plots the rownames.
 #'
-#' @return
+#' @return nheatmap object
 #' @export
 #'
 #' @examples
-nheatmap_names <- function(nh, side, aname=F, names=NULL, prop=0.1, cutoff=T, cex=0.8,
+nheatmap_names <- function(nh, side, attribute=F, names=NULL, prop=0.1, cutoff=T, cex=0.8,
                            show_bounding_box = F) {
 
   list2env(nheatmap_boundaries(nh, side, prop=prop, show_bounding_box = show_bounding_box), environment())
@@ -963,18 +988,18 @@ nheatmap_names <- function(nh, side, aname=F, names=NULL, prop=0.1, cutoff=T, ce
   }
 
   if (!is.null(names)) {
-    gr[[aname]] <- names[match(row.names(gr), row.names(names)), aname]
+    gr[[attribute]] <- names[match(row.names(gr), row.names(names)), attribute]
   }
 
 
-  if (aname == F) {
+  if (attribute == F) {
     labels = row.names(gr)
 
-  # }  else if (!aname %in% colnames(names)) {
-  #   stop(paste(aname, 'not found in column names'))
+  # }  else if (!attribute %in% colnames(names)) {
+  #   stop(paste(attribute, 'not found in column names'))
 
   } else {
-    labels = ar[match(row.names(gr), row.names(ar)), aname]
+    labels = ar[match(row.names(gr), row.names(ar)), attribute]
   }
 
   if (side == 1) {
@@ -1003,13 +1028,16 @@ nheatmap_names <- function(nh, side, aname=F, names=NULL, prop=0.1, cutoff=T, ce
 
 
 
-#' empty for now
+
+#' Plot dendrogram layer
 #'
-#' @description empty for now
+#' @description Function for plotting an dendrogram layer. This function will only work on sides which have been clustered by hclust in the initial nheatmap call.
 #'
-#' @param still empty
+#' @param nh - nheatmap object.
+#' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param prop - the proportion of plotting space reserved for this layer
 #'
-#' @return
+#' @return nheatmap object
 #' @export
 #'
 #' @examples

@@ -2,7 +2,7 @@
 % Please edit documentation in R/nheatmap.R
 \name{nheatmap_dend}
 \alias{nheatmap_dend}
-\title{empty for now}
+\title{Plot dendrogram layer}
 \usage{
 nheatmap_dend(
   nh,
@@ -15,8 +15,15 @@ nheatmap_dend(
 )
 }
 \arguments{
-\item{still}{empty}
+\item{nh}{- nheatmap object.}
+
+\item{side}{- value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).}
+
+\item{prop}{- the proportion of plotting space reserved for this layer}
+}
+\value{
+nheatmap object
 }
 \description{
-empty for now
+Function for plotting an dendrogram layer. This function will only work on sides which have been clustered by hclust in the initial nheatmap call.
 }

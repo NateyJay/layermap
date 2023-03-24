@@ -2,12 +2,12 @@
 % Please edit documentation in R/nheatmap.R
 \name{nheatmap_group}
 \alias{nheatmap_group}
-\title{empty for now}
+\title{Plot group layer}
 \usage{
 nheatmap_group(
   nh,
   side,
-  gname,
+  attribute,
   col = NULL,
   palette = "Zissou 1",
   prop = NULL,
@@ -19,8 +19,27 @@ nheatmap_group(
 )
 }
 \arguments{
-\item{still}{empty}
+\item{nh}{- nheatmap object .}
+
+\item{side}{- value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).}
+
+\item{attribute}{- name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.}
+
+\item{col}{- named color vector, where the names are conditions found in the attribute.}
+
+\item{palette}{- hcl.colors palette to fill in unnamed conditions colors.}
+
+\item{prop}{- the proportion of plotting space reserved for this layer}
+
+\item{labels}{- logical for whether group labels should be plotted.}
+
+\item{layer_just}{- the justification side for a layer label (right or left).}
+
+\item{cex_label}{- cex value for label characters.}
+}
+\value{
+nheatmap object
 }
 \description{
-empty for now
+Function for plotting a group layer based on column or row attributes.
 }

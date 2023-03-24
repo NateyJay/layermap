@@ -2,13 +2,20 @@
 % Please edit documentation in R/nheatmap.R
 \name{nh_colorize}
 \alias{nh_colorize}
-\title{empty for now}
+\title{Build a named color vector}
 \usage{
 nh_colorize(col, conditions, palette)
 }
 \arguments{
-\item{still}{empty}
+\item{col}{- named color vector}
+
+\item{conditions}{- list of conditions to colorize}
+
+\item{palette}{- hcl.colors palette used to fill in unnamed colors}
+}
+\value{
+named color vector
 }
 \description{
-empty for now
+Utility for getting named color vector used in nheatmap layer functions.
 }
