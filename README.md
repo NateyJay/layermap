@@ -16,9 +16,9 @@ This package is meant to address a couple of what I see as a couple common probl
 
 # Basics of nheatmap 
 
-### structure
+### Structure
 
-<p align="center"><img src="images/DataStructures.png" alt="data_structures" width="800" /></p>
+<p align="center"><img src="images/DataStructures.png" alt="data_structures" width="700" /></p>
 Heatmaps are complicated, there is no avoiding that. Instead, nheatmap tries to fit all essential data for plotting into 3 tables.  
 
 These are:
@@ -41,7 +41,7 @@ value.df[row.names(row.df), row.names(column.df)] ## should return no errors.
 
 *Note:* `row.df` and `column.df` are not required, but are almost certainly necessary to annotate the plot with layers (where the magic lives).
 
-### invocation
+### Invocation
 This function is modular, so it relies on multiple commands to build a complete plot. The main command is `nheatmap()`, which will produce the unannotated plot. The output of this will be saved and passed into subsequent commands to add layers to the annotation.
 
 ```
@@ -52,12 +52,23 @@ nh <- nheatmap_dend(nh, side=2, lwd=2)
 nh <- nheatmap_annotate(nh, side=1, aname='anotherColumn')
 ```
 
-Layer-functions add a layer feature next to the plot, with the side corresponding to r-plotting sides `(1-bottom, 2-left, 3-top, 4-right)`. Sides make it important to give the correct attribute names for the sides `(sides 1,3 ~ column.df, sides 2,4 ~ row.df)`.
+
+### Common plotting principles
+***Sides***
+Layer-functions add a layer feature next to the plot, with the side corresponding to r-plotting sides:
+`(1-bottom, 2-left, 3-top, 4-right)`  
+Sides make it important to give the correct attribute names for the sides:
+`(sides 1,3 ~ column.df, sides 2,4 ~ row.df)`
+
+***Proportion***
+The general plotting area and layers are spatially defined in terms of proportion. In the initial plot invocation, this is given by the option default `plot_margin=c(0.2,0.2,0.2,0.2)`. 
+This means that all sides have margin space for layers corresponding to 20% of the total plot dimension on that axis.l
 
 
-### grouping
 
-Sometimes, you want to show heatmaps where some attributes are grouped together and won't inter-mingle with other groups upon clustering. This is a core-feature of nheatmap, and allows the user to highlight multiple layers of groups in the data for each axis. 
+### Grouping
+
+Sometimes, you want to show heatmaps where some attributes are grouped together and won't inter-mingle with other groups upon clustering. This is a core-feature of nheatmap, and allows the user to highlight multiple layers of groups in the data for each axis.
 
 Groups are derived from attribute columns in the `row.df` and `column.df`. As these affect the actual plotting order and dimensions of the heatmap, these must be specified in the initial invocation of `nheatmap()` using the following options:
 * `row_groups` and/or `col_groups` - vectors of which columns for the respective dataframes should be grouped. These values must be found in the attributes columns of those dataframes.
@@ -65,7 +76,15 @@ Groups are derived from attribute columns in the `row.df` and `column.df`. As th
 
 Group layers can be added using the `nheatmap_group()` function. Multiple group layers may be plotted, if multiple group attributes were specified.
 
-### 
+### Other layers
+
+Several other layer functions allow building a custom plot.
+
+`nheatmap_dend()` adds a dendrogram for sides that have been hierarchically clustered. This accepts many line-related options from r-base plotting.
+
+`nheatmap_annotate()` adds colored category annotations. These are unlabeled and generally useful to see how clustering relates to categories.
+
+`nheatmap_text()` adds text labels to an axis. Useful to show gene names, symbols (or both!). A r-base character related options.
 
 
 
