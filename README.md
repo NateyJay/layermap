@@ -129,7 +129,6 @@ nh = nheatmap_dend(nh, 4, lwd=1)
 ```
 
 
-<p align="center"><img src="images/AnnotatedTest.png" alt="test" width="600" /></p>
-
+<p align="center"><img src="images/AnnotatedTest.png" alt="left" width="800" />
 
 
