@@ -9,6 +9,17 @@
 
 require(stringr)
 
+
+#' ndendrogram object converter
+#'
+#' @description utility to make a usable dendrogram for more complex plotting
+#'
+#' @param d - Base or dendextend Dendrogram object from R
+#'
+#' @return ndendrogram object
+#' @export
+#'
+#' @examples
 as.ndendrogram <- function(d) {
   require(dendextend)
   d = as.dendrogram(d)
@@ -84,6 +95,17 @@ as.ndendrogram <- function(d) {
 }
 
 
+#' ndendrogram plotting function
+#'
+#' @description plot.ndendrogram plots an ndendgrogram object in specific locations
+#'
+#' @param d - an ndendrogram object
+#' @param horiz - logical assigns whether the dendrogram is plotted vertical or horizontal.
+#'
+#' @return
+#' @export
+#'
+#' @examples
 plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=F,
                              scale.x=NULL, scale.y=NULL,
                              pos.x=0, pos.y=0, ...) {
@@ -168,6 +190,17 @@ plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=
 # dim_reference="din"
 
 
+
+#' empty for now
+#'
+#' @description empty for now
+#'
+#' @param still empty
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nheatmap <- function(value.df, xlim=NULL, ylim=NULL,
                          column.df=NULL, row.df=NULL,
                          column_groups=c(), row_groups=c(),
@@ -440,7 +473,16 @@ nheatmap <- function(value.df, xlim=NULL, ylim=NULL,
 
 
 
-
+#' empty for now
+#'
+#' @description empty for now
+#'
+#' @param still empty
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nheatmap_boundaries <- function(nh, side, prop, show_bounding_box=F, din_adjusted=T) {
 
   if (din_adjusted) {
@@ -514,6 +556,17 @@ nheatmap_boundaries <- function(nh, side, prop, show_bounding_box=F, din_adjuste
 }
 
 
+
+#' empty for now
+#'
+#' @description empty for now
+#'
+#' @param still empty
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nh_label <- function(nh, x_vec, y_vec, side, text, just, offset=0.9, cex) {
   if (side %in% c(2,4)) {
     offset = strheight("G", font=2, cex=cex) * offset * nh$din_ratio
@@ -548,6 +601,18 @@ nh_label <- function(nh, x_vec, y_vec, side, text, just, offset=0.9, cex) {
 
 }
 
+
+
+#' empty for now
+#'
+#' @description empty for now
+#'
+#' @param still empty
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nh_colorize <- function(col, conditions, palette) {
 
   if (!is.null(col)) {
@@ -571,7 +636,19 @@ nh_colorize <- function(col, conditions, palette) {
 }
 
 
-# gname='cat'; side= 2;palette= 'terrain'; label_just = 'left'
+
+
+
+#' empty for now
+#'
+#' @description empty for now
+#'
+#' @param still empty
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", prop=NULL, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
 
   if (labels) {
@@ -696,6 +773,18 @@ nheatmap_group <- function(nh, side, gname, col= NULL, palette="Zissou 1", prop=
 }
 
 
+
+
+#' empty for now
+#'
+#' @description empty for now
+#'
+#' @param still empty
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nheatmap_annotate <- function(nh, side, aname, a.df=NULL, col=NULL, prop=0.05, palette='Viridis',
                               show_bounding_box=F, type='rect', label_just='right', cex.label=0.8) {
 
@@ -777,6 +866,19 @@ nheatmap_annotate <- function(nh, side, aname, a.df=NULL, col=NULL, prop=0.05, p
   return(nh)
 }
 
+
+
+
+#' empty for now
+#'
+#' @description empty for now
+#'
+#' @param still empty
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nheatmap_legend <- function(nh, add=F) {
 
   leg <- nh$legend
@@ -834,6 +936,19 @@ nheatmap_legend <- function(nh, add=F) {
 
 }
 
+
+
+
+#' empty for now
+#'
+#' @description empty for now
+#'
+#' @param still empty
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nheatmap_names <- function(nh, side, aname=F, names=NULL, prop=0.1, cutoff=T, cex=0.8,
                            show_bounding_box = F) {
 
@@ -886,6 +1001,18 @@ nheatmap_names <- function(nh, side, aname=F, names=NULL, prop=0.1, cutoff=T, ce
 
 
 
+
+
+#' empty for now
+#'
+#' @description empty for now
+#'
+#' @param still empty
+#'
+#' @return
+#' @export
+#'
+#' @examples
 nheatmap_dend <- function(nh, side, prop=0.1, cutoff=T, cex=0.8,
   show_bounding_box = F, ...) {
 
