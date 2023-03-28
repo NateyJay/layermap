@@ -10,7 +10,8 @@ nheatmap_annotate(
   attribute,
   a.df = NULL,
   col = NULL,
-  prop = 0.05,
+  size = 1,
+  gap = 0.4,
   palette = "Viridis",
   show_bounding_box = F,
   type = "rect",
@@ -27,11 +28,11 @@ nheatmap_annotate(
 
 \item{col}{- named color vector, where the names are conditions found in the attribute.}
 
-\item{prop}{- the proportion of plotting space reserved for this layer}
-
 \item{palette}{- hcl.colors palette to fill in unnamed conditions colors.}
 
 \item{cex.label}{- cex value for label characters.}
+
+\item{prop}{- the proportion of plotting space reserved for this layer}
 
 \item{layer_just}{- the justification side for a layer label (right or left).}
 }

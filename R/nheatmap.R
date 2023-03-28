@@ -211,13 +211,16 @@ nheatmap <- function(value.df, xlim=NULL, ylim=NULL,
                          zero_centered_colors=F,
                          cluster_cols=F, cluster_rows=T,
                          group_gap=0.02, border='grey25',
-                         plot_margin=c(0.2,0.2,0.2,0.2),
+                         # plot_margin=c(0.2,0.2,0.2,0.2),
                          dim_reference="din") {
 
-  par(mar=c(0.3,0.3,0.3,0.3), xpd=T)
+  # par(mar=c(0.3,0.3,0.3,0.3))
+
+  par(xpd=T)
+  cxy = par()$cxy
 
   if (class(value.df)[1] == 'table') {
-    header = colnames(input.df)
+    header = colnames(value.df)
     mat = as.data.frame(matrix(input.df, nrow(input.df)), row.names=row.names(input.df))
     colnames(mat) = header
     value.df <- mat
@@ -372,9 +375,14 @@ nheatmap <- function(value.df, xlim=NULL, ylim=NULL,
                   max(groups$cols$group_order)-1,
                   group_gap*din_ratio)
 
+  # ymax <- (nrow(df)-1) + max(groups$rows$group_order)-1 * group_gap
+  # xmax <- ncol(df) + max(groups$cols$group_order)-1 * group_gap * din_ratio
+
 
   gap.y = ymax * group_gap
-  gap.x = xmax * group_gap*din_ratio
+  gap.x = xmax * group_gap * din_ratio
+  # gap.y = ymax * group_gap
+  # gap.x = xmax * group_gap*din_ratio
 
 
   ## getting xy coordinates
@@ -427,8 +435,13 @@ nheatmap <- function(value.df, xlim=NULL, ylim=NULL,
 
 
 
-  xlim = c(0 - xmax * plot_margin[2], xmax + xmax * plot_margin[4])
-  ylim = c(0 - ymax * plot_margin[1], ymax + ymax * plot_margin[3])
+  # xlim = c(0 - xmax * plot_margin[2], xmax + xmax * plot_margin[4])
+  # ylim = c(0 - ymax * plot_margin[1], ymax + ymax * plot_margin[3])
+#
+#   xlim = c(0, max(groups$cols$x)+1)
+#   ylim = c(0, max(groups$rows$y)+1)
+  xlim = c(0, xmax)
+  ylim = c(0, ymax)
 
 
   ## plotting data
@@ -449,7 +462,9 @@ nheatmap <- function(value.df, xlim=NULL, ylim=NULL,
   # points(xmax, 0)
 
 
-  last_positions <- c(0, 0, ymax, xmax)
+  boundaries <- c(0, 0, ymax, xmax)
+
+  # lines= c(0,0,0,0) - 0.5
 
 
   out = list(xlim=xlim,
@@ -466,12 +481,11 @@ nheatmap <- function(value.df, xlim=NULL, ylim=NULL,
              cluster_cols=cluster_cols,
              groups=groups,
              plotting.df=m.df,
-             boundaries = last_positions,
+             boundaries = boundaries,
              legend = list(),
              din_ratio=din_ratio)
 
 }
-
 
 
 
@@ -486,70 +500,88 @@ nheatmap <- function(value.df, xlim=NULL, ylim=NULL,
 #' @export
 #'
 #' @examples
-nheatmap_boundaries <- function(nh, side, prop, show_bounding_box=F, din_adjusted=T) {
+nh_boundaries <- function(nh, side, size, gap, text.gap=0, text.restriction=F, show_bounding_box=F, din_adjusted=T) {
 
-  if (din_adjusted) {
-    din_ratio = nh$din_ratio
+  if (side %in% c(2,4)) {
+    cxy = par()$cxy[1] * 1.33
+
   } else {
-    din_ratio = 1
+    cxy = par()$cxy[2]
+
   }
-  # din_ratio = 1
-
-  if (side == 2) {
-    ## left
-
-    xy0 = nh$boundaries[2]
-    xy1 = xy0 - nh$xmax * prop * din_ratio
-    xy0 = xy0 - nh$gap.x
-
-    if (show_bounding_box) {rect(xy1, min(nh$plotting.df$y), xy0, max(nh$plotting.df$y)+1)}
-
-    nh$boundaries[2] = xy1
-
-    sign = -1
 
 
-  } else if (side == 1) {
+  if (side == 1) {
     ## bot
 
-    xy0 = nh$boundaries[1]
-    xy1 = xy0 - nh$ymax * prop
-    xy0 = xy0 - nh$gap.y
+    xy1 = nh$boundaries[side] - cxy * gap
+    xy0 = nh$boundaries[side] - cxy * size - cxy * gap
+
+    nh$boundaries[side] = xy0 - text.gap
 
     if (show_bounding_box) {rect(min(nh$plotting.df$x), xy1, max(nh$plotting.df$x)+1, xy0)}
 
-    nh$boundaries[1] = xy1
-
     sign = -1
 
+  } else if (side == 2) {
+    ## left
 
-  } else if (side == 4) {
-    ## right
+    xy1 = nh$boundaries[side] - cxy * size - cxy * gap - text.gap
+    xy0 = nh$boundaries[side] - cxy * gap - text.gap
 
-    xy0 = nh$boundaries[4]
-    xy1 = xy0 + nh$xmax * prop * din_ratio
-    xy0 = xy0 + nh$gap.x
+    nh$boundaries[side] = xy1
 
-    if (show_bounding_box) {rect(xy0, min(nh$plotting.df$y), xy1, max(nh$plotting.df$y)+1)}
+    if (show_bounding_box) {rect(xy1, min(nh$plotting.df$y), xy0, max(nh$plotting.df$y)+1)}
 
-    nh$boundaries[4] = xy1
-
-    sign = 1
-
+    sign = -1
 
   } else if (side == 3) {
     ## top
 
-    xy0 = nh$boundaries[3]
-    xy1 = xy0 + nh$ymax * prop
-    xy0 = xy0 + nh$gap.y
+    xy1 = nh$boundaries[side] + cxy * size + cxy * gap + text.gap
+    xy0 = nh$boundaries[side] + cxy * gap + text.gap
+
+    nh$boundaries[side] = xy1
 
     if (show_bounding_box) {rect(min(nh$plotting.df$x), xy1, max(nh$plotting.df$x)+1, xy0)}
 
-    nh$boundaries[3] = xy1
+    sign = 1
+  } else if (side == 4) {
+    ## right
+
+    xy1 = nh$boundaries[side] + cxy * gap
+    xy0 = nh$boundaries[side] + cxy * size + cxy * gap
+
+    nh$boundaries[side] = xy0 + text.gap
+
+    if (show_bounding_box) {rect(xy0, min(nh$plotting.df$y), xy1, max(nh$plotting.df$y)+1)}
 
     sign = 1
+
+
   }
+
+
+  if (text.restriction) {
+    if (side == 1) {
+      xy0 = xy1 - text.restriction
+      nh$boundaries[side] = xy0
+
+    } else if (side == 2) {
+      xy1 = xy0 - text.restriction
+      nh$boundaries[side] = xy1
+
+    } else if (side == 3) {
+      xy1 = xy0 + text.restriction
+      nh$boundaries[side] = xy1
+
+    } else if (side == 4) {
+      xy0 = xy1 + text.restriction
+      nh$boundaries[side] = xy0
+
+    }
+  }
+
 
   ls = list(xy0=xy0,
             xy1=xy1,
@@ -557,6 +589,9 @@ nheatmap_boundaries <- function(nh, side, prop, show_bounding_box=F, din_adjuste
             sign=sign)
   return(ls)
 }
+
+
+
 
 
 
@@ -603,6 +638,25 @@ nh_label <- function(nh, x_vec, y_vec, side, text, just, offset=0.9, cex) {
   text(x, y, text, srt=srt, adj=adj, font=2, cex=cex)
 
 
+}
+
+
+#' empty for now
+#'
+#' @description empty for now
+#'
+#' @param still empty
+#'
+#' @return
+#' @export
+#'
+#' @examples
+nh_rotate <- function(val) {
+  usr = par()$usr
+  usr_ratio = (usr[2] - usr[1]) / (usr[4] - usr[3])
+  pin_ratio = par()$pin[1] / par()$pin[2]
+  val = val / pin_ratio
+  return(val)
 }
 
 
@@ -663,48 +717,52 @@ nh_colorize <- function(col, conditions, palette) {
 #' @export
 #'
 #' @examples
-nheatmap_group <- function(nh, side, attribute, col= NULL, palette="Zissou 1", prop=NULL, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
+nheatmap_group <- function(nh, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
 
   if (labels) {
-    box.p = 0.5
-    text.p = 0.25
-    if (is.null(prop)) {
-      prop=0.1
-    }
-  } else {
-    box.p = 0
-    text.p = 0.25
-    if (is.null(prop)) {
-      prop=0.1
-    }
-  }
+    str_multiplier = 1.5
+    if (side == 1) {
+      text.gap = strheight("G", cex=cex.label) * str_multiplier
 
-  list2env(nheatmap_boundaries(nh, side, prop=prop, show_bounding_box = show_bounding_box), environment())
+    } else if (side == 2) {
+      text.gap = strwidth("G", cex=cex.label) * str_multiplier
+      text.gap = nh_rotate(text.gap)
+
+    } else if (side == 3) {
+      text.gap = strheight("G", cex=cex.label) * str_multiplier
+
+    } else if (side == 4) {
+      text.gap = strwidth("G", cex=cex.label, srt=90) * str_multiplier
+      text.gap = nh_rotate(text.gap)
+
+    }
+  } else {text.gap = 0}
+
+
+  list2env(nh_boundaries(nh, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
 
   if (side == 1) {
     box.y1 = xy0
-    box.y2 = xy0 - abs(xy1-xy0) * (1-box.p)
-    text.y = xy1 + abs(xy1-xy0) * text.p
-    gr = nh$groups$cols
-
-  } else if (side == 3) {
-    box.y1 = xy1
-    box.y2 = xy0 + abs(xy1-xy0) * box.p
-    text.y = xy0 + abs(xy1-xy0) * text.p
+    box.y2 = xy1
+    text.y = xy0 - text.gap * 0.6
     gr = nh$groups$cols
 
   } else if (side == 2) {
-    box.x1 = xy0 - abs(xy1-xy0) * box.p
+    box.x1 = xy0
     box.x2 = xy1
-    text.x = xy0 - abs(xy1-xy0) * text.p
-    # half.x = xy0 - abs(xy1-xy0) * half.p
+    text.x = xy0 + text.gap * 0.6
     gr = nh$groups$rows
 
+  } else if (side == 3) {
+    box.y1 = xy0
+    box.y2 = xy1
+    text.y = xy0 - text.gap * 0.6
+    gr = nh$groups$cols
+
   } else if (side == 4) {
-    box.x1 = xy0 + abs(xy1-xy0) * (1-box.p)
-    box.x2 = xy0
-    text.x = xy1 - abs(xy1-xy0) * text.p
-    # half.x = xy0 + abs(xy1-xy0) * half.p
+    box.x1 = xy0
+    box.x2 = xy1
+    text.x = xy0 + text.gap * 0.6
     gr = nh$groups$rows
 
   }
@@ -740,40 +798,48 @@ nheatmap_group <- function(nh, side, attribute, col= NULL, palette="Zissou 1", p
   if (side %in% c(1,3)) {
     x_vec = gr$x
     y_vec = c(box.y1, box.y2)
+    half.y1 = mean(c(box.y1, box.y2)) + abs(box.y2-box.y1)*0.2
+    half.y2 = mean(c(box.y1, box.y2)) - abs(box.y2-box.y1)*0.2
 
-    half.y = mean(c(box.y1, box.y2))
+    # half.y = mean(c(box.y1, box.y2))
     for (clump_i in seq_along(clumped_groups)) {
       clump = clumped_groups[[clump_i]]
 
       g.df <- gr[gr$group_order %in% clump,]
       cond = g.df[[attribute]][1]
-      segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col='black', lwd=3, lend=1)
-      segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col=col[cond], lwd=2.5, lend=1)
+      # segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col='black', lwd=3, lend=1)
+      # segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col=col[cond], lwd=2.5, lend=1)
+      rect(min(g.df$x), half.y1, max(g.df$x), half.y2, col=col[cond])
       if (labels) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=cex.label) }
 
       for (gi in clump){
         g.df <- gr[gr$group_order == gi,]
         rect(min(g.df$x), box.y1, max(g.df$x)+1, box.y2, col=col[as.vector(cond)])
+        # abline(h=c(box.y1, box.y2))
       }
     }
 
   } else if (side %in% c(2,4)) {
     y_vec = gr$y
     x_vec = c(box.x1, box.x2)
-    half.x = mean(c(box.x1, box.x2))
+    half.x1 = mean(c(box.x1, box.x2)) + abs(box.x2-box.x1)*0.2
+    half.x2 = mean(c(box.x1, box.x2)) - abs(box.x2-box.x1)*0.2
+    # half.x = mean(c(box.x1, box.x2))
 
     for (clump_i in seq_along(clumped_groups)) {
       clump = clumped_groups[[clump_i]]
 
       g.df <- gr[gr$group_order %in% clump,]
       cond = g.df[[attribute]][1]
-      segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col='black', lwd=3, lend=1)
-      segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col=col[cond], lwd=2.5, lend=1)
+      # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col='black', lwd=3, lend=1)
+      # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col=col[cond], lwd=2.5, lend=1)
+      rect(half.x1, min(g.df$y), half.x2, max(g.df$y), col=col[cond])
       if (labels) { text(text.x, mean(c(min(g.df$y), max(g.df$y)+1)), srt=90, cond, cex=cex) }
 
       for (gi in clump){
         g.df <- gr[gr$group_order == gi,]
         rect(box.x1, min(g.df$y), box.x2, max(g.df$y)+1, col=col[cond])
+        # abline(v=c(box.x1, box.x2))
       }
     }
   }
@@ -807,10 +873,10 @@ nheatmap_group <- function(nh, side, attribute, col= NULL, palette="Zissou 1", p
 #' @export
 #'
 #' @examples
-nheatmap_annotate <- function(nh, side, attribute, a.df=NULL, col=NULL, prop=0.05, palette='Viridis',
+nheatmap_annotate <- function(nh, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.4, palette='Viridis',
                               show_bounding_box=F, type='rect', label_just='right', cex.label=0.8) {
 
-  list2env(nheatmap_boundaries(nh, side, prop=prop, show_bounding_box = show_bounding_box), environment())
+  list2env(nh_boundaries(nh, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
   if (is.null(a.df)) {
     if (side %in% c(1,3)) {
@@ -974,10 +1040,9 @@ nheatmap_legend <- function(nh, add=F) {
 #' @export
 #'
 #' @examples
-nheatmap_names <- function(nh, side, attribute=F, names=NULL, prop=0.1, cutoff=T, cex=0.8,
-                           show_bounding_box = F) {
+nheatmap_names <- function(nh, side, attribute=F, names=NULL, size=1, gap=0.4, autobox=T, cex=0.8,
+                           show_bounding_box = F, just='auto') {
 
-  list2env(nheatmap_boundaries(nh, side, prop=prop, show_bounding_box = show_bounding_box), environment())
 
   if (side %in% c(1,3)) {
     gr = nh$groups$cols
@@ -995,26 +1060,60 @@ nheatmap_names <- function(nh, side, attribute=F, names=NULL, prop=0.1, cutoff=T
   if (attribute == F) {
     labels = row.names(gr)
 
-  # }  else if (!attribute %in% colnames(names)) {
-  #   stop(paste(attribute, 'not found in column names'))
+    # }  else if (!attribute %in% colnames(names)) {
+    #   stop(paste(attribute, 'not found in column names'))
 
   } else {
     labels = ar[match(row.names(gr), row.names(ar)), attribute]
   }
 
-  if (side == 1) {
-    text(gr$x+0.5, xy0, labels, cex=cex, srt=90, adj=c(1,0.5))
 
-  } else if (side == 3) {
-    text(gr$x+0.5, xy0, labels, cex=cex, srt=90, adj=c(0,0.5))
+  if (autobox) {
+    if (side %in% c(2,4)) {
+      srt=0
+    } else {
+      srt=90
+    }
+    text.restriction=max(strwidth(labels, cex=cex), na.rm=T)
+    if (srt == 90) {
+      text.restriction = nh_rotate(text.restriction)
+    }
 
-  } else if (side == 2) {
-    text(xy0, gr$y+0.5, labels, cex=cex, srt=0, adj=c(1,0.5))
-
-  } else if (side == 4) {
-    text(xy0, gr$y+0.5, labels, cex=cex, srt=0, adj=c(0,0.5))
+  } else {
+    text.restriction=F
 
   }
+
+  list2env(nh_boundaries(nh, side, size, gap, show_bounding_box = show_bounding_box, text.restriction=text.restriction), environment())
+
+
+  if (just == 'auto') {
+    if (side %in% c(1,2)) {
+      just = 'right'
+    } else {
+      just = 'left'
+    }
+  }
+
+
+  if (just == 'right') {
+    if (side %in% c(1,3)) {
+      text(gr$x+0.5, xy1, labels, cex=cex, srt=90, adj=c(1,0.5))
+
+    } else if (side %in% c(2,4)) {
+      text(xy0, gr$y+0.5, labels, cex=cex, srt=0, adj=c(1,0.5))
+
+    }
+  } else if (just == 'left') {
+    if (side %in% c(1,3)) {
+      text(gr$x+0.5, xy0, labels, cex=cex, srt=90, adj=c(0,0.5))
+
+    } else if (side %in% c(2,4)) {
+      text(xy1, gr$y+0.5, labels, cex=cex, srt=0, adj=c(0,0.5))
+
+    }
+  }
+
 
 
   nh$boundaries <- boundaries
@@ -1041,11 +1140,11 @@ nheatmap_names <- function(nh, side, attribute=F, names=NULL, prop=0.1, cutoff=T
 #' @export
 #'
 #' @examples
-nheatmap_dend <- function(nh, side, prop=0.1, cutoff=T, cex=0.8,
+nheatmap_dend <- function(nh, side, size=1, gap=0.4, cutoff=T, cex=0.8,
   show_bounding_box = F, ...) {
 
 
-  list2env(nheatmap_boundaries(nh, side, prop=prop, show_bounding_box = show_bounding_box), environment())
+  list2env(nh_boundaries(nh, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
   if (side %in% c(1,3)) {
     gr = nh$groups$cols

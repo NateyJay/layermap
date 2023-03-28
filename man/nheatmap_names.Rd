@@ -9,10 +9,12 @@ nheatmap_names(
   side,
   attribute = F,
   names = NULL,
-  prop = 0.1,
-  cutoff = T,
+  size = 1,
+  gap = 0.4,
+  autobox = T,
   cex = 0.8,
-  show_bounding_box = F
+  show_bounding_box = F,
+  just = "auto"
 )
 }
 \arguments{

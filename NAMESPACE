@@ -2,11 +2,12 @@
 
 S3method(plot,ndendrogram)
 export(as.ndendrogram)
+export(nh_boundaries)
 export(nh_colorize)
 export(nh_label)
+export(nh_rotate)
 export(nheatmap)
 export(nheatmap_annotate)
-export(nheatmap_boundaries)
 export(nheatmap_dend)
 export(nheatmap_group)
 export(nheatmap_legend)

@@ -10,7 +10,8 @@ nheatmap_group(
   attribute,
   col = NULL,
   palette = "Zissou 1",
-  prop = NULL,
+  size = 1,
+  gap = 0.4,
   cex = 0.8,
   show_bounding_box = F,
   label_just = "right",
@@ -29,9 +30,9 @@ nheatmap_group(
 
 \item{palette}{- hcl.colors palette to fill in unnamed conditions colors.}
 
-\item{prop}{- the proportion of plotting space reserved for this layer}
-
 \item{labels}{- logical for whether group labels should be plotted.}
+
+\item{prop}{- the proportion of plotting space reserved for this layer}
 
 \item{layer_just}{- the justification side for a layer label (right or left).}
 

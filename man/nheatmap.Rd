@@ -19,7 +19,6 @@ nheatmap(
   cluster_rows = T,
   group_gap = 0.02,
   border = "grey25",
-  plot_margin = c(0.2, 0.2, 0.2, 0.2),
   dim_reference = "din"
 )
 }
