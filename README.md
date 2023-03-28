@@ -1,4 +1,4 @@
-<p align="left"><img src="images/Logo.png" alt="main logo" width="500" /></p>
+<p align="center"><img src="images/Logo.png" alt="main logo" width="500" /></p>
 
 A modular heatmap library for R-base graphics
  
