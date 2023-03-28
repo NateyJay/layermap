@@ -64,12 +64,25 @@ Layer-functions add a layer feature next to the plot, with the side correspondin
 Sides make it important to give the correct attribute names for the sides:
 `(sides 1,3 ~ column.df, sides 2,4 ~ row.df)`
 
-***Proportion***  
-The general plotting area and layers are spatially defined in terms of proportion. In the initial plot invocation, this is given by the option default `plot_margin=c(0.2,0.2,0.2,0.2)`. 
-This means that all sides have margin space for layers corresponding to 20% of the total plot dimension on that axis. 
+***Sizes***  
+The general plotting area and layers are spatially defined in terms of the margin lines. In terms of R base graphics, the plotting area is where the colored "heats" are shown, while the margins include the layers.
 
-Layers are added under the same principle, with proportion describing the width/height of that layer in regard to the axis.
+Margin sizes can be changed using `par(mar)`, as always. Example: `par(mar=c(2,3,3,10))`
 
+Layer dimensions are decided by predominantly 2 attributes: the size of the layer and the gap between this layer and the prior, both in terms of lines. The defaults are `size=4` and `gap=0.4`, meaning that most layers will be 1.5x the size of the gap.
+
+***Export***
+Proportion in export is always difficult to work out. Since layer dimensions are based on margins, if you change the plotting area the layers will be dramatically affected. This means, that you will need to replot all the layers. A recommended workflow using R-studio is to reform the plotting window and margin sizes until they meet they look good and then export that same plotting window size. `svglite` is an excellent package for exporting vector graphics.
+
+Example for plotting window size:
+```
+#once you find a good window, you can save using svglite to save
+
+svglite("Outputplot.svg", par()$din[1], par()$din[2])
+#plotting code here
+dev.off()
+
+```
 
 ---
 ### Grouping
@@ -111,24 +124,27 @@ column.df$treatment <- factor(column.df$treatment, levels=c("Nitrate", "Drought"
 row.df <- read.delim("test/rows.txt")
 value.df <- read.delim("test/values.txt")
 
+par(mar=c(5,7,5,10))
 nh = nheatmap(value.df, zero_centered_colors = T,
                   column.df=column.df, row.df=row.df,
                   column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
               cluster_cols=T,
-              group_gap = 0.02,
-              plot_margin = c(0.1,0.5,0.4,0.2))
+              group_gap = 0.02)
 
-nh = nheatmap_group(nh, 3, 'treatment', labels=T, prop=0.1, label_just = 'left',
-                    col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')))
-nh = nheatmap_annotate(nh, 3, 'tissue', prop=0.05, label_just = 'left',
+nh = nheatmap_group(nh, 3, 'treatment', labels=T, label_just = 'left',
+                    col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),
+                    show_bounding_box = F)
+
+
+nh = nheatmap_annotate(nh, 3, 'tissue', label_just = 'left',
                        col=setNames('red', 'Root'))
 
-nh = nheatmap_group(nh, 4, 'PlantTFDB', labels=F, prop=0.05, label_just = 'left')
-nh = nheatmap_group(nh, 4, 'Nit_GOs', labels=F, prop=0.05, label_just = 'left')
+nh = nheatmap_group(nh, 4, 'PlantTFDB', labels=T, label_just = 'left')
+nh = nheatmap_group(nh, 4, 'Nit_GOs', labels=F, label_just = 'left')
 
-nh = nheatmap_names(nh, 2, prop=0.15, cex=0.5)
-nh = nheatmap_names(nh, 2, "symbol", cex=0.5)
-nh = nheatmap_dend(nh, 4, lwd=1)
+nh = nheatmap_names(nh, 2, cex=0.5)
+nh = nheatmap_names(nh, 2, 'symbol', cex=0.5)
+nh = nheatmap_dend(nh, 4, lwd=1.5, gap=0.4)
 ```
 
 
