@@ -8,7 +8,7 @@ nheatmap_dend(
   nh,
   side,
   size = 1,
-  gap = 0.4,
+  gap = 0.2,
   cutoff = T,
   cex = 0.8,
   show_bounding_box = F,
