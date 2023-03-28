@@ -39,8 +39,9 @@ value.df[row.names(row.df), row.names(column.df)] ## should return no errors.
 
 *Note:* `row.df` and `column.df` are not required, but are almost certainly necessary to annotate the plot with layers (where the magic lives).
 
----
-### Invocation
+Invocation
+----------
+
 This function is modular, so it relies on multiple commands to build a complete plot. The main command is `nheatmap()`, which will produce the unannotated plot. The output of this will be saved and passed into subsequent commands to add layers to the annotation.
 
 ```
@@ -52,26 +53,25 @@ nh <- nheatmap_annotate(nh, side=1, aname='anotherColumn')
 ```
 
 
----
-### Common plotting principles
-
+Common plotting principles
+--------------------------
 
 <p align="center"><img src="images/Margins.png" alt="margins" width="500" /></p>
 
-***Sides***  
+#### Sides
 Layer-functions add a layer feature next to the plot, with the side corresponding to r-plotting sides:
 `(1-bottom, 2-left, 3-top, 4-right)`  
 Sides make it important to give the correct attribute names for the sides:
 `(sides 1,3 ~ column.df, sides 2,4 ~ row.df)`
 
-***Sizes***  
+#### Sizes
 The general plotting area and layers are spatially defined in terms of the margin lines. In terms of R base graphics, the plotting area is where the colored "heats" are shown, while the margins include the layers.
 
 Margin sizes can be changed using `par(mar)`, as always. Example: `par(mar=c(2,3,3,10))`
 
 Layer dimensions are decided by predominantly 2 attributes: the size of the layer and the gap between this layer and the prior, both in terms of lines. The defaults are `size=4` and `gap=0.4`, meaning that most layers will be 1.5x the size of the gap.
 
-***Export***
+#### Export
 Proportion in export is always difficult to work out. Since layer dimensions are based on margins, if you change the plotting area the layers will be dramatically affected. This means, that you will need to replot all the layers. A recommended workflow using R-studio is to reform the plotting window and margin sizes until they meet they look good and then export that same plotting window size. `svglite` is an excellent package for exporting vector graphics.
 
 Example for plotting window size:
@@ -87,8 +87,8 @@ dev.off()
 
 ```
 
----
-### Grouping
+Grouping
+--------
 
 Sometimes, you want to show heatmaps where some attributes are grouped together and won't inter-mingle with other groups upon clustering. This is a core-feature of nheatmap, and allows the user to highlight multiple layers of groups in the data for each axis.
 
@@ -98,8 +98,8 @@ Groups are derived from attribute columns in the `row.df` and `column.df`. As th
 
 Group layers can be added using the `nheatmap_group()` function. Multiple group layers may be plotted, if multiple group attributes were specified.
 
----
-### Other layers
+Other layers
+------------
 
 Several other layer functions allow building a custom plot.
 
@@ -109,8 +109,8 @@ Several other layer functions allow building a custom plot.
 
 `nheatmap_text()` adds text labels to an axis. Useful to show gene names, symbols (or both!). A r-base character related options.
 
----
-### Colors
+Colors
+------
 Colors will automatically be provided from default hcl.colors palettes. For all layers, colors can be specified as a named vector, with the names corresponding to attribute conditions. This can be easily made with `setNames()`:
 ```
 color_vector = setNames(colors, conditions)
