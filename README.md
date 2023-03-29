@@ -11,6 +11,7 @@ This package is meant to address a couple of what I see as a couple common probl
 * **Unlabeled annotations**, usually relying on matching games with indistinct colors.
 * **No flexiblity in the orientation**, or manner of annotated attributes (sides, different formats).
 * **No tiers of organization**, usually relying on clustering/not clustering as the only form of ordering.
+* **Arbitrary plotting spaces** are commonly used for many packages relating to ggplot. For those that want to use R-base graphics tools, they are usually tough to mix.
 
 # Installation
 
