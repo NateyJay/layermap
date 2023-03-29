@@ -1191,7 +1191,7 @@ nheatmap_dend <- function(nh, side, size=1, gap=0.2, cutoff=T, cex=0.8,
 
       } else if (side == 2) {
         plot.ndendrogram(d, add=T,
-                         pos.x = xy0, pos.y=pos.xy-0.5,
+                         pos.x = xy1, pos.y=pos.xy-0.5,
                          scale.y=scale.xy,
                          scale.x=width, horiz=T, flip.x=T, ...)
 
