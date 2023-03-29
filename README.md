@@ -169,7 +169,7 @@ nh = nheatmap_dend(nh, 4, lwd=1.5, gap=0.4)
 To-do list
 ----------
 
-[x] Make a simple install guide.  
-[ ] Complete help documents within R.  
-[ ] Complete more reproducible examples.
+- [x] Make a simple install guide.  
+- [ ] Complete help documents within R.  
+- [ ] Complete more reproducible examples.
 
