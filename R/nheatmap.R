@@ -1,11 +1,4 @@
 
-# To-do
-
-# [ ] Allow to accept manual color vectors. Perhaps this will be a named list of groups/annotations representing named vectors for colors
-# [ ] Accept annotation as a top-level attribute. This can be entered at the main-plot or an annotation method.
-# [ ] Colorize and label legend better. Allow for placement in main plotting space. Maybe sides 1.5, 2.5, 3.5, 4.5/0.5?
-# [ ] Give an option for changing main-space widths (so some column.df can be bigger/smaller).
-
 
 require(stringr)
 
@@ -191,20 +184,20 @@ plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=
 
 
 
-#' Plot nheatmap
+#' Plot layermap
 #'
-#' @description Backbone function for nheatmap. This makes the basic heatmap structure and plots it. Requires a dataframe of just numerical values with named rows/columns. Row and column attributes are provided through additional dataframes keyed to the value dataframe names.
+#' @description Backbone function for layermap. This makes the basic heatmap structure and plots it. Requires a dataframe of just numerical values with named rows/columns. Row and column attributes are provided through additional dataframes keyed to the value dataframe names.
 #'
 #' @param value.df - numerical dataframe or matrix with column name and row names.
 #' @param row.df - attribute dataframe which will be used for layer plotting functions on sides 2 and 4. Rownames correspond to value.df rownames.
 #' @param column.df - attribute dataframe which will be used for layer plotting functions on sides 1 and 3. Rownames correspond to value.df colnames.
 #'
 #'
-#' @return nh object
+#' @return ly object
 #' @export
 #'
 #' @examples
-nheatmap <- function(value.df, xlim=NULL, ylim=NULL,
+layermap <- function(value.df, xlim=NULL, ylim=NULL,
                          column.df=NULL, row.df=NULL,
                          column_groups=c(), row_groups=c(),
                          palette='PuOr', reverse_palette=T,
@@ -500,7 +493,7 @@ nheatmap <- function(value.df, xlim=NULL, ylim=NULL,
 #' @export
 #'
 #' @examples
-nh_boundaries <- function(nh, side, size, gap, text.gap=0, text.restriction=F, show_bounding_box=F, din_adjusted=T) {
+ly_boundaries <- function(ly, side, size, gap, text.gap=0, text.restriction=F, show_bounding_box=F, din_adjusted=T) {
 
   if (side %in% c(2,4)) {
     cxy = par()$cxy[1] * 1.33
@@ -514,47 +507,47 @@ nh_boundaries <- function(nh, side, size, gap, text.gap=0, text.restriction=F, s
   if (side == 1) {
     ## bot
 
-    xy1 = nh$boundaries[side] - cxy * gap
-    xy0 = nh$boundaries[side] - cxy * size - cxy * gap
+    xy1 = ly$boundaries[side] - cxy * gap
+    xy0 = ly$boundaries[side] - cxy * size - cxy * gap
 
-    nh$boundaries[side] = xy0 - text.gap
+    ly$boundaries[side] = xy0 - text.gap
 
-    if (show_bounding_box) {rect(min(nh$plotting.df$x), xy1, max(nh$plotting.df$x)+1, xy0)}
+    if (show_bounding_box) {rect(min(ly$plotting.df$x), xy1, max(ly$plotting.df$x)+1, xy0)}
 
     sign = -1
 
   } else if (side == 2) {
     ## left
 
-    xy1 = nh$boundaries[side] - cxy * size - cxy * gap - text.gap
-    xy0 = nh$boundaries[side] - cxy * gap - text.gap
+    xy1 = ly$boundaries[side] - cxy * size - cxy * gap - text.gap
+    xy0 = ly$boundaries[side] - cxy * gap - text.gap
 
-    nh$boundaries[side] = xy1
+    ly$boundaries[side] = xy1
 
-    if (show_bounding_box) {rect(xy1, min(nh$plotting.df$y), xy0, max(nh$plotting.df$y)+1)}
+    if (show_bounding_box) {rect(xy1, min(ly$plotting.df$y), xy0, max(ly$plotting.df$y)+1)}
 
     sign = -1
 
   } else if (side == 3) {
     ## top
 
-    xy1 = nh$boundaries[side] + cxy * size + cxy * gap + text.gap
-    xy0 = nh$boundaries[side] + cxy * gap + text.gap
+    xy1 = ly$boundaries[side] + cxy * size + cxy * gap + text.gap
+    xy0 = ly$boundaries[side] + cxy * gap + text.gap
 
-    nh$boundaries[side] = xy1
+    ly$boundaries[side] = xy1
 
-    if (show_bounding_box) {rect(min(nh$plotting.df$x), xy1, max(nh$plotting.df$x)+1, xy0)}
+    if (show_bounding_box) {rect(min(ly$plotting.df$x), xy1, max(ly$plotting.df$x)+1, xy0)}
 
     sign = 1
   } else if (side == 4) {
     ## right
 
-    xy1 = nh$boundaries[side] + cxy * gap
-    xy0 = nh$boundaries[side] + cxy * size + cxy * gap
+    xy1 = ly$boundaries[side] + cxy * gap
+    xy0 = ly$boundaries[side] + cxy * size + cxy * gap
 
-    nh$boundaries[side] = xy0 + text.gap
+    ly$boundaries[side] = xy0 + text.gap
 
-    if (show_bounding_box) {rect(xy0, min(nh$plotting.df$y), xy1, max(nh$plotting.df$y)+1)}
+    if (show_bounding_box) {rect(xy0, min(ly$plotting.df$y), xy1, max(ly$plotting.df$y)+1)}
 
     sign = 1
 
@@ -565,19 +558,19 @@ nh_boundaries <- function(nh, side, size, gap, text.gap=0, text.restriction=F, s
   if (text.restriction) {
     if (side == 1) {
       xy0 = xy1 - text.restriction
-      nh$boundaries[side] = xy0
+      ly$boundaries[side] = xy0
 
     } else if (side == 2) {
       xy1 = xy0 - text.restriction
-      nh$boundaries[side] = xy1
+      ly$boundaries[side] = xy1
 
     } else if (side == 3) {
       xy1 = xy0 + text.restriction
-      nh$boundaries[side] = xy1
+      ly$boundaries[side] = xy1
 
     } else if (side == 4) {
       xy0 = xy1 + text.restriction
-      nh$boundaries[side] = xy0
+      ly$boundaries[side] = xy0
 
     }
   }
@@ -585,7 +578,7 @@ nh_boundaries <- function(nh, side, size, gap, text.gap=0, text.restriction=F, s
 
   ls = list(xy0=xy0,
             xy1=xy1,
-            boundaries=nh$boundaries,
+            boundaries=ly$boundaries,
             sign=sign)
   return(ls)
 }
@@ -606,9 +599,9 @@ nh_boundaries <- function(nh, side, size, gap, text.gap=0, text.restriction=F, s
 #' @export
 #'
 #' @examples
-nh_label <- function(nh, x_vec, y_vec, side, text, just, offset=0.9, cex) {
+ly_label <- function(ly, x_vec, y_vec, side, text, just, offset=0.9, cex) {
   if (side %in% c(2,4)) {
-    offset = strheight("G", font=2, cex=cex) * offset * nh$din_ratio
+    offset = strheight("G", font=2, cex=cex) * offset * ly$din_ratio
     x = mean(x_vec)
     srt= 90
 
@@ -651,7 +644,7 @@ nh_label <- function(nh, x_vec, y_vec, side, text, just, offset=0.9, cex) {
 #' @export
 #'
 #' @examples
-nh_rotate <- function(val) {
+ly_rotate <- function(val) {
   usr = par()$usr
   usr_ratio = (usr[2] - usr[1]) / (usr[4] - usr[3])
   pin_ratio = par()$pin[1] / par()$pin[2]
@@ -663,7 +656,7 @@ nh_rotate <- function(val) {
 
 #' Build a named color vector
 #'
-#' @description Utility for getting named color vector used in nheatmap layer functions.
+#' @description Utility for getting named color vector used in layermap layer functions.
 #'
 #' @param col - named color vector
 #' @param conditions - list of conditions to colorize
@@ -673,7 +666,7 @@ nh_rotate <- function(val) {
 #' @export
 #'
 #' @examples
-nh_colorize <- function(col, conditions, palette) {
+ly_colorize <- function(col, conditions, palette) {
 
   if (!is.null(col)) {
     if (!any(names(col) %in% conditions)) {
@@ -703,7 +696,7 @@ nh_colorize <- function(col, conditions, palette) {
 #'
 #' @description Function for plotting a group layer based on column or row attributes.
 #'
-#' @param nh - nheatmap object .
+#' @param ly - layermap object .
 #' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
 #' @param attribute - name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
 #' @param col - named color vector, where the names are conditions found in the attribute.
@@ -713,11 +706,11 @@ nh_colorize <- function(col, conditions, palette) {
 #' @param cex_label - cex value for label characters.
 #' @param labels - logical for whether group labels should be plotted.
 #'
-#' @return nheatmap object
+#' @return layermap object
 #' @export
 #'
 #' @examples
-nheatmap_group <- function(nh, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
+ly_group <- function(ly, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
 
   if (labels) {
     str_multiplier = 1.5
@@ -726,44 +719,44 @@ nheatmap_group <- function(nh, side, attribute, col= NULL, palette="Zissou 1", s
 
     } else if (side == 2) {
       text.gap = strwidth("G", cex=cex.label) * str_multiplier
-      text.gap = nh_rotate(text.gap)
+      text.gap = ly_rotate(text.gap)
 
     } else if (side == 3) {
       text.gap = strheight("G", cex=cex.label) * str_multiplier
 
     } else if (side == 4) {
       text.gap = strwidth("G", cex=cex.label) * str_multiplier
-      text.gap = nh_rotate(text.gap)
+      text.gap = ly_rotate(text.gap)
 
     }
   } else {text.gap = 0}
 
 
-  list2env(nh_boundaries(nh, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
+  list2env(ly_boundaries(ly, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
 
   if (side == 1) {
     box.y1 = xy0
     box.y2 = xy1
     text.y = xy0 - text.gap * 0.6
-    gr = nh$groups$cols
+    gr = ly$groups$cols
 
   } else if (side == 2) {
     box.x1 = xy0
     box.x2 = xy1
     text.x = xy0 + text.gap * 0.6
-    gr = nh$groups$rows
+    gr = ly$groups$rows
 
   } else if (side == 3) {
     box.y1 = xy0
     box.y2 = xy1
     text.y = xy0 - text.gap * 0.6
-    gr = nh$groups$cols
+    gr = ly$groups$cols
 
   } else if (side == 4) {
     box.x1 = xy0
     box.x2 = xy1
     text.x = xy0 + text.gap * 0.6
-    gr = nh$groups$rows
+    gr = ly$groups$rows
 
   }
 
@@ -772,7 +765,7 @@ nheatmap_group <- function(nh, side, attribute, col= NULL, palette="Zissou 1", s
   conditions = unique(gr[[attribute]])
 
 
-  col = nh_colorize(col, conditions, palette)
+  col = ly_colorize(col, conditions, palette)
 
   ## Finding groups which are identical and consecutive
   last_cond = ''
@@ -845,11 +838,11 @@ nheatmap_group <- function(nh, side, attribute, col= NULL, palette="Zissou 1", s
   }
 
 
-  nh_label(nh, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+  ly_label(ly, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
 
-  nh$legend[[attribute]] = col
-  nh$boundaries <- boundaries
-  return(nh)
+  ly$legend[[attribute]] = col
+  ly$boundaries <- boundaries
+  return(ly)
 }
 
 
@@ -860,7 +853,7 @@ nheatmap_group <- function(nh, side, attribute, col= NULL, palette="Zissou 1", s
 #'
 #' @description Function for plotting an annotation layer based on column or row attributes.
 #'
-#' @param nh - nheatmap object .
+#' @param ly - layermap object .
 #' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
 #' @param attribute - name for the attribute which will be plotted in the layer.
 #' @param col - named color vector, where the names are conditions found in the attribute.
@@ -869,30 +862,30 @@ nheatmap_group <- function(nh, side, attribute, col= NULL, palette="Zissou 1", s
 #' @param layer_just - the justification side for a layer label (right or left).
 #' @param cex.label - cex value for label characters.
 #'
-#' @return nheatmap object
+#' @return layermap object
 #' @export
 #'
 #' @examples
-nheatmap_annotate <- function(nh, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.4, palette='Viridis',
+ly_annotate <- function(ly, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.4, palette='Viridis',
                               show_bounding_box=F, type='rect', label_just='right', cex.label=0.8) {
 
-  list2env(nh_boundaries(nh, side, size, gap, show_bounding_box = show_bounding_box), environment())
+  list2env(ly_boundaries(ly, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
   if (is.null(a.df)) {
     if (side %in% c(1,3)) {
-      a.df <- nh$column.df
+      a.df <- ly$column.df
     } else if (side %in% c(2,4)) {
-      a.df <- nh$row.df
+      a.df <- ly$row.df
       }
   }
 
   # attribute=names(a.df)[1]
 
   conditions = unique(a.df[[attribute]])
-  col = nh_colorize(col, conditions, palette)
+  col = ly_colorize(col, conditions, palette)
 
   if (side %in% c(2,4)) {
-    gr = nh$groups$rows
+    gr = ly$groups$rows
     y_vec = gr$y
     x_vec = c(xy1, xy0)
 
@@ -907,18 +900,18 @@ nheatmap_annotate <- function(nh, side, attribute, a.df=NULL, col=NULL, size=1, 
     }
 
     # if (label_just == 'right') {
-    #   x1 = mean(c(xy0,xy1)); y1 = max(gr$y)+nh$gap.y
+    #   x1 = mean(c(xy0,xy1)); y1 = max(gr$y)+ly$gap.y
     #   text(x1, y1, attribute, adj=c(0,0.5), font=2, srt=90, cex=cex)
-    #   points(x1, y1-nh$gap.y*0.5, pch=-9660, cex=0.5)
+    #   points(x1, y1-ly$gap.y*0.5, pch=-9660, cex=0.5)
     #
     # } else if (label_just == 'left') {
-    #   x1 = mean(c(xy0,xy1)); y1 = min(gr$y)-nh$gap.y
+    #   x1 = mean(c(xy0,xy1)); y1 = min(gr$y)-ly$gap.y
     #   text(x1, y1, attribute, adj=c(1,0.5), font=2, srt=90, cex=cex)
-    #   points(x1, y1+nh$gap.y*0.5, pch=-9650, cex=0.5)
+    #   points(x1, y1+ly$gap.y*0.5, pch=-9650, cex=0.5)
     # }
 
   } else if (side %in% c(1,3)) {
-    gr = nh$groups$cols
+    gr = ly$groups$cols
     x_vec = gr$x
     y_vec = c(xy1, xy0)
 
@@ -935,23 +928,23 @@ nheatmap_annotate <- function(nh, side, attribute, a.df=NULL, col=NULL, size=1, 
 
     # if (label_just == 'right') {
     #   label_string = paste(-9668, attribute, 'new')
-    #   x1 = max(gr$x)+nh$gap.x+1; y1 = mean(c(xy0,xy1))
+    #   x1 = max(gr$x)+ly$gap.x+1; y1 = mean(c(xy0,xy1))
     #   text(x1, y1, label_string, adj=c(0,0.5), font=2, cex=cex)
 
-      # x1 = max(gr$x)+nh$gap.x+1; y1 = mean(c(xy0,xy1))
+      # x1 = max(gr$x)+ly$gap.x+1; y1 = mean(c(xy0,xy1))
       # text(x1, y1, attribute, adj=c(0,0.5), font=2, cex=cex)
-      # points(x1-nh$gap.x*0.5, y1, pch=-9668, cex=0.5)
+      # points(x1-ly$gap.x*0.5, y1, pch=-9668, cex=0.5)
 
     # } else if (label_just == 'left') {
-    #   x1 = min(gr$x)-nh$gap.x; y1 = mean(c(xy0,xy1))
+    #   x1 = min(gr$x)-ly$gap.x; y1 = mean(c(xy0,xy1))
     #   text(x1,y1, attribute, adj=c(1,0.5), font=2, cex=cex)
-    #   points(x1+nh$gap.x*0.5, y1, pch=-9658, cex=0.5)
+    #   points(x1+ly$gap.x*0.5, y1, pch=-9658, cex=0.5)
     # }
   }
-  nh_label(nh, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
-  nh$boundaries <- boundaries
-  nh$legend[[attribute]] = col
-  return(nh)
+  ly_label(ly, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+  ly$boundaries <- boundaries
+  ly$legend[[attribute]] = col
+  return(ly)
 }
 
 
@@ -959,18 +952,18 @@ nheatmap_annotate <- function(nh, side, attribute, a.df=NULL, col=NULL, size=1, 
 
 #' Plot simple legend
 #'
-#' @description Makes a simple heatmap color legend for a nheatmap object.
+#' @description Makes a simple heatmap color legend for a layermap object.
 #'
-#' @param nh - nheatmap object
+#' @param ly - layermap object
 #' @param add - logical for whether this should plot a new window. Experimental.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-nheatmap_legend <- function(nh, add=F) {
+ly_legend <- function(ly, add=F) {
 
-  leg <- nh$legend
+  leg <- ly$legend
   lines = length(unlist(leg)) + length(leg) + 3
 
   par(mar=rep(0.3,4))
@@ -1032,24 +1025,24 @@ nheatmap_legend <- function(nh, add=F) {
 #'
 #' @description Function for plotting an name layer based on column or row attributes.
 #'
-#' @param nh - nheatmap object .
+#' @param ly - layermap object .
 #' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
 #' @param attribute - name for the attribute which will be plotted in the layer. Default is F, which plots the rownames.
 #'
-#' @return nheatmap object
+#' @return layermap object
 #' @export
 #'
 #' @examples
-nheatmap_names <- function(nh, side, attribute=F, names=NULL, size=1, gap=0.4, autobox=T, cex=0.8,
+ly_names <- function(ly, side, attribute=F, names=NULL, size=1, gap=0.4, autobox=T, cex=0.8,
                            show_bounding_box = F, just='auto') {
 
 
   if (side %in% c(1,3)) {
-    gr = nh$groups$cols
-    ar = nh$column.df
+    gr = ly$groups$cols
+    ar = ly$column.df
   } else if (side %in% c(2,4)) {
-    gr = nh$groups$rows
-    ar = nh$row.df
+    gr = ly$groups$rows
+    ar = ly$row.df
   }
 
   if (!is.null(names)) {
@@ -1076,7 +1069,7 @@ nheatmap_names <- function(nh, side, attribute=F, names=NULL, size=1, gap=0.4, a
     }
     text.restriction=max(strwidth(labels, cex=cex), na.rm=T)
     if (srt == 90) {
-      text.restriction = nh_rotate(text.restriction)
+      text.restriction = ly_rotate(text.restriction)
     }
 
   } else {
@@ -1084,7 +1077,7 @@ nheatmap_names <- function(nh, side, attribute=F, names=NULL, size=1, gap=0.4, a
 
   }
 
-  list2env(nh_boundaries(nh, side, size, gap, show_bounding_box = show_bounding_box, text.restriction=text.restriction), environment())
+  list2env(ly_boundaries(ly, side, size, gap, show_bounding_box = show_bounding_box, text.restriction=text.restriction), environment())
 
 
   if (just == 'auto') {
@@ -1116,8 +1109,8 @@ nheatmap_names <- function(nh, side, attribute=F, names=NULL, size=1, gap=0.4, a
 
 
 
-  nh$boundaries <- boundaries
-  return(nh)
+  ly$boundaries <- boundaries
+  return(ly)
 
 }
 
@@ -1130,26 +1123,26 @@ nheatmap_names <- function(nh, side, attribute=F, names=NULL, size=1, gap=0.4, a
 
 #' Plot dendrogram layer
 #'
-#' @description Function for plotting an dendrogram layer. This function will only work on sides which have been clustered by hclust in the initial nheatmap call.
+#' @description Function for plotting an dendrogram layer. This function will only work on sides which have been clustered by hclust in the initial layermap call.
 #'
-#' @param nh - nheatmap object.
+#' @param ly - layermap object.
 #' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
 #' @param prop - the proportion of plotting space reserved for this layer
 #'
-#' @return nheatmap object
+#' @return layermap object
 #' @export
 #'
 #' @examples
-nheatmap_dend <- function(nh, side, size=1, gap=0.2, cutoff=T, cex=0.8,
+ly_dend <- function(ly, side, size=1, gap=0.2, cutoff=T, cex=0.8,
   show_bounding_box = F, ...) {
 
 
-  list2env(nh_boundaries(nh, side, size, gap, show_bounding_box = show_bounding_box), environment())
+  list2env(ly_boundaries(ly, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
   if (side %in% c(1,3)) {
-    gr = nh$groups$cols
+    gr = ly$groups$cols
   } else if (side %in% c(2,4)) {
-    gr = nh$groups$rows
+    gr = ly$groups$rows
   }
 
 
@@ -1157,10 +1150,10 @@ nheatmap_dend <- function(nh, side, size=1, gap=0.2, cutoff=T, cex=0.8,
     g.df <- gr[gr$group_order == gi,]
 
     if (side %in% c(2,4)) {
-      cl = nh$groups$row_clusters[[gi]]
+      cl = ly$groups$row_clusters[[gi]]
 
     } else if (side %in% c(1,3)) {
-      cl = nh$groups$col_clusters[[gi]]
+      cl = ly$groups$col_clusters[[gi]]
     }
 
 
@@ -1204,8 +1197,8 @@ nheatmap_dend <- function(nh, side, size=1, gap=0.2, cutoff=T, cex=0.8,
     }
   }
 
-  nh$boundaries <- boundaries
-  return(nh)
+  ly$boundaries <- boundaries
+  return(ly)
 
 }
 
