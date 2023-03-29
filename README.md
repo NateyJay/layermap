@@ -2,8 +2,8 @@
 
 A modular heatmap library for R-base graphics
  
-## But why?
-There are many excellent fully featured heatmap/plot libraries. While those may be excellent for data exploration, they often produce images which are difficult to get to **"publication quality"**. Figure quality is *essential* for demonstration of your data and this is no more relevant than with heatmaps, which can be notorious for being inscruitably dense. 
+# But why?
+There are many excellent fully featured heatmap/plot libraries. While those may be excellent for data exploration (notably, [pheatmap](https://github.com/raivokolde/pheatmap)), they often produce images which are difficult to get to **"publication quality"**. Figure quality is *essential* for demonstration of your data and this is no more relevant than with heatmaps, which can be notorious for being inscruitably dense. 
 
 This package is meant to address a couple of what I see as a couple common problems which are **hard to fix in other tools:**
 
@@ -11,6 +11,18 @@ This package is meant to address a couple of what I see as a couple common probl
 * **Unlabeled annotations**, usually relying on matching games with indistinct colors.
 * **No flexiblity in the orientation**, or manner of annotated attributes (sides, different formats).
 * **No tiers of organization**, usually relying on clustering/not clustering as the only form of ordering.
+
+# Installation
+
+Installing can be done simply using devtools. 
+
+```
+install.packages("devtools") #Installing from CRAN if you don't have devtools
+
+devtools::install_github("nateyjay/nheatmap")
+require(nheatmap)
+```
+
 
 # Basics of nheatmap 
 
@@ -153,4 +165,11 @@ nh = nheatmap_dend(nh, 4, lwd=1.5, gap=0.4)
 
 <p align="center"><img src="images/AnnotatedTest.png" alt="left" width="800" />
 
+
+To-do list
+----------
+
+[x] Make a simple install guide.  
+[ ] Complete help documents within R.  
+[ ] Complete more reproducible examples.
 
