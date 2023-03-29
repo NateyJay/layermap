@@ -172,5 +172,6 @@ To-do list
 - [x] Make a simple install guide.  
 - [ ] Complete help documents within R.  
 - [ ] Complete more reproducible examples. 
-- [ ] Improve legend plotting.
+- [ ] Improve catagorical legend plotting.
+- [ ] Make legend for color gradients. ***Urgent***
 
