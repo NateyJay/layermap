@@ -59,9 +59,9 @@ This function is modular, so it relies on multiple commands to build a complete 
 ```
 nh <- nheatmap(nh, value.df=value.df, column.df=column.df, row.df=row.df, column_groups=c("groupA"))
 
-nh <- nheatmap_group(nh, side=3, gname='groupA')
-nh <- nheatmap_dend(nh, side=2, lwd=2)
-nh <- nheatmap_annotate(nh, side=1, aname='anotherColumn')
+nh <- nh_group(nh, side=3, gname='groupA')
+nh <- nh_dend(nh, side=2, lwd=2)
+nh <- nh_annotate(nh, side=1, aname='anotherColumn')
 ```
 
 
@@ -108,18 +108,18 @@ Groups are derived from attribute columns in the `row.df` and `column.df`. As th
 * `row_groups` and/or `col_groups` - vectors of which columns for the respective dataframes should be grouped. These values must be found in the attributes columns of those dataframes.
 * `group_gap` - the distance (in proportion of plotting area) by which groups should be separated. Default = 0.02.
 
-Group layers can be added using the `nheatmap_group()` function. Multiple group layers may be plotted, if multiple group attributes were specified.
+Group layers can be added using the `nh_group()` function. Multiple group layers may be plotted, if multiple group attributes were specified.
 
 Other layers
 ------------
 
 Several other layer functions allow building a custom plot.
 
-`nheatmap_dend()` adds a dendrogram for sides that have been hierarchically clustered. This accepts many line-related options from r-base plotting.
+`nh_dend()` adds a dendrogram for sides that have been hierarchically clustered. This accepts many line-related options from r-base plotting.
 
-`nheatmap_annotate()` adds colored category annotations. These are unlabeled and generally useful to see how clustering relates to categories.
+`nh_annotate()` adds colored category annotations. These are unlabeled and generally useful to see how clustering relates to categories.
 
-`nheatmap_text()` adds text labels to an axis. Useful to show gene names, symbols (or both!). A r-base character related options.
+`nh_text()` adds text labels to an axis. Useful to show gene names, symbols (or both!). A r-base character related options.
 
 Colors
 ------
@@ -146,20 +146,20 @@ nh = nheatmap(value.df, zero_centered_colors = T,
               cluster_cols=T,
               group_gap = 0.02)
 
-nh = nheatmap_group(nh, 3, 'treatment', labels=T, label_just = 'left',
+nh = nh_group(nh, 3, 'treatment', labels=T, label_just = 'left',
                     col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),
                     show_bounding_box = F)
 
 
-nh = nheatmap_annotate(nh, 3, 'tissue', label_just = 'left',
+nh = nh_annotate(nh, 3, 'tissue', label_just = 'left',
                        col=setNames('red', 'Root'))
 
-nh = nheatmap_group(nh, 4, 'PlantTFDB', labels=T, label_just = 'left')
-nh = nheatmap_group(nh, 4, 'Nit_GOs', labels=F, label_just = 'left')
+nh = nh_group(nh, 4, 'PlantTFDB', labels=T, label_just = 'left')
+nh = nh_group(nh, 4, 'Nit_GOs', labels=F, label_just = 'left')
 
-nh = nheatmap_names(nh, 2, cex=0.5)
-nh = nheatmap_names(nh, 2, 'symbol', cex=0.5)
-nh = nheatmap_dend(nh, 4, lwd=1.5, gap=0.4)
+nh = nh_names(nh, 2, cex=0.5)
+nh = nh_names(nh, 2, 'symbol', cex=0.5)
+nh = nh_dend(nh, 4, lwd=1.5, gap=0.4)
 ```
 
 
@@ -171,5 +171,6 @@ To-do list
 
 - [x] Make a simple install guide.  
 - [ ] Complete help documents within R.  
-- [ ] Complete more reproducible examples.
+- [ ] Complete more reproducible examples. 
+- [ ] Improve legend plotting.
 
