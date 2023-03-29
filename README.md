@@ -19,17 +19,17 @@ Installing can be done simply using devtools.
 ```
 install.packages("devtools") #Installing from CRAN if you don't have devtools
 
-devtools::install_github("nateyjay/nheatmap")
-require(nheatmap)
+devtools::install_github("nateyjay/layermap")
+require(layermap)
 ```
 
 
-# Basics of nheatmap 
+# Basics of layermap 
 
 ### Structure
 
 <p align="center"><img src="images/DataStructures.png" alt="data_structures" width="700" /></p>
-Heatmaps are complicated, there is no avoiding that. Instead, nheatmap tries to fit all essential data for plotting into 3 tables.  
+Heatmaps are complicated, there is no avoiding that. Instead, layermap tries to fit all essential data for plotting into 3 tables.  
 
 These are:
 
@@ -54,14 +54,14 @@ value.df[row.names(row.df), row.names(column.df)] ## should return no errors.
 Invocation
 ----------
 
-This function is modular, so it relies on multiple commands to build a complete plot. The main command is `nheatmap()`, which will produce the unannotated plot. The output of this will be saved and passed into subsequent commands to add layers to the annotation.
+This function is modular, so it relies on multiple commands to build a complete plot. The main command is `layermap()`, which will produce the unannotated plot. The output of this will be saved and passed into subsequent commands to add layers to the annotation.
 
 ```
-nh <- nheatmap(nh, value.df=value.df, column.df=column.df, row.df=row.df, column_groups=c("groupA"))
+lr <- layermap(lr, value.df=value.df, column.df=column.df, row.df=row.df, column_groups=c("groupA"))
 
-nh <- nh_group(nh, side=3, gname='groupA')
-nh <- nh_dend(nh, side=2, lwd=2)
-nh <- nh_annotate(nh, side=1, aname='anotherColumn')
+lr <- lr_group(lr, side=3, gname='groupA')
+lr <- lr_dend(lr, side=2, lwd=2)
+lr <- lr_annotate(lr, side=1, aname='anotherColumn')
 ```
 
 
@@ -93,7 +93,7 @@ Example for plotting window size:
 svglite("Outputplot.svg", par()$din[1], par()$din[2]) #uses the inch dimensions of the current plotting window.
 
 #par("mar") call here
-#nheatmap plotting code here
+#layermap plotting code here
 
 dev.off()
 
@@ -102,24 +102,24 @@ dev.off()
 Grouping
 --------
 
-Sometimes, you want to show heatmaps where some attributes are grouped together and won't inter-mingle with other groups upon clustering. This is a core-feature of nheatmap, and allows the user to highlight multiple layers of groups in the data for each axis.
+Sometimes, you want to show heatmaps where some attributes are grouped together and won't inter-mingle with other groups upon clustering. This is a core-feature of layermap, and allows the user to highlight multiple layers of groups in the data for each axis.
 
-Groups are derived from attribute columns in the `row.df` and `column.df`. As these affect the actual plotting order and dimensions of the heatmap, these must be specified in the initial invocation of `nheatmap()` using the following options:
+Groups are derived from attribute columns in the `row.df` and `column.df`. As these affect the actual plotting order and dimensions of the heatmap, these must be specified in the initial invocation of `layermap()` using the following options:
 * `row_groups` and/or `col_groups` - vectors of which columns for the respective dataframes should be grouped. These values must be found in the attributes columns of those dataframes.
 * `group_gap` - the distance (in proportion of plotting area) by which groups should be separated. Default = 0.02.
 
-Group layers can be added using the `nh_group()` function. Multiple group layers may be plotted, if multiple group attributes were specified.
+Group layers can be added using the `lr_group()` function. Multiple group layers may be plotted, if multiple group attributes were specified.
 
 Other layers
 ------------
 
 Several other layer functions allow building a custom plot.
 
-`nh_dend()` adds a dendrogram for sides that have been hierarchically clustered. This accepts many line-related options from r-base plotting.
+`lr_dend()` adds a dendrogram for sides that have been hierarchically clustered. This accepts many line-related options from r-base plotting.
 
-`nh_annotate()` adds colored category annotations. These are unlabeled and generally useful to see how clustering relates to categories.
+`lr_annotate()` adds colored category annotations. These are unlabeled and generally useful to see how clustering relates to categories.
 
-`nh_text()` adds text labels to an axis. Useful to show gene names, symbols (or both!). A r-base character related options.
+`lr_text()` adds text labels to an axis. Useful to show gene names, symbols (or both!). A r-base character related options.
 
 Colors
 ------
@@ -140,26 +140,26 @@ row.df <- read.delim("test/rows.txt")
 value.df <- read.delim("test/values.txt")
 
 par(mar=c(5,7,5,10))
-nh = nheatmap(value.df, zero_centered_colors = T,
+lr = layermap(value.df, zero_centered_colors = T,
                   column.df=column.df, row.df=row.df,
                   column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
               cluster_cols=T,
               group_gap = 0.02)
 
-nh = nh_group(nh, 3, 'treatment', labels=T, label_just = 'left',
+lr = lr_group(lr, 3, 'treatment', labels=T, label_just = 'left',
                     col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),
                     show_bounding_box = F)
 
 
-nh = nh_annotate(nh, 3, 'tissue', label_just = 'left',
+lr = lr_annotate(lr, 3, 'tissue', label_just = 'left',
                        col=setNames('red', 'Root'))
 
-nh = nh_group(nh, 4, 'PlantTFDB', labels=T, label_just = 'left')
-nh = nh_group(nh, 4, 'Nit_GOs', labels=F, label_just = 'left')
+lr = lr_group(lr, 4, 'PlantTFDB', labels=T, label_just = 'left')
+lr = lr_group(lr, 4, 'Nit_GOs', labels=F, label_just = 'left')
 
-nh = nh_names(nh, 2, cex=0.5)
-nh = nh_names(nh, 2, 'symbol', cex=0.5)
-nh = nh_dend(nh, 4, lwd=1.5, gap=0.4)
+lr = lr_names(lr, 2, cex=0.5)
+lr = lr_names(lr, 2, 'symbol', cex=0.5)
+lr = lr_dend(lr, 4, lwd=1.5, gap=0.4)
 ```
 
 

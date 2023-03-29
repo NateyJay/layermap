@@ -30,7 +30,7 @@ layermap(
 \item{row.df}{- attribute dataframe which will be used for layer plotting functions on sides 2 and 4. Rownames correspond to value.df rownames.}
 }
 \value{
-ly object
+lr object
 }
 \description{
 Backbone function for layermap. This makes the basic heatmap structure and plots it. Requires a dataframe of just numerical values with named rows/columns. Row and column attributes are provided through additional dataframes keyed to the value dataframe names.
