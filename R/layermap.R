@@ -1,5 +1,7 @@
 
 
+# devtools::install_github('NateyJay/layermap')
+
 require(stringr)
 
 
@@ -515,8 +517,7 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
              groups=groups,
              plotting.df=m.df,
              boundaries = boundaries,
-             legend = list(),
-             din_ratio=din_ratio)
+             legend = list())
 
 }
 
@@ -652,7 +653,9 @@ lp_boundaries <- function(lp, side, size, gap, text.gap=0, text.restriction=F, s
 #' @examples
 lp_label <- function(lp, x_vec, y_vec, side, text, just, offset=0.9, cex) {
   if (side %in% c(2,4)) {
-    offset = strheight("G", font=2, cex=cex) * offset * lp$din_ratio
+    # offset = strheight("G", font=2, cex=cex) * offset * lp$din_ratio
+    offset = lp$gap.y
+
     x = mean(x_vec)
     srt= 90
 
@@ -665,7 +668,8 @@ lp_label <- function(lp, x_vec, y_vec, side, text, just, offset=0.9, cex) {
     }
 
   } else if (side %in% c(1,3)) {
-    offset = strwidth("G", font=2, cex=cex) * offset
+    # offset = strwidth("G", font=2, cex=cex) * offset
+    offset = lp$gap.x
     y = mean(y_vec)
     srt= 0
 
