@@ -161,6 +161,8 @@ lp = lp_group(lp, 4, 'Nit_GOs', labels=F, label_just = 'left')
 lp = lp_names(lp, 2, cex=0.5)
 lp = lp_names(lp, 2, 'symbol', cex=0.5)
 lp = lp_dend(lp, 4, lwd=1.5, gap=0.4)
+
+lp = lp_color_legend(lp, 1)
 ```
 
 
@@ -174,6 +176,6 @@ To-do list
 - [ ] Complete help documents within R.  
 - [ ] Complete more reproducible examples. 
 - [ ] Improve catagorical legend plotting.
-- [ ] Make legend for color gradients. ***Urgent***
+- [x] Make legend for color gradients. ***Urgent***
 - [ ] Compatibility function for AD2.
 

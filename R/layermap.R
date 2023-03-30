@@ -174,15 +174,100 @@ plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=
 
 }
 
-# xlim=NULL; ylim=NULL
-# palette='Blue-Red 2'
-# zero_centered_colors=F
-# cluster_cols=F; cluster_rows=T
-# group_cols=NULL; group_rows=NULL
-# ann_cols=NULL; ann_rows=NULL
-# group_gap=0.02; border='grey25'
-# plot_margin=c(0.2,0.2,0.2,0.2)
-# dim_reference="din"
+
+#' Utility to repair svg header
+#'
+#' @description Affinity Designer (and possibly other) vector graphics softwares do not import svgs produced through svglite correctly. As this tool produces superior (small) svgs, this utility is meant to fix the file by adding a more explicit header. Overwrites the input file.
+#'
+#' @param file - an svg file produced as the output of svglite::svglite()
+#'
+#'
+#' @export
+#'
+#' @examples
+ADsvg = function(file) {
+
+  fixed_style = "<defs>
+  <style>
+    rect {
+      fill: none;
+      stroke: #000000;
+        stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  polygon {
+    fill: none;
+    stroke: #000000;
+      stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 10.00;
+  }
+  line {
+    fill: none;
+    stroke: #000000;
+      stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 10.00;
+  }
+  polyline {
+    fill: none;
+    stroke: #000000;
+      stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 10.00;
+  }
+  path {
+    fill: none;
+    stroke: #000000;
+      stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 10.00;
+  }
+  circle {
+    fill: none;
+    stroke: #000000;
+      stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-miterlimit: 10.00;
+  }
+  text {
+    white-space: pre;
+  }
+  </style>
+</defs>"
+  temp_value = str_replace(as.character(as.numeric(Sys.time())), "\\.", "_")
+  temp_file = str_glue("temp_{temp_value}.svg")
+
+  writeLines("", con=temp_file, sep='')
+
+  line_i = 0
+  con = file(file, "r")
+  while ( TRUE ) {
+    line_i = line_i + 1
+
+    line = readLines(con, n = 1)
+    if ( length(line) == 0 ) {
+      break
+    }
+
+    if (line_i == 3) {
+
+      cat(fixed_style, file=temp_file, append=T)
+
+    }
+
+    cat(line, file=temp_file, append=T, sep='\n')
+
+  }
+  close(con)
+  file.remove(file)
+  file.rename(temp_file, file)
+}
+
+
+
+
 
 
 # value.df; xlim=NULL; ylim=NULL;
@@ -506,6 +591,7 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
              ylim=ylim,
              xmax=xmax,
              ymax=ymax,
+             color_scale = color_scale,
              column.df=column.df,
              row.df=row.df,
              # xrange=xrange,
@@ -713,6 +799,7 @@ lp_line_to_coord <- function(xmax, ymax, side, line) {
   return(out)
 
 }
+
 
 
 # lp_convert_visible <- function(df, x=NULL, y=NULL) {
@@ -1031,40 +1118,54 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 #' @export
 #'
 #' @examples
-lp_color_legend <- function(lp, side, size=1, gap=0.4, text.gap=1, ratio=3, just='lb') {
+lp_color_legend <- function(lp, side, size=1, gap=0.4, ratio=3, adj=0, round=1) {
 
+  list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = F), environment())
 
-  list2env(lp_boundaries(lp, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
-
-
-  aspect_multiplier = (par()$usr[2] - par()$usr[1]) / (par()$usr[4] - par()$usr[3]) * (par()$din[2] / par()$din[1])
-
-
-
-  get_coords <- function(lim) {
-    if (just == 'lb') {
-      c0 = lim[1]
-      c1 = c0 + par()$pin[1]
-
-    }
-
-    rect(c0, xy0, c1, xy1, col='black')
-  }
-
-  if (side == 1) {
+  if (side %in% c(1,3)) {
     y0 = xy0
     y1 = xy1
 
-  }
-  if (just == 'lb') {
+    w = lp_line_to_coord(lp$xmax, lp$ymax, side=2, line=size*ratio)
+
+    centerpoint = (lp$xmax - w) * adj + w/2
+
+    x0 = centerpoint - w/2
+    x1 = centerpoint + w/2
+
+
+    c = 1:length(lp$color_scale)
+
+    rect(x0+w*(c-1)/length(c), y0, x1, y1, col=lp$color_scale[c], border = NA)
+    rect(x0,y0,x1,y1, lwd=1.5)
+
+    text(x0, mean(c(y0,y1)), round(min(lp$plotting.df$value),round), pos=2)
+    text(x1, mean(c(y0,y1)), round(max(lp$plotting.df$value),round), pos=4)
+
+
+
+
+  } else if (side %in% c(2,4)) {
+
+    x0 = xy0
+    x1 = xy1
+
+    w = lp_line_to_coord(lp$xmax, lp$ymax, side=1, line=size*ratio)
+
+    centerpoint = (lp$ymax - w) * adj + w/2
+
+    y0 = centerpoint - w/2
+    y1 = centerpoint + w/2
+
+    c = 1:length(lp$color_scale)
+
+    rect(x0, y0+w*(c-1)/length(c), x1, y1, col=lp$color_scale[c], border = NA)
+    rect(x0,y0,x1,y1, lwd=1.5)
 
   }
 
-  leg <- function(x0,y1,x2,y2) {
-
-  }
-
-
+  lp$boundaries <- boundaries
+  return(lp)
 }
 
 
