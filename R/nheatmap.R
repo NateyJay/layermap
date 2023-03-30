@@ -183,6 +183,15 @@ plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=
 # dim_reference="din"
 
 
+# value.df; xlim=NULL; ylim=NULL;
+# column.df=NULL; row.df=NULL;
+# column_groups=c(); row_groups=c();
+# palette='PuOr'; reverse_palette=T;
+# zero_centered_colors=F;
+# cluster_cols=F; cluster_rows=T;
+# group_gap=0.02; border='grey25';
+# dim_reference="din"
+
 
 #' Plot layermap
 #'
@@ -353,27 +362,55 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
     # g = group_gap
 
     ymax = base / (1-(gi * g))
-    # ymax * (1-(gi*g))
     return(ymax)
   }
 
 
-  din_ratio = par()$din[2] / par()$din[1]
 
-  ymax <- get_max(nrow(df),
-                  max(groups$rows$group_order)-1,
-                  group_gap)
+  convertInches <- function(df, x, y){
+    per_inch = c(ncol(df), nrow(df)) / par()$pin
 
-  xmax <- get_max(ncol(df),
-                  max(groups$cols$group_order)-1,
-                  group_gap*din_ratio)
+    return(c(x,y) / per_inch)
+
+  }
+
+  inchesToCoords <- function(df, x=NULL, y=NULL) {
+    per_inch = c(ncol(df), nrow(df)) / par()$pin
+
+    if (!is.null(x)) {
+      out = x * per_inch[1]
+
+    } else if (!is.null(y)) {
+      out = y * per_inch[2]
+
+    } else {
+      stop('must give x or y')
+    }
+    return(out)
+  }
+
+
+  gap.x <- inchesToCoords(df, x=group_gap)
+  gap.y <- inchesToCoords(df, y=group_gap)
+
+  ymax = nrow(df) + gap.y * (max(groups$rows$group_order)-1)
+  xmax = ncol(df) + gap.x * (max(groups$cols$group_order)-1)
+
+#
+#   ymax <- get_max(nrow(df),
+#                   max(groups$rows$group_order)-1,
+#                   gap.y)
+#
+#   xmax <- get_max(ncol(df),
+#                   max(groups$cols$group_order)-1,
+#                   gap.x)
 
   # ymax <- (nrow(df)-1) + max(groups$rows$group_order)-1 * group_gap
   # xmax <- ncol(df) + max(groups$cols$group_order)-1 * group_gap * din_ratio
 
 
-  gap.y = ymax * group_gap
-  gap.x = xmax * group_gap * din_ratio
+  # gap.x = xmax * group_gap
+  # gap.y = lr_convert_visible(df, x=group_gap)
   # gap.y = ymax * group_gap
   # gap.x = xmax * group_gap*din_ratio
 
@@ -433,9 +470,12 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
 #
 #   xlim = c(0, max(groups$cols$x)+1)
 #   ylim = c(0, max(groups$rows$y)+1)
-  xlim = c(0, xmax)
-  ylim = c(0, ymax)
+  # xlim = c(0, xmax)
+  # ylim = c(0, ymax)
 
+  gutter_dim = 0.0365 ## this is a magic number which removes the box gap around the plotting area... I'm not sure how it's derived or how to remove that gap any other way.
+  xlim = c(xmax * gutter_dim, xmax * (1-gutter_dim))
+  ylim = c(ymax * gutter_dim, ymax * (1-gutter_dim))
 
   ## plotting data
 
@@ -493,22 +533,33 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
 #' @export
 #'
 #' @examples
-lr_boundaries <- function(lr, side, size, gap, text.gap=0, text.restriction=F, show_bounding_box=F, din_adjusted=T) {
+lr_boundaries <- function(lr, side, size, gap, text.gap=0, text.restriction=F, show_bounding_box=F) {
 
-  if (side %in% c(2,4)) {
-    cxy = par()$cxy[1] * 1.33
+  # if (side %in% c(2,4)) {
+  #   cxy = par()$cxy[1] * 1.33
+  #
+  # } else {
+  #   cxy = par()$cxy[2]
+  #
+  # }
 
-  } else {
-    cxy = par()$cxy[2]
+  size     = lr_line_to_coord(lr$xmax, lr$ymax, side, size)
+  gap      = lr_line_to_coord(lr$xmax, lr$ymax, side, gap)
 
-  }
+
+
+  # text.gap = lr_line_to_coord(lr$xmax, lr$ymax, side, text.gap)
+
+  # rect(10,10,
+  #        10+lr_line_to_coord(lr$xmax, lr$ymax, side=4, line=10),
+  #        10+lr_line_to_coord(lr$xmax, lr$ymax, side=3, line=10), lwd=2)
 
 
   if (side == 1) {
     ## bot
 
-    xy1 = lr$boundaries[side] - cxy * gap
-    xy0 = lr$boundaries[side] - cxy * size - cxy * gap
+    xy1 = lr$boundaries[side] - gap
+    xy0 = lr$boundaries[side] - size - gap
 
     lr$boundaries[side] = xy0 - text.gap
 
@@ -519,8 +570,8 @@ lr_boundaries <- function(lr, side, size, gap, text.gap=0, text.restriction=F, s
   } else if (side == 2) {
     ## left
 
-    xy1 = lr$boundaries[side] - cxy * size - cxy * gap - text.gap
-    xy0 = lr$boundaries[side] - cxy * gap - text.gap
+    xy1 = lr$boundaries[side] - size - gap - text.gap
+    xy0 = lr$boundaries[side] - gap - text.gap
 
     lr$boundaries[side] = xy1
 
@@ -531,8 +582,8 @@ lr_boundaries <- function(lr, side, size, gap, text.gap=0, text.restriction=F, s
   } else if (side == 3) {
     ## top
 
-    xy1 = lr$boundaries[side] + cxy * size + cxy * gap + text.gap
-    xy0 = lr$boundaries[side] + cxy * gap + text.gap
+    xy1 = lr$boundaries[side] + size + gap + text.gap
+    xy0 = lr$boundaries[side] + gap + text.gap
 
     lr$boundaries[side] = xy1
 
@@ -542,8 +593,8 @@ lr_boundaries <- function(lr, side, size, gap, text.gap=0, text.restriction=F, s
   } else if (side == 4) {
     ## right
 
-    xy1 = lr$boundaries[side] + cxy * gap
-    xy0 = lr$boundaries[side] + cxy * size + cxy * gap
+    xy1 = lr$boundaries[side] + gap
+    xy0 = lr$boundaries[side] + size + gap
 
     lr$boundaries[side] = xy0 + text.gap
 
@@ -634,23 +685,47 @@ lr_label <- function(lr, x_vec, y_vec, side, text, just, offset=0.9, cex) {
 }
 
 
-#' empty for now
+
+
+
+
+#' Convert plot lines to coordinates
 #'
-#' @description empty for now
+#' @description Utility for converting plotting coordinate systems.
 #'
-#' @param still empty
 #'
-#' @return
+#' @return value in coordinates
 #' @export
 #'
 #' @examples
-lr_rotate <- function(val) {
-  usr = par()$usr
-  usr_ratio = (usr[2] - usr[1]) / (usr[4] - usr[3])
-  pin_ratio = par()$pin[1] / par()$pin[2]
-  val = val / pin_ratio
-  return(val)
+lr_line_to_coord <- function(xmax, ymax, side, line) {
+
+  inches_per_line = par()$mai / par()$mar
+  coords_per_inch = c(xmax, ymax) / par()$pin
+  coords_per_inch = c(coords_per_inch[2], coords_per_inch[1], coords_per_inch[2], coords_per_inch[1])
+
+  out = line * inches_per_line[side] * coords_per_inch[side]
+
+  return(out)
+
 }
+
+
+# lr_convert_visible <- function(df, x=NULL, y=NULL) {
+#   per_inch = c(ncol(df), nrow(df)) / par()$pin
+#
+#   if (!is.null(x)) {
+#     out = x * per_inch[2] / per_inch[1]
+#
+#   } else if (!is.null(y)) {
+#     out = y / per_inch[2] * per_inch[1]
+#
+#   } else {
+#     stop("must include an x  or a y")
+#
+#   }
+#   return(out)
+# }
 
 
 
@@ -713,22 +788,15 @@ lr_colorize <- function(col, conditions, palette) {
 lr_group <- function(lr, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
 
   if (labels) {
-    str_multiplier = 1.5
-    if (side == 1) {
-      text.gap = strheight("G", cex=cex.label) * str_multiplier
+    str_multiplier = 2
 
-    } else if (side == 2) {
-      text.gap = strwidth("G", cex=cex.label) * str_multiplier
-      text.gap = lr_rotate(text.gap)
+    text.gap = strheight("G", cex=cex.label) * str_multiplier * cex.label
 
-    } else if (side == 3) {
-      text.gap = strheight("G", cex=cex.label) * str_multiplier
-
-    } else if (side == 4) {
-      text.gap = strwidth("G", cex=cex.label) * str_multiplier
-      text.gap = lr_rotate(text.gap)
-
+    if (side %in% c(2,4)) {
+      # text.gap = lr_rotate(text.gap)
+      text.gap = text.gap * par()$cxy[1] / par()$cxy[2] * 1.33
     }
+
   } else {text.gap = 0}
 
 
@@ -948,9 +1016,56 @@ lr_annotate <- function(lr, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 }
 
 
+#' Plot color gradient legend
+#'
+#' @description Makes a simple color gradient legend corresponding to the main heatmap.
+#'
+#' @param lr - layermap object
+#' @param add - logical for whether this should plot a new window. Experimental.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+lr_color_legend <- function(lr, side, size=1, gap=0.4, text.gap=1, ratio=3, just='lb') {
 
 
-#' Plot simple legend
+  list2env(lr_boundaries(lr, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
+
+
+  aspect_multiplier = (par()$usr[2] - par()$usr[1]) / (par()$usr[4] - par()$usr[3]) * (par()$din[2] / par()$din[1])
+
+
+
+  get_coords <- function(lim) {
+    if (just == 'lb') {
+      c0 = lim[1]
+      c1 = c0 + par()$pin[1]
+
+    }
+
+    rect(c0, xy0, c1, xy1, col='black')
+  }
+
+  if (side == 1) {
+    y0 = xy0
+    y1 = xy1
+
+  }
+  if (just == 'lb') {
+
+  }
+
+  leg <- function(x0,y1,x2,y2) {
+
+  }
+
+
+}
+
+
+
+#' Plot simple categorical legend
 #'
 #' @description Makes a simple heatmap color legend for a layermap object.
 #'

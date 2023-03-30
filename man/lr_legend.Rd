@@ -2,7 +2,7 @@
 % Please edit documentation in R/nheatmap.R
 \name{lr_legend}
 \alias{lr_legend}
-\title{Plot simple legend}
+\title{Plot simple categorical legend}
 \usage{
 lr_legend(lr, add = F)
 }

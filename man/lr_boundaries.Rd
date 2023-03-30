@@ -11,8 +11,7 @@ lr_boundaries(
   gap,
   text.gap = 0,
   text.restriction = F,
-  show_bounding_box = F,
-  din_adjusted = T
+  show_bounding_box = F
 )
 }
 \arguments{
