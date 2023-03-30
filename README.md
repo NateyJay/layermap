@@ -58,11 +58,11 @@ Invocation
 This function is modular, so it relies on multiple commands to build a complete plot. The main command is `layermap()`, which will produce the unannotated plot. The output of this will be saved and passed into subsequent commands to add layers to the annotation.
 
 ```
-lr <- layermap(lr, value.df=value.df, column.df=column.df, row.df=row.df, column_groups=c("groupA"))
+lp <- layermap(lp, value.df=value.df, column.df=column.df, row.df=row.df, column_groups=c("groupA"))
 
-lr <- lr_group(lr, side=3, gname='groupA')
-lr <- lr_dend(lr, side=2, lwd=2)
-lr <- lr_annotate(lr, side=1, aname='anotherColumn')
+lp <- lp_group(lp, side=3, gname='groupA')
+lp <- lp_dend(lp, side=2, lwd=2)
+lp <- lp_annotate(lp, side=1, aname='anotherColumn')
 ```
 
 
@@ -109,18 +109,18 @@ Groups are derived from attribute columns in the `row.df` and `column.df`. As th
 * `row_groups` and/or `col_groups` - vectors of which columns for the respective dataframes should be grouped. These values must be found in the attributes columns of those dataframes.
 * `group_gap` - the distance (in proportion of plotting area) by which groups should be separated. Default = 0.02.
 
-Group layers can be added using the `lr_group()` function. Multiple group layers may be plotted, if multiple group attributes were specified.
+Group layers can be added using the `lp_group()` function. Multiple group layers may be plotted, if multiple group attributes were specified.
 
 Other layers
 ------------
 
 Several other layer functions allow building a custom plot.
 
-`lr_dend()` adds a dendrogram for sides that have been hierarchically clustered. This accepts many line-related options from r-base plotting.
+`lp_dend()` adds a dendrogram for sides that have been hierarchically clustered. This accepts many line-related options from r-base plotting.
 
-`lr_annotate()` adds colored category annotations. These are unlabeled and generally useful to see how clustering relates to categories.
+`lp_annotate()` adds colored category annotations. These are unlabeled and generally useful to see how clustering relates to categories.
 
-`lr_text()` adds text labels to an axis. Useful to show gene names, symbols (or both!). A r-base character related options.
+`lp_text()` adds text labels to an axis. Useful to show gene names, symbols (or both!). A r-base character related options.
 
 Colors
 ------
@@ -141,26 +141,26 @@ row.df <- read.delim("test/rows.txt")
 value.df <- read.delim("test/values.txt")
 
 par(mar=c(5,7,5,10))
-lr = layermap(value.df, zero_centered_colors = T,
+lp = layermap(value.df, zero_centered_colors = T,
                   column.df=column.df, row.df=row.df,
                   column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
               cluster_cols=T,
               group_gap = 0.02)
 
-lr = lr_group(lr, 3, 'treatment', labels=T, label_just = 'left',
+lp = lp_group(lp, 3, 'treatment', labels=T, label_just = 'left',
                     col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),
                     show_bounding_box = F)
 
 
-lr = lr_annotate(lr, 3, 'tissue', label_just = 'left',
+lp = lp_annotate(lp, 3, 'tissue', label_just = 'left',
                        col=setNames('red', 'Root'))
 
-lr = lr_group(lr, 4, 'PlantTFDB', labels=T, label_just = 'left')
-lr = lr_group(lr, 4, 'Nit_GOs', labels=F, label_just = 'left')
+lp = lp_group(lp, 4, 'PlantTFDB', labels=T, label_just = 'left')
+lp = lp_group(lp, 4, 'Nit_GOs', labels=F, label_just = 'left')
 
-lr = lr_names(lr, 2, cex=0.5)
-lr = lr_names(lr, 2, 'symbol', cex=0.5)
-lr = lr_dend(lr, 4, lwd=1.5, gap=0.4)
+lp = lp_names(lp, 2, cex=0.5)
+lp = lp_names(lp, 2, 'symbol', cex=0.5)
+lp = lp_dend(lp, 4, lwd=1.5, gap=0.4)
 ```
 
 
