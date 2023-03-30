@@ -44,7 +44,7 @@ value.df <- read.delim("test/values.txt")
 # svglite::svglite("test/test.svg", 7, 5.4)
 
 par(mar=c(5,7,5,10))
-lr = layermap(value.df, zero_centered_colors = T,
+lp = layermap(value.df, zero_centered_colors = T,
                   column.df=column.df, row.df=row.df,
                   column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
               cluster_cols=T,
@@ -53,32 +53,32 @@ lr = layermap(value.df, zero_centered_colors = T,
 
 # for (l in 0:10) {
 #   mtext(str_glue("line {l}"), side=4, line=l)
-#   abline(v= lr$xmax + lr_line_to_coord(lr$xmax, lr$ymax, 4, l))
+#   abline(v= lp$xmax + lp_line_to_coord(lp$xmax, lp$ymax, 4, l))
 #   mtext(str_glue("line {l}"), side=3, line=l)
-#   abline(h= lr$ymax + lr_line_to_coord(lr$ymax, lr$ymax, 3, l))
+#   abline(h= lp$ymax + lp_line_to_coord(lp$ymax, lp$ymax, 3, l))
 # }
 
-lr = lr_group(lr, 3, 'treatment', labels=T, label_just = 'left',
+lp = lp_group(lp, 3, 'treatment', labels=T, label_just = 'left',
                     col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),
                     show_bounding_box = F)
 
 
-lr = lr_annotate(lr, 3, 'tissue', label_just = 'left',
+lp = lp_annotate(lp, 3, 'tissue', label_just = 'left',
                        col=setNames('red', 'Root'))
 
-lr = lr_group(lr, 4, 'PlantTFDB', labels=T, label_just = 'left')
-lr = lr_group(lr, 4, 'Nit_GOs', labels=F, label_just = 'left')
+lp = lp_group(lp, 4, 'PlantTFDB', labels=T, label_just = 'left')
+lp = lp_group(lp, 4, 'Nit_GOs', labels=F, label_just = 'left')
 
 
-lr = lr_names(lr, 2, cex=0.5)
-lr = lr_names(lr, 2, 'symbol', cex=0.5)
-lr = lr_dend(lr, 4, lwd=1.5, gap=0.4)
+lp = lp_names(lp, 2, cex=0.5)
+lp = lp_names(lp, 2, 'symbol', cex=0.5)
+lp = lp_dend(lp, 4, lwd=1.5, gap=0.4)
 
 # dev.off()
 # fix_svg('test/test.svg')
 
 # svglite::svglite("test/legend.svg", 4.9, 5.4)
-# lr_legend(lr)
+# lp_legend(lp)
 # dev.off()
 # fix_svg('test/legend.svg')
 

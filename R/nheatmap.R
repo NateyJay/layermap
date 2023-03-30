@@ -202,7 +202,7 @@ plot.ndendrogram <- function(d, horiz=T, flip.x=F, flip.y=F, type='square', add=
 #' @param column.df - attribute dataframe which will be used for layer plotting functions on sides 1 and 3. Rownames correspond to value.df colnames.
 #'
 #'
-#' @return lr object
+#' @return lp object
 #' @export
 #'
 #' @examples
@@ -410,7 +410,7 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
 
 
   # gap.x = xmax * group_gap
-  # gap.y = lr_convert_visible(df, x=group_gap)
+  # gap.y = lp_convert_visible(df, x=group_gap)
   # gap.y = ymax * group_gap
   # gap.x = xmax * group_gap*din_ratio
 
@@ -533,7 +533,7 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
 #' @export
 #'
 #' @examples
-lr_boundaries <- function(lr, side, size, gap, text.gap=0, text.restriction=F, show_bounding_box=F) {
+lp_boundaries <- function(lp, side, size, gap, text.gap=0, text.restriction=F, show_bounding_box=F) {
 
   # if (side %in% c(2,4)) {
   #   cxy = par()$cxy[1] * 1.33
@@ -543,62 +543,62 @@ lr_boundaries <- function(lr, side, size, gap, text.gap=0, text.restriction=F, s
   #
   # }
 
-  size     = lr_line_to_coord(lr$xmax, lr$ymax, side, size)
-  gap      = lr_line_to_coord(lr$xmax, lr$ymax, side, gap)
+  size     = lp_line_to_coord(lp$xmax, lp$ymax, side, size)
+  gap      = lp_line_to_coord(lp$xmax, lp$ymax, side, gap)
 
 
 
-  # text.gap = lr_line_to_coord(lr$xmax, lr$ymax, side, text.gap)
+  # text.gap = lp_line_to_coord(lp$xmax, lp$ymax, side, text.gap)
 
   # rect(10,10,
-  #        10+lr_line_to_coord(lr$xmax, lr$ymax, side=4, line=10),
-  #        10+lr_line_to_coord(lr$xmax, lr$ymax, side=3, line=10), lwd=2)
+  #        10+lp_line_to_coord(lp$xmax, lp$ymax, side=4, line=10),
+  #        10+lp_line_to_coord(lp$xmax, lp$ymax, side=3, line=10), lwd=2)
 
 
   if (side == 1) {
     ## bot
 
-    xy1 = lr$boundaries[side] - gap
-    xy0 = lr$boundaries[side] - size - gap
+    xy1 = lp$boundaries[side] - gap
+    xy0 = lp$boundaries[side] - size - gap
 
-    lr$boundaries[side] = xy0 - text.gap
+    lp$boundaries[side] = xy0 - text.gap
 
-    if (show_bounding_box) {rect(min(lr$plotting.df$x), xy1, max(lr$plotting.df$x)+1, xy0)}
+    if (show_bounding_box) {rect(min(lp$plotting.df$x), xy1, max(lp$plotting.df$x)+1, xy0)}
 
     sign = -1
 
   } else if (side == 2) {
     ## left
 
-    xy1 = lr$boundaries[side] - size - gap - text.gap
-    xy0 = lr$boundaries[side] - gap - text.gap
+    xy1 = lp$boundaries[side] - size - gap - text.gap
+    xy0 = lp$boundaries[side] - gap - text.gap
 
-    lr$boundaries[side] = xy1
+    lp$boundaries[side] = xy1
 
-    if (show_bounding_box) {rect(xy1, min(lr$plotting.df$y), xy0, max(lr$plotting.df$y)+1)}
+    if (show_bounding_box) {rect(xy1, min(lp$plotting.df$y), xy0, max(lp$plotting.df$y)+1)}
 
     sign = -1
 
   } else if (side == 3) {
     ## top
 
-    xy1 = lr$boundaries[side] + size + gap + text.gap
-    xy0 = lr$boundaries[side] + gap + text.gap
+    xy1 = lp$boundaries[side] + size + gap + text.gap
+    xy0 = lp$boundaries[side] + gap + text.gap
 
-    lr$boundaries[side] = xy1
+    lp$boundaries[side] = xy1
 
-    if (show_bounding_box) {rect(min(lr$plotting.df$x), xy1, max(lr$plotting.df$x)+1, xy0)}
+    if (show_bounding_box) {rect(min(lp$plotting.df$x), xy1, max(lp$plotting.df$x)+1, xy0)}
 
     sign = 1
   } else if (side == 4) {
     ## right
 
-    xy1 = lr$boundaries[side] + gap
-    xy0 = lr$boundaries[side] + size + gap
+    xy1 = lp$boundaries[side] + gap
+    xy0 = lp$boundaries[side] + size + gap
 
-    lr$boundaries[side] = xy0 + text.gap
+    lp$boundaries[side] = xy0 + text.gap
 
-    if (show_bounding_box) {rect(xy0, min(lr$plotting.df$y), xy1, max(lr$plotting.df$y)+1)}
+    if (show_bounding_box) {rect(xy0, min(lp$plotting.df$y), xy1, max(lp$plotting.df$y)+1)}
 
     sign = 1
 
@@ -609,19 +609,19 @@ lr_boundaries <- function(lr, side, size, gap, text.gap=0, text.restriction=F, s
   if (text.restriction) {
     if (side == 1) {
       xy0 = xy1 - text.restriction
-      lr$boundaries[side] = xy0
+      lp$boundaries[side] = xy0
 
     } else if (side == 2) {
       xy1 = xy0 - text.restriction
-      lr$boundaries[side] = xy1
+      lp$boundaries[side] = xy1
 
     } else if (side == 3) {
       xy1 = xy0 + text.restriction
-      lr$boundaries[side] = xy1
+      lp$boundaries[side] = xy1
 
     } else if (side == 4) {
       xy0 = xy1 + text.restriction
-      lr$boundaries[side] = xy0
+      lp$boundaries[side] = xy0
 
     }
   }
@@ -629,7 +629,7 @@ lr_boundaries <- function(lr, side, size, gap, text.gap=0, text.restriction=F, s
 
   ls = list(xy0=xy0,
             xy1=xy1,
-            boundaries=lr$boundaries,
+            boundaries=lp$boundaries,
             sign=sign)
   return(ls)
 }
@@ -650,9 +650,9 @@ lr_boundaries <- function(lr, side, size, gap, text.gap=0, text.restriction=F, s
 #' @export
 #'
 #' @examples
-lr_label <- function(lr, x_vec, y_vec, side, text, just, offset=0.9, cex) {
+lp_label <- function(lp, x_vec, y_vec, side, text, just, offset=0.9, cex) {
   if (side %in% c(2,4)) {
-    offset = strheight("G", font=2, cex=cex) * offset * lr$din_ratio
+    offset = strheight("G", font=2, cex=cex) * offset * lp$din_ratio
     x = mean(x_vec)
     srt= 90
 
@@ -698,7 +698,7 @@ lr_label <- function(lr, x_vec, y_vec, side, text, just, offset=0.9, cex) {
 #' @export
 #'
 #' @examples
-lr_line_to_coord <- function(xmax, ymax, side, line) {
+lp_line_to_coord <- function(xmax, ymax, side, line) {
 
   inches_per_line = par()$mai / par()$mar
   coords_per_inch = c(xmax, ymax) / par()$pin
@@ -711,7 +711,7 @@ lr_line_to_coord <- function(xmax, ymax, side, line) {
 }
 
 
-# lr_convert_visible <- function(df, x=NULL, y=NULL) {
+# lp_convert_visible <- function(df, x=NULL, y=NULL) {
 #   per_inch = c(ncol(df), nrow(df)) / par()$pin
 #
 #   if (!is.null(x)) {
@@ -741,7 +741,7 @@ lr_line_to_coord <- function(xmax, ymax, side, line) {
 #' @export
 #'
 #' @examples
-lr_colorize <- function(col, conditions, palette) {
+lp_colorize <- function(col, conditions, palette) {
 
   if (!is.null(col)) {
     if (!any(names(col) %in% conditions)) {
@@ -771,7 +771,7 @@ lr_colorize <- function(col, conditions, palette) {
 #'
 #' @description Function for plotting a group layer based on column or row attributes.
 #'
-#' @param lr - layermap object .
+#' @param lp - layermap object .
 #' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
 #' @param attribute - name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
 #' @param col - named color vector, where the names are conditions found in the attribute.
@@ -785,7 +785,7 @@ lr_colorize <- function(col, conditions, palette) {
 #' @export
 #'
 #' @examples
-lr_group <- function(lr, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
+lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
 
   if (labels) {
     str_multiplier = 2
@@ -793,38 +793,38 @@ lr_group <- function(lr, side, attribute, col= NULL, palette="Zissou 1", size=1,
     text.gap = strheight("G", cex=cex.label) * str_multiplier * cex.label
 
     if (side %in% c(2,4)) {
-      # text.gap = lr_rotate(text.gap)
+      # text.gap = lp_rotate(text.gap)
       text.gap = text.gap * par()$cxy[1] / par()$cxy[2] * 1.33
     }
 
   } else {text.gap = 0}
 
 
-  list2env(lr_boundaries(lr, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
+  list2env(lp_boundaries(lp, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
 
   if (side == 1) {
     box.y1 = xy0
     box.y2 = xy1
     text.y = xy0 - text.gap * 0.6
-    gr = lr$groups$cols
+    gr = lp$groups$cols
 
   } else if (side == 2) {
     box.x1 = xy0
     box.x2 = xy1
     text.x = xy0 + text.gap * 0.6
-    gr = lr$groups$rows
+    gr = lp$groups$rows
 
   } else if (side == 3) {
     box.y1 = xy0
     box.y2 = xy1
     text.y = xy0 - text.gap * 0.6
-    gr = lr$groups$cols
+    gr = lp$groups$cols
 
   } else if (side == 4) {
     box.x1 = xy0
     box.x2 = xy1
     text.x = xy0 + text.gap * 0.6
-    gr = lr$groups$rows
+    gr = lp$groups$rows
 
   }
 
@@ -833,7 +833,7 @@ lr_group <- function(lr, side, attribute, col= NULL, palette="Zissou 1", size=1,
   conditions = unique(gr[[attribute]])
 
 
-  col = lr_colorize(col, conditions, palette)
+  col = lp_colorize(col, conditions, palette)
 
   ## Finding groups which are identical and consecutive
   last_cond = ''
@@ -906,11 +906,11 @@ lr_group <- function(lr, side, attribute, col= NULL, palette="Zissou 1", size=1,
   }
 
 
-  lr_label(lr, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+  lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
 
-  lr$legend[[attribute]] = col
-  lr$boundaries <- boundaries
-  return(lr)
+  lp$legend[[attribute]] = col
+  lp$boundaries <- boundaries
+  return(lp)
 }
 
 
@@ -921,8 +921,8 @@ lr_group <- function(lr, side, attribute, col= NULL, palette="Zissou 1", size=1,
 #'
 #' @description Function for plotting an annotation layer based on column or row attributes.
 #'
-#' @param lr - layermap object .
-#' @param side - value for which side of the plot to applr the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param lp - layermap object .
+#' @param side - value for which side of the plot to applp the layer (1-bottom, 2-left, 3-top, 4-right).
 #' @param attribute - name for the attribute which will be plotted in the layer.
 #' @param col - named color vector, where the names are conditions found in the attribute.
 #' @param palette - hcl.colors palette to fill in unnamed conditions colors.
@@ -934,26 +934,26 @@ lr_group <- function(lr, side, attribute, col= NULL, palette="Zissou 1", size=1,
 #' @export
 #'
 #' @examples
-lr_annotate <- function(lr, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.4, palette='Viridis',
+lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.4, palette='Viridis',
                               show_bounding_box=F, type='rect', label_just='right', cex.label=0.8) {
 
-  list2env(lr_boundaries(lr, side, size, gap, show_bounding_box = show_bounding_box), environment())
+  list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
   if (is.null(a.df)) {
     if (side %in% c(1,3)) {
-      a.df <- lr$column.df
+      a.df <- lp$column.df
     } else if (side %in% c(2,4)) {
-      a.df <- lr$row.df
+      a.df <- lp$row.df
       }
   }
 
   # attribute=names(a.df)[1]
 
   conditions = unique(a.df[[attribute]])
-  col = lr_colorize(col, conditions, palette)
+  col = lp_colorize(col, conditions, palette)
 
   if (side %in% c(2,4)) {
-    gr = lr$groups$rows
+    gr = lp$groups$rows
     y_vec = gr$y
     x_vec = c(xy1, xy0)
 
@@ -968,18 +968,18 @@ lr_annotate <- function(lr, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
     }
 
     # if (label_just == 'right') {
-    #   x1 = mean(c(xy0,xy1)); y1 = max(gr$y)+lr$gap.y
+    #   x1 = mean(c(xy0,xy1)); y1 = max(gr$y)+lp$gap.y
     #   text(x1, y1, attribute, adj=c(0,0.5), font=2, srt=90, cex=cex)
-    #   points(x1, y1-lr$gap.y*0.5, pch=-9660, cex=0.5)
+    #   points(x1, y1-lp$gap.y*0.5, pch=-9660, cex=0.5)
     #
     # } else if (label_just == 'left') {
-    #   x1 = mean(c(xy0,xy1)); y1 = min(gr$y)-lr$gap.y
+    #   x1 = mean(c(xy0,xy1)); y1 = min(gr$y)-lp$gap.y
     #   text(x1, y1, attribute, adj=c(1,0.5), font=2, srt=90, cex=cex)
-    #   points(x1, y1+lr$gap.y*0.5, pch=-9650, cex=0.5)
+    #   points(x1, y1+lp$gap.y*0.5, pch=-9650, cex=0.5)
     # }
 
   } else if (side %in% c(1,3)) {
-    gr = lr$groups$cols
+    gr = lp$groups$cols
     x_vec = gr$x
     y_vec = c(xy1, xy0)
 
@@ -996,23 +996,23 @@ lr_annotate <- function(lr, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 
     # if (label_just == 'right') {
     #   label_string = paste(-9668, attribute, 'new')
-    #   x1 = max(gr$x)+lr$gap.x+1; y1 = mean(c(xy0,xy1))
+    #   x1 = max(gr$x)+lp$gap.x+1; y1 = mean(c(xy0,xy1))
     #   text(x1, y1, label_string, adj=c(0,0.5), font=2, cex=cex)
 
-      # x1 = max(gr$x)+lr$gap.x+1; y1 = mean(c(xy0,xy1))
+      # x1 = max(gr$x)+lp$gap.x+1; y1 = mean(c(xy0,xy1))
       # text(x1, y1, attribute, adj=c(0,0.5), font=2, cex=cex)
-      # points(x1-lr$gap.x*0.5, y1, pch=-9668, cex=0.5)
+      # points(x1-lp$gap.x*0.5, y1, pch=-9668, cex=0.5)
 
     # } else if (label_just == 'left') {
-    #   x1 = min(gr$x)-lr$gap.x; y1 = mean(c(xy0,xy1))
+    #   x1 = min(gr$x)-lp$gap.x; y1 = mean(c(xy0,xy1))
     #   text(x1,y1, attribute, adj=c(1,0.5), font=2, cex=cex)
-    #   points(x1+lr$gap.x*0.5, y1, pch=-9658, cex=0.5)
+    #   points(x1+lp$gap.x*0.5, y1, pch=-9658, cex=0.5)
     # }
   }
-  lr_label(lr, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
-  lr$boundaries <- boundaries
-  lr$legend[[attribute]] = col
-  return(lr)
+  lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+  lp$boundaries <- boundaries
+  lp$legend[[attribute]] = col
+  return(lp)
 }
 
 
@@ -1020,17 +1020,17 @@ lr_annotate <- function(lr, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 #'
 #' @description Makes a simple color gradient legend corresponding to the main heatmap.
 #'
-#' @param lr - layermap object
+#' @param lp - layermap object
 #' @param add - logical for whether this should plot a new window. Experimental.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-lr_color_legend <- function(lr, side, size=1, gap=0.4, text.gap=1, ratio=3, just='lb') {
+lp_color_legend <- function(lp, side, size=1, gap=0.4, text.gap=1, ratio=3, just='lb') {
 
 
-  list2env(lr_boundaries(lr, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
+  list2env(lp_boundaries(lp, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
 
 
   aspect_multiplier = (par()$usr[2] - par()$usr[1]) / (par()$usr[4] - par()$usr[3]) * (par()$din[2] / par()$din[1])
@@ -1069,16 +1069,16 @@ lr_color_legend <- function(lr, side, size=1, gap=0.4, text.gap=1, ratio=3, just
 #'
 #' @description Makes a simple heatmap color legend for a layermap object.
 #'
-#' @param lr - layermap object
+#' @param lp - layermap object
 #' @param add - logical for whether this should plot a new window. Experimental.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-lr_legend <- function(lr, add=F) {
+lp_legend <- function(lp, add=F) {
 
-  leg <- lr$legend
+  leg <- lp$legend
   lines = length(unlist(leg)) + length(leg) + 3
 
   par(mar=rep(0.3,4))
@@ -1140,7 +1140,7 @@ lr_legend <- function(lr, add=F) {
 #'
 #' @description Function for plotting an name layer based on column or row attributes.
 #'
-#' @param lr - layermap object .
+#' @param lp - layermap object .
 #' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
 #' @param attribute - name for the attribute which will be plotted in the layer. Default is F, which plots the rownames.
 #'
@@ -1148,16 +1148,16 @@ lr_legend <- function(lr, add=F) {
 #' @export
 #'
 #' @examples
-lr_names <- function(lr, side, attribute=F, names=NULL, size=1, gap=0.4, autobox=T, cex=0.8,
+lp_names <- function(lp, side, attribute=F, names=NULL, size=1, gap=0.4, autobox=T, cex=0.8,
                            show_bounding_box = F, just='auto') {
 
 
   if (side %in% c(1,3)) {
-    gr = lr$groups$cols
-    ar = lr$column.df
+    gr = lp$groups$cols
+    ar = lp$column.df
   } else if (side %in% c(2,4)) {
-    gr = lr$groups$rows
-    ar = lr$row.df
+    gr = lp$groups$rows
+    ar = lp$row.df
   }
 
   if (!is.null(names)) {
@@ -1184,7 +1184,7 @@ lr_names <- function(lr, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
     }
     text.restriction=max(strwidth(labels, cex=cex), na.rm=T)
     if (srt == 90) {
-      text.restriction = lr_rotate(text.restriction)
+      text.restriction = lp_rotate(text.restriction)
     }
 
   } else {
@@ -1192,7 +1192,7 @@ lr_names <- function(lr, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
 
   }
 
-  list2env(lr_boundaries(lr, side, size, gap, show_bounding_box = show_bounding_box, text.restriction=text.restriction), environment())
+  list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box, text.restriction=text.restriction), environment())
 
 
   if (just == 'auto') {
@@ -1224,8 +1224,8 @@ lr_names <- function(lr, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
 
 
 
-  lr$boundaries <- boundaries
-  return(lr)
+  lp$boundaries <- boundaries
+  return(lp)
 
 }
 
@@ -1240,7 +1240,7 @@ lr_names <- function(lr, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
 #'
 #' @description Function for plotting an dendrogram layer. This function will only work on sides which have been clustered by hclust in the initial layermap call.
 #'
-#' @param lr - layermap object.
+#' @param lp - layermap object.
 #' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
 #' @param prop - the proportion of plotting space reserved for this layer
 #'
@@ -1248,16 +1248,16 @@ lr_names <- function(lr, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
 #' @export
 #'
 #' @examples
-lr_dend <- function(lr, side, size=1, gap=0.2, cutoff=T, cex=0.8,
+lp_dend <- function(lp, side, size=1, gap=0.2, cutoff=T, cex=0.8,
   show_bounding_box = F, ...) {
 
 
-  list2env(lr_boundaries(lr, side, size, gap, show_bounding_box = show_bounding_box), environment())
+  list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
   if (side %in% c(1,3)) {
-    gr = lr$groups$cols
+    gr = lp$groups$cols
   } else if (side %in% c(2,4)) {
-    gr = lr$groups$rows
+    gr = lp$groups$rows
   }
 
 
@@ -1265,10 +1265,10 @@ lr_dend <- function(lr, side, size=1, gap=0.2, cutoff=T, cex=0.8,
     g.df <- gr[gr$group_order == gi,]
 
     if (side %in% c(2,4)) {
-      cl = lr$groups$row_clusters[[gi]]
+      cl = lp$groups$row_clusters[[gi]]
 
     } else if (side %in% c(1,3)) {
-      cl = lr$groups$col_clusters[[gi]]
+      cl = lp$groups$col_clusters[[gi]]
     }
 
 
@@ -1312,8 +1312,8 @@ lr_dend <- function(lr, side, size=1, gap=0.2, cutoff=T, cex=0.8,
     }
   }
 
-  lr$boundaries <- boundaries
-  return(lr)
+  lp$boundaries <- boundaries
+  return(lp)
 
 }
 
