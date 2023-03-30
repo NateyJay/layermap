@@ -79,33 +79,7 @@ show_test_plot <- function(save=F) {
     ADsvg(file_name)
   }
 }
-
-
-# fix_svg('test/test.svg')
-
-# svglite::svglite("test/legend.svg", 4.9, 5.4)
-# lp_legend(lp)
-# dev.off()
-# fix_svg('test/legend.svg')
-
-
-
-svglite('test/fixing_svg.svg', 5,5)
-plot(1,1)
-
-rect(0.9,0.9, 1.2,1.2, col='red')
-rect(0.95,0.95, 1.1,1.1, lwd=3)
-
-dev.off()
-
-in_file = "test/fixing_svg.svg"
-out_file= "test/fixed.svg"
-
-
-
-
-
-processFile(in_file)
+show_test_plot(T)
 
 
 
