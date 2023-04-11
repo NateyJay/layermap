@@ -3,6 +3,7 @@
 # devtools::install_github('NateyJay/layermap')
 
 require(stringr)
+require(dendextend)
 
 
 #' ndendrogram object converter
@@ -16,7 +17,6 @@ require(stringr)
 #'
 #' @examples
 as.ndendrogram <- function(d) {
-  require(dendextend)
   d = as.dendrogram(d)
 
 
@@ -316,6 +316,15 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
   }
 
   df <- as.data.frame(value.df)
+
+
+  if (length(column_groups) > 0 & is.null(column.df)) {
+    stop("column groups given with no column.df")
+  }
+
+  if (length(row_groups) > 0 & is.null(row.df)) {
+    stop("row groups given with no row.df")
+  }
 
   if (any(!column_groups %in% colnames(column.df))) {
     bad_names <- paste(column_groups[which(!column_groups %in% colnames(column.df))], collapse=', ')
@@ -1289,7 +1298,8 @@ lp_names <- function(lp, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
     }
     text.restriction=max(strwidth(labels, cex=cex), na.rm=T)
     if (srt == 90) {
-      text.restriction = lp_rotate(text.restriction)
+      # text.restriction = lp_rotate(text.restriction)
+      text.restriction = text.restriction * par()$cxy[1] / par()$cxy[2] * 1.33
     }
 
   } else {

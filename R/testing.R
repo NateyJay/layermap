@@ -82,6 +82,18 @@ show_test_plot <- function(save=F) {
 show_test_plot(T)
 
 
+## testing ADsvg function
+file_name='test/ad_test.svg'
+svglite::svglite(file_name, 7,7)
+
+par(mfrow=c(2,2))
+
+plot(1:5,1:5)
+rect(3,1, 4,2)
+
+plot(ecdf(1:10))
 
 
+dev.off()
+ADsvg(file_name)
 
