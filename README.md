@@ -177,5 +177,5 @@ To-do list
 - [ ] Complete more reproducible examples. 
 - [ ] Improve catagorical legend plotting.
 - [x] Make legend for color gradients. ***Urgent***
-- [ ] Compatibility function for AD2.
+- [x] Compatibility function for AD2.
 
