@@ -91,12 +91,13 @@ Example for plotting window size:
 ```
 #once you find a good window, you can save using svglite to save
 
-svglite("Outputplot.svg", par()$din[1], par()$din[2]) #uses the inch dimensions of the current plotting window.
+svglite("output_plot.svg", par()$din[1], par()$din[2]) #uses the inch dimensions of the current plotting window.
 
 #par("mar") call here
 #layermap plotting code here
 
 dev.off()
+ADsvg("output_plot.svg") # an optional function that helps with software compatibility (affinity designer)
 
 ```
 
