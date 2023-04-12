@@ -407,6 +407,8 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
       mat = t(fun.df)
     }
 
+    label_order = d$labels[d$order]
+
     for (g in unique(gr$group_order)) {
       f = gr$group_order %in% g
 
@@ -419,7 +421,6 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
         d = dist(d)
         d = hclust(d)
         clusters[[g]] = d
-        label_order = d$labels[d$order]
         gr[label_order,'cluster_order'] <- 1:sum(f)
       }
 
