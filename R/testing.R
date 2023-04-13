@@ -103,17 +103,17 @@ ADsvg(file_name)
 
 # Fixing a problem --------------------------------------------------------
 
-# value.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/value.txt", sep='\t')
-# row.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/row.txt", sep='\t')
-# column.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/column.txt", sep='\t')
-#
-# lp <- layermap(value.df, zero_centered_colors = T,
-#                cluster_rows = F, cluster_cols = F,
-#                row.df=row.df,
-#                column.df=column.df,
-#                row_groups = 'ago3')
-#
-# lp <- lp_group(lp, 4, 'ago3')
+value.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/value.txt", sep='\t')
+row.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/row.txt", sep='\t')
+column.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/column.txt", sep='\t')
 
+lp <- layermap(value.df, zero_centered_colors = T,
+               cluster_rows = F, cluster_cols = F,
+               row.df=row.df,
+               column.df=column.df,
+               row_groups = 'ago3')
+
+lp <- lp_group(lp, 4, 'ago3')
+lp <- lp_dend(lp, 1)
 
 

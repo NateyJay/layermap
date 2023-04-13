@@ -1401,7 +1401,7 @@ lp_dend <- function(lp, side, size=1, gap=0.2, cutoff=T, cex=0.8,
 
       if (side == 1) {
         plot.ndendrogram(d, add=T,
-                         pos.y = xy1, pos.x=pos.xy-0.5,
+                         pos.y = xy0, pos.x=pos.xy-0.5,
                          scale.x=scale.xy,
                          scale.y=width,
                          flip.y=T,
