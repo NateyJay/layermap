@@ -1266,7 +1266,7 @@ lp_legend <- function(lp, add=F) {
 #'
 #' @examples
 lp_names <- function(lp, side, attribute=F, names=NULL, size=1, gap=0.4, autobox=T, cex=0.8,
-                           show_bounding_box = F, just='auto') {
+                           show_bounding_box = F, just='auto', col='black') {
 
 
   if (side %in% c(1,3)) {
@@ -1324,18 +1324,18 @@ lp_names <- function(lp, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
 
   if (just == 'right') {
     if (side %in% c(1,3)) {
-      text(gr$x+0.5, xy1, labels, cex=cex, srt=90, adj=c(1,0.5))
+      text(gr$x+0.5, xy1, labels, cex=cex, srt=90, adj=c(1,0.5), col=col)
 
     } else if (side %in% c(2,4)) {
-      text(xy0, gr$y+0.5, labels, cex=cex, srt=0, adj=c(1,0.5))
+      text(xy0, gr$y+0.5, labels, cex=cex, srt=0, adj=c(1,0.5), col=col)
 
     }
   } else if (just == 'left') {
     if (side %in% c(1,3)) {
-      text(gr$x+0.5, xy0, labels, cex=cex, srt=90, adj=c(0,0.5))
+      text(gr$x+0.5, xy0, labels, cex=cex, srt=90, adj=c(0,0.5), col=col)
 
     } else if (side %in% c(2,4)) {
-      text(xy1, gr$y+0.5, labels, cex=cex, srt=0, adj=c(0,0.5))
+      text(xy1, gr$y+0.5, labels, cex=cex, srt=0, adj=c(0,0.5), col=col)
 
     }
   }
