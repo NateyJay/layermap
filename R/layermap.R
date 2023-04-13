@@ -299,7 +299,7 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
                          palette='PuOr', reverse_palette=T,
                          zero_centered_colors=F,
                          cluster_cols=F, cluster_rows=T,
-                         group_gap=0.02, border='grey25',
+                         group_gap=0.1, border='grey25',
                          # plot_margin=c(0.2,0.2,0.2,0.2),
                          dim_reference="din") {
 
@@ -350,6 +350,9 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
       row.df[[g]][row.df[[g]] == T] <- 'True'
     }
   }
+
+  row.df <- row.df[row.names(df),]
+  column.df <- column.df[names(df),]
 
   # column.df[,column_groups] <- as.character(column.df[,column_groups])
   # row.df[,row_groups] <- as.character(row.df[,row_groups])
