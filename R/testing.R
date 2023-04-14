@@ -102,18 +102,26 @@ ADsvg(file_name)
 
 
 # Fixing a problem --------------------------------------------------------
-
-value.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/value.txt", sep='\t')
-row.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/row.txt", sep='\t')
-column.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/column.txt", sep='\t')
-
-lp <- layermap(value.df, zero_centered_colors = T,
-               cluster_rows = F, cluster_cols = F,
-               row.df=row.df,
-               column.df=column.df,
-               row_groups = 'ago3')
-
-lp <- lp_group(lp, 4, 'ago3')
-lp <- lp_dend(lp, 1)
-
+#
+# value.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/value.txt", sep='\t')
+# row.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/row.txt", sep='\t')
+# column.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/column.txt", sep='\t')
+#
+#
+# par(mar=c(2,2,5,5))
+# lp <- layermap(value.df, zero_centered_colors = T,
+#                cluster_rows = F,
+#                column.df= column.df,
+#                row.df= row.df,
+#                group_gap = 0.1)
+# lp <- lp_names(lp, 3)
+#
+# gap =0
+# size=0.8
+# border='black'
+# col=c(up='red', down='blue', `-`='white')
+# lp <- lp_annotate(lp, 4, "ago1", gap=0.5, size=size, col=col, border=border)
+# lp <- lp_annotate(lp, 4, "ago2", gap=0, size=size, col=col, border=border)
+# lp <- lp_annotate(lp, 4, "ago3", gap=0, size=size, col=col, border=border)
+# lp <- lp_annotate(lp, 4, "ago4", gap=0, size=size, col=col, border=border)
 

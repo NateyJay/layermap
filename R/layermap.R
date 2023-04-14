@@ -1018,7 +1018,8 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
 
 
 
-
+# a.df=NULL; col=NULL; size=1; gap=0.4; palette='Viridis'
+# show_bounding_box=F; type='rect'; label_just='right'; cex.label=0.8
 
 #' Plot annotation layer
 #'
@@ -1038,7 +1039,7 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
 #'
 #' @examples
 lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.4, palette='Viridis',
-                              show_bounding_box=F, type='rect', label_just='right', cex.label=0.8) {
+                              show_bounding_box=F, type='rect', label_just='right', cex.label=0.8, border=NA) {
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
@@ -1053,19 +1054,22 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
   # attribute=names(a.df)[1]
 
   conditions = unique(a.df[[attribute]])
-  col = lp_colorize(col, conditions, palette)
+
+  if (is.null(col)) {
+    col = lp_colorize(col, conditions, palette)
+  }
 
   if (side %in% c(2,4)) {
     gr = lp$groups$rows
     y_vec = gr$y
     x_vec = c(xy1, xy0)
 
-    col_ordered <- col[a.df[match(rownames(gr), rownames(a.df)),1]]
+    col_ordered <- col[a.df[match(rownames(gr), rownames(a.df)),attribute]]
 
     xy_mean = mean(c(xy1,xy0))
 
     if (type == 'rect') {
-      rect(xy0, gr$y, xy1, gr$y + 1, col=col_ordered, border=NA)
+      rect(xy0, gr$y, xy1, gr$y + 1, col=col_ordered, border=border)
     } else if (type == 'points') {
       points(rep(xy_mean, nrow(gr)), gr$y + 0.5, col=col_ordered, pch=19)
     }
@@ -1091,7 +1095,7 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
     xy_mean = mean(c(xy1,xy0))
 
     if (type == 'rect') {
-      rect(gr$x, xy0, gr$x + 1, xy1, col=col_ordered, border=NA)
+      rect(gr$x, xy0, gr$x + 1, xy1, col=col_ordered, border=border)
     } else if (type == 'points') {
       points(gr$x + 0.5, rep(xy_mean, nrow(gr)), col=col_ordered, pch=19)
 
