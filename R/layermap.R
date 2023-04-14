@@ -758,10 +758,10 @@ lp_label <- function(lp, x_vec, y_vec, side, text, just, offset=0.9, cex) {
     srt= 90
 
     if (just == 'left') {
-      y = min(y_vec) - offset
+      y = 0 - offset
       adj = c(1, 0.5)
     } else if (just == 'right') {
-      y = max(y_vec) + offset
+      y = lp$ymax + offset
       adj = c(0, 0.5)
     }
 
@@ -772,10 +772,10 @@ lp_label <- function(lp, x_vec, y_vec, side, text, just, offset=0.9, cex) {
     srt= 0
 
     if (just == 'left') {
-      x = min(x_vec) - offset
+      x = 0 - offset
       adj = c(1, 0.5)
     } else if (just == 'right') {
-      x = max(x_vec) + offset
+      x = lp$xmax + offset
       x = x + 1
       adj = c(0, 0.5)
     }
