@@ -277,7 +277,7 @@ ADsvg = function(file) {
 # zero_centered_colors=F;
 # cluster_cols=F; cluster_rows=T;
 # group_gap=0.02; border='grey25';
-# dim_reference="din"
+# dim_reference="din"; force_numeric=F
 
 
 #' Plot layermap
@@ -297,11 +297,11 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
                          column.df=NULL, row.df=NULL,
                          column_groups=c(), row_groups=c(),
                          palette='PuOr', reverse_palette=T,
-                         zero_centered_colors=F,
+                         zero_centered_colors=F, color_scale=NULL,
                          cluster_cols=F, cluster_rows=T,
                          group_gap=0.1, border='grey25',
                          # plot_margin=c(0.2,0.2,0.2,0.2),
-                         dim_reference="din") {
+                         dim_reference="din", force_numeric=F) {
 
   # par(mar=c(0.3,0.3,0.3,0.3))
 
@@ -314,6 +314,33 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
     colnames(mat) = header
     value.df <- mat
   }
+
+  if (any(c("factor", "character") %in% lapply(value.df,class))) {
+    value_categories = unique(as.vector(as.matrix(value.df)))
+    if (force_numeric) {
+      message("Categorical data detected, but force_numeric specified. This may generate warnings/errors/NAs.")
+      value.df = data.frame(lapply(value.df,as.numeric))
+      data_type = 'numerical'
+
+    } else {
+      message("Value dataframe columns are not all numeric. Treating the dataframe as categorical data.")
+      data_type = 'categorical'
+
+    }
+    message(str_glue("{length(value_categories)} categories found"))
+  } else {
+    data_type = 'numerical'
+  }
+
+
+  if (data_type == 'categorical' & (cluster_cols | cluster_rows)) {
+    message('warning: clustering will not occur with categorical data')
+    cluster_cols = F
+    cluster_rows = F
+  }
+
+
+
 
   df <- as.data.frame(value.df)
 
@@ -398,7 +425,7 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
 
 
 
-  order_by_cluster <- function(fun.df, margin, groups) {
+  order_by_cluster <- function(fun.df, margin, groups, cluster) {
 
     clusters=list()
 
@@ -418,12 +445,17 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
         gr[,'cluster_order'] <- 1
 
       } else {
-        d = mat[f,, drop=F]
-        d = dist(d)
-        d = hclust(d)
-        clusters[[g]] = d
-        label_order = d$labels[d$order]
-        gr[label_order,'cluster_order'] <- 1:sum(f)
+        if (cluster == T) {
+          d = mat[f,, drop=F]
+          d = dist(d)
+          d = hclust(d)
+          clusters[[g]] = d
+          label_order = d$labels[d$order]
+          gr[label_order,'cluster_order'] <- 1:sum(f)
+        } else {
+          gr[,'cluster_order'] <- 1:sum(f)
+        }
+
       }
 
     }
@@ -445,8 +477,9 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
   groups$cols <- order_by_groups(groups$cols)
 
 
-  groups <- order_by_cluster(df, 1, groups)
-  groups <- order_by_cluster(df, 2, groups)
+
+  groups <- order_by_cluster(df, 1, groups, cluster=cluster_rows)
+  groups <- order_by_cluster(df, 2, groups, cluster=cluster_cols)
 
   ## reordering if clustering is selected
   if (cluster_rows) groups$rows <- groups$rows[order(groups$rows$group_order, groups$rows$cluster_order),]
@@ -535,19 +568,41 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
   m.df <- reshape2::melt(m.df, id.vars='rows')
   colnames(m.df)[2] <- 'column.df'
 
-  color_n = 100
-  color_scale = hcl.colors(color_n, palette=palette, rev=reverse_palette)
+  if (data_type == "numeric") {
 
-  if (zero_centered_colors) {
-    max_dist_from_zero = max(abs(m.df$value), na.rm=T)
-    m.df$color_i <- round((m.df$value + max_dist_from_zero) / (max_dist_from_zero*2) * (color_n -1)) + 1
+    if (is.null(color_scale)){
+        color_n = 100
+        color_scale = hcl.colors(color_n, palette=palette, rev=reverse_palette)
 
-  } else {
-    m.df$color_i <- round((m.df$value - min(m.df$value, na.rm=T)) / (max(m.df$value, na.rm=T)-min(m.df$value, na.rm=T)) * (color_n-1)) +1
+    } else {
+      color_n = length(color_scale)
+    }
+
+    if (zero_centered_colors) {
+      max_dist_from_zero = max(abs(m.df$value), na.rm=T)
+      m.df$color_i <- round((m.df$value + max_dist_from_zero) / (max_dist_from_zero*2) * (color_n -1)) + 1
+
+    } else {
+      m.df$color_i <- round((m.df$value - min(m.df$value, na.rm=T)) / (max(m.df$value, na.rm=T)-min(m.df$value, na.rm=T)) * (color_n-1)) +1
+
+    }
+
+    m.df$color <- color_scale[m.df$color_i]
+
+  } else if (data_type == 'categorical') {
+
+    not_in_colorscale = value_categories[which(!value_categories %in% names(color_scale))]
+
+    if (is.null(color_scale)) {
+      color_scale = c()
+    }
+
+    color_scale <- c(color_scale,
+                     setNames(hcl.colors(length(not_in_colorscale),palette=palette, rev=reverse_palette), not_in_colorscale))
+    m.df$color <- color_scale[m.df$value]
 
   }
 
-  m.df$color <- color_scale[m.df$color_i]
 
 
 

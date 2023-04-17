@@ -125,3 +125,23 @@ ADsvg(file_name)
 # lp <- lp_annotate(lp, 4, "ago3", gap=0, size=size, col=col, border=border)
 # lp <- lp_annotate(lp, 4, "ago4", gap=0, size=size, col=col, border=border)
 
+
+
+
+# df <- data.frame(num=c(1,2,3,4,5),
+#                  char=c('6','7','8','9','10'),
+#                  fac=factor(c('11','12','13','11','13'), levels=c('11','12','13')),
+#                  noconvert = c("a",'b','c','d','3'))
+#
+#
+# lapply(df,class)
+#
+# converted = data.frame(lapply(df,as.numeric))
+#
+# lapply(converted,class)
+# converted
+#
+#
+# lp = layermap(df)
+
+
