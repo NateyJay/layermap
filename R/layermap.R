@@ -568,7 +568,8 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
   m.df <- reshape2::melt(m.df, id.vars='rows')
   colnames(m.df)[2] <- 'column.df'
 
-  if (data_type == "numeric") {
+  if (data_type == "numerical") {
+    message('numeric coloring')
 
     if (is.null(color_scale)){
         color_n = 100
@@ -590,6 +591,8 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
     m.df$color <- color_scale[m.df$color_i]
 
   } else if (data_type == 'categorical') {
+
+    message('categorical coloring')
 
     not_in_colorscale = value_categories[which(!value_categories %in% names(color_scale))]
 
