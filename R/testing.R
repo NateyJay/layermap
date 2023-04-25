@@ -145,3 +145,17 @@ ADsvg(file_name)
 # lp = layermap(df)
 
 
+
+# masking problem with ADsvg ----------------------------------------------
+
+#
+# x <- c(sample(1:100, 50, replace=T), sample(34:67, 80, replace=T))
+#
+# file_name = "test.svg"
+# svglite::svglite(file_name, 5,5)
+# par(xpd=T)
+# plot(density(x), xlim=c(20,80))
+# dev.off()
+# ADsvg(file_name)
+
+
