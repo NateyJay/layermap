@@ -1031,14 +1031,14 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
       cond = g.df[[attribute]][1]
       # segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col='black', lwd=3, lend=1)
       # segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col=col[cond], lwd=2.5, lend=1)
-      rect(min(g.df$x), half.y1, max(g.df$x), half.y2, col=col[cond])
+      rect(min(g.df$x), box.y1, max(g.df$x), box.y2, col=col[cond])
       if (labels) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=cex.label) }
 
-      for (gi in clump){
-        g.df <- gr[gr$group_order == gi,]
-        rect(min(g.df$x), box.y1, max(g.df$x)+1, box.y2, col=col[as.vector(cond)])
+      # for (gi in clump){
+      #   g.df <- gr[gr$group_order == gi,]
+      #   rect(min(g.df$x), box.y1, max(g.df$x)+1, box.y2, col=col[as.vector(cond)])
         # abline(h=c(box.y1, box.y2))
-      }
+      # }
     }
 
   } else if (side %in% c(2,4)) {
@@ -1055,14 +1055,14 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
       cond = g.df[[attribute]][1]
       # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col='black', lwd=3, lend=1)
       # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col=col[cond], lwd=2.5, lend=1)
-      rect(half.x1, min(g.df$y), half.x2, max(g.df$y), col=col[cond])
+      rect(box.x1, min(g.df$y), box.x2, max(g.df$y), col=col[cond])
       if (labels) { text(text.x, mean(c(min(g.df$y), max(g.df$y)+1)), srt=90, cond, cex=cex) }
 
-      for (gi in clump){
-        g.df <- gr[gr$group_order == gi,]
-        rect(box.x1, min(g.df$y), box.x2, max(g.df$y)+1, col=col[cond])
-        # abline(v=c(box.x1, box.x2))
-      }
+      # for (gi in clump){
+      #   g.df <- gr[gr$group_order == gi,]
+      #   rect(box.x1, min(g.df$y), box.x2, max(g.df$y)+1, col=col[cond])
+      #   # abline(v=c(box.x1, box.x2))
+      # }
     }
   }
 
