@@ -315,6 +315,7 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
     value.df <- mat
   }
 
+
   if (any(c("factor", "character") %in% lapply(value.df,class))) {
     value_categories = unique(as.vector(as.matrix(value.df)))
     if (force_numeric) {
@@ -582,8 +583,10 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
       color_n = length(color_scale)
     }
 
+
     if (zero_centered_colors) {
       max_dist_from_zero = max(abs(m.df$value), na.rm=T)
+      print(max_dist_from_zero)
       m.df$color_i <- round((m.df$value + max_dist_from_zero) / (max_dist_from_zero*2) * (color_n -1)) + 1
 
       zlim = c(max_dist_from_zero * -1, max_dist_from_zero)
@@ -591,9 +594,10 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
     } else {
       m.df$color_i <- round((m.df$value - min(m.df$value, na.rm=T)) / (max(m.df$value, na.rm=T)-min(m.df$value, na.rm=T)) * (color_n-1)) +1
 
-      zlim = c(min(m.df, na.rm=T), max(m.df, na.rm=T))
+      zlim = c(min(m.df$value, na.rm=T), max(m.df$value, na.rm=T))
 
     }
+
 
     m.df$color <- color_scale[m.df$color_i]
 
@@ -612,6 +616,7 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
     m.df$color <- color_scale[m.df$value]
 
   }
+
 
 
 
