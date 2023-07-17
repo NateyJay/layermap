@@ -583,8 +583,12 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
       max_dist_from_zero = max(abs(m.df$value), na.rm=T)
       m.df$color_i <- round((m.df$value + max_dist_from_zero) / (max_dist_from_zero*2) * (color_n -1)) + 1
 
+      zlim = c(max_dist_from_zero * -1, max_dist_from_zero)
+
     } else {
       m.df$color_i <- round((m.df$value - min(m.df$value, na.rm=T)) / (max(m.df$value, na.rm=T)-min(m.df$value, na.rm=T)) * (color_n-1)) +1
+
+      zlim = c(min(m.df, na.rm=T), max(m.df, na.rm=T))
 
     }
 
@@ -659,6 +663,7 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
 
   out = list(xlim=xlim,
              ylim=ylim,
+             zlim=zlim,
              xmax=xmax,
              ymax=ymax,
              color_scale = color_scale,
@@ -1196,6 +1201,10 @@ lp_color_legend <- function(lp, side, size=1, gap=0.4, ratio=3, adj=0, round=1) 
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = F), environment())
 
+
+  # max_dist_from_zero = max(abs(m.df$value), na.rm=T)
+
+
   if (side %in% c(1,3)) {
     y0 = xy0
     y1 = xy1
@@ -1213,8 +1222,8 @@ lp_color_legend <- function(lp, side, size=1, gap=0.4, ratio=3, adj=0, round=1) 
     rect(x0+w*(c-1)/length(c), y0, x1, y1, col=lp$color_scale[c], border = NA)
     rect(x0,y0,x1,y1, lwd=1.5)
 
-    text(x0, mean(c(y0,y1)), round(min(lp$plotting.df$value),round), pos=2)
-    text(x1, mean(c(y0,y1)), round(max(lp$plotting.df$value),round), pos=4)
+    text(x0, mean(c(y0,y1)), round(zlim[1],round), pos=2)
+    text(x1, mean(c(y0,y1)), round(zlim[2],round), pos=4)
 
 
 
