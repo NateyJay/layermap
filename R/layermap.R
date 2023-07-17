@@ -455,7 +455,7 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
 
           gr[label_order,'cluster_order'] <- 1:sum(f)
         } else {
-          print(f)
+
           gr[,'cluster_order'] <- 1:length(f)
         }
 
