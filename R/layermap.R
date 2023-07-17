@@ -440,6 +440,7 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
     for (g in unique(gr$group_order)) {
       f = gr$group_order %in% g
 
+
       if (sum(f) == 1) {
         clusters[[g]] = F
         gr[,'cluster_order'] <- 1
@@ -451,9 +452,11 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
           d = hclust(d)
           clusters[[g]] = d
           label_order = d$labels[d$order]
+
           gr[label_order,'cluster_order'] <- 1:sum(f)
         } else {
-          gr[,'cluster_order'] <- 1:sum(f)
+          print(f)
+          gr[,'cluster_order'] <- 1:length(f)
         }
 
       }
@@ -1197,13 +1200,10 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 #' @export
 #'
 #' @examples
+
 lp_color_legend <- function(lp, side, size=1, gap=0.4, ratio=3, adj=0, round=1) {
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = F), environment())
-
-
-  # max_dist_from_zero = max(abs(m.df$value), na.rm=T)
-
 
   if (side %in% c(1,3)) {
     y0 = xy0
