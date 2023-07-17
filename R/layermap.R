@@ -1222,8 +1222,8 @@ lp_color_legend <- function(lp, side, size=1, gap=0.4, ratio=3, adj=0, round=1) 
     rect(x0+w*(c-1)/length(c), y0, x1, y1, col=lp$color_scale[c], border = NA)
     rect(x0,y0,x1,y1, lwd=1.5)
 
-    text(x0, mean(c(y0,y1)), round(zlim[1],round), pos=2)
-    text(x1, mean(c(y0,y1)), round(zlim[2],round), pos=4)
+    text(x0, mean(c(y0,y1)), round(lp$zlim[1],round), pos=2)
+    text(x1, mean(c(y0,y1)), round(lp$zlim[2],round), pos=4)
 
 
 
