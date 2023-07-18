@@ -1100,6 +1100,7 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
 #' @param side - value for which side of the plot to applp the layer (1-bottom, 2-left, 3-top, 4-right).
 #' @param attribute - name for the attribute which will be plotted in the layer.
 #' @param col - named color vector, where the names are conditions found in the attribute.
+#' @param type - what to plot as the annotation ('rect' or 'points).
 #' @param palette - hcl.colors palette to fill in unnamed conditions colors.
 #' @param prop - the proportion of plotting space reserved for this layer
 #' @param layer_just - the justification side for a layer label (right or left).
@@ -1249,6 +1250,9 @@ lp_color_legend <- function(lp, side, size=1, gap=0.4, ratio=3, adj=0, round=1) 
 
     rect(x0, y0+w*(c-1)/length(c), x1, y1, col=lp$color_scale[c], border = NA)
     rect(x0,y0,x1,y1, lwd=1.5)
+
+    text(mean(c(x0,x1)), y0, round(lp$zlim[1],round), pos=1)
+    text(mean(c(x0,x1)), y1, round(lp$zlim[2],round), pos=3)
 
   }
 
