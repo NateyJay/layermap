@@ -180,3 +180,6 @@ To-do list
 - [x] Make legend for color gradients. ***Urgent***
 - [x] Compatibility function for AD2.
 
+- [ ] Color scale layer in addition to annotate.
+- [ ] manual setting of zlim for input.
+
