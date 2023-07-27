@@ -293,7 +293,7 @@ ADsvg = function(file) {
 #' @export
 #'
 #' @examples
-layermap <- function(value.df, xlim=NULL, ylim=NULL,
+layermap <- function(value.df, zlim=NULL,
                          column.df=NULL, row.df=NULL,
                          column_groups=c(), row_groups=c(),
                          palette='PuOr', reverse_palette=T,
@@ -301,7 +301,10 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
                          cluster_cols=F, cluster_rows=T,
                          group_gap=0.1, border='grey25',
                          # plot_margin=c(0.2,0.2,0.2,0.2),
-                         dim_reference="din", force_numeric=F) {
+                         dim_reference="din", force_numeric=F,
+                     plot_values=F,
+                     round.value=1,
+                     cex.value=0.8) {
 
   # par(mar=c(0.3,0.3,0.3,0.3))
 
@@ -584,20 +587,23 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
     }
 
 
-    if (zero_centered_colors) {
+    if (!is.null(zlim)) {
+      if (zero_centered_colors) {
+        message("warning: zero_centered_colors overrided due to zlim inclusion")
+      }
+    } else if (zero_centered_colors) {
+
       max_dist_from_zero = max(abs(m.df$value), na.rm=T)
-      print(max_dist_from_zero)
-      m.df$color_i <- round((m.df$value + max_dist_from_zero) / (max_dist_from_zero*2) * (color_n -1)) + 1
-
       zlim = c(max_dist_from_zero * -1, max_dist_from_zero)
-
     } else {
-      m.df$color_i <- round((m.df$value - min(m.df$value, na.rm=T)) / (max(m.df$value, na.rm=T)-min(m.df$value, na.rm=T)) * (color_n-1)) +1
-
       zlim = c(min(m.df$value, na.rm=T), max(m.df$value, na.rm=T))
-
     }
 
+    message(str_glue("zlim: {zlim[1]} to {zlim[2]}"))
+
+    m.df$color_i <- round((m.df$value - zlim[1]) / (zlim[2]-zlim[1]) * (color_n-1)) +1
+    m.df$color_i[m.df$color_i < 1] <- 1
+    m.df$color_i[m.df$color_i > color_n] <- color_n
 
     m.df$color <- color_scale[m.df$color_i]
 
@@ -652,6 +658,10 @@ layermap <- function(value.df, xlim=NULL, ylim=NULL,
 
 
   rect(m.df$x, m.df$y, m.df$x+1, m.df$y+1, col=m.df$color, border=NA)
+
+  if (plot_values) {
+    text(m.df$x+0.5, m.df$y+0.5, round(m.df$value, round.value), adj=c(0.5,0.5), cex=cex.value)
+  }
 
   for (box in unique(m.df$box)) {
     box.df <- m.df[m.df$box == box,]
@@ -1446,7 +1456,7 @@ lp_names <- function(lp, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
 #' @export
 #'
 #' @examples
-lp_dend <- function(lp, side, size=1, gap=0.2, cutoff=T, cex=0.8,
+lp_dend <- function(lp, side, size=2, gap=0.2, cutoff=T, cex=0.8,
   show_bounding_box = F, ...) {
 
 

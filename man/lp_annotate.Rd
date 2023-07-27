@@ -16,7 +16,8 @@ lp_annotate(
   show_bounding_box = F,
   type = "rect",
   label_just = "right",
-  cex.label = 0.8
+  cex.label = 0.8,
+  border = NA
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ lp_annotate(
 \item{col}{- named color vector, where the names are conditions found in the attribute.}
 
 \item{palette}{- hcl.colors palette to fill in unnamed conditions colors.}
+
+\item{type}{- what to plot as the annotation ('rect' or 'points).}
 
 \item{cex.label}{- cex value for label characters.}
 

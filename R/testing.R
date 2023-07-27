@@ -28,7 +28,6 @@
 #
 
 
-
 # # Nitrogen Drought data ---------------------------------------------------
 
 
@@ -79,23 +78,23 @@ show_test_plot <- function(save=F) {
     ADsvg(file_name)
   }
 }
-show_test_plot(T)
+# show_test_plot(F)
 
 
 ## testing ADsvg function
-file_name='test/ad_test.svg'
-svglite::svglite(file_name, 7,7)
-
-par(mfrow=c(2,2))
-
-plot(1:5,1:5)
-rect(3,1, 4,2)
-
-plot(ecdf(1:10))
-
-
-dev.off()
-ADsvg(file_name)
+# file_name='test/ad_test.svg'
+# svglite::svglite(file_name, 7,7)
+#
+# par(mfrow=c(2,2))
+#
+# plot(1:5,1:5)
+# rect(3,1, 4,2)
+#
+# plot(ecdf(1:10))
+#
+#
+# dev.off()
+# ADsvg(file_name)
 
 
 
@@ -107,12 +106,20 @@ ADsvg(file_name)
 # row.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/row.txt", sep='\t')
 # column.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/column.txt", sep='\t')
 #
-#
+# row.df$group_layer <- ifelse(row.df$only_ago2, "Yes", "No")
 # par(mar=c(2,2,5,5))
+
+
+# value.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2023-Weiberg_Bci_AGO/+Figures/value.df", sep='\t')
+# lp <- layermap(value.df)
+# lp <- lp_color_legend(lp, 1)
+# lp <- lp_color_legend(lp, 4)
+#
 # lp <- layermap(value.df, zero_centered_colors = T,
 #                cluster_rows = F,
 #                column.df= column.df,
 #                row.df= row.df,
+#                row_groups = 'group_layer',
 #                group_gap = 0.1)
 # lp <- lp_names(lp, 3)
 #
@@ -143,6 +150,35 @@ ADsvg(file_name)
 #
 #
 # lp = layermap(df)
+
+
+
+# adding features ---------------------------------------------------------
+
+# value.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2021-NxD_data/+Figures/test.txt")
+#
+#
+# par(mar=c(6,8,6,8))
+# lp <- layermap(value.df, zero_centered_colors = T,
+#                # zlim=c(-3,1.1),
+#                zlim=c(-1,1),
+#                cluster_cols = T,
+#                plot_values = T,
+#                cex.value = 0.6,
+#                round.value = 2)
+# lp <- lp_names(lp, 1)
+# lp <- lp_names(lp, 4)
+# lp <- lp_dend(lp, 2, size=2, lwd=1.5)
+# lp <- lp_dend(lp, 3, size=2, lwd=1.5)
+# lp <- lp_color_legend(lp, 4)
+
+
+
+
+
+
+
+
 
 
 

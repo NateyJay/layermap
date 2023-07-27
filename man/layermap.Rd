@@ -6,8 +6,7 @@
 \usage{
 layermap(
   value.df,
-  xlim = NULL,
-  ylim = NULL,
+  zlim = NULL,
   column.df = NULL,
   row.df = NULL,
   column_groups = c(),
@@ -15,11 +14,16 @@ layermap(
   palette = "PuOr",
   reverse_palette = T,
   zero_centered_colors = F,
+  color_scale = NULL,
   cluster_cols = F,
   cluster_rows = T,
-  group_gap = 0.02,
+  group_gap = 0.1,
   border = "grey25",
-  dim_reference = "din"
+  dim_reference = "din",
+  force_numeric = F,
+  plot_values = F,
+  round.value = 1,
+  cex.value = 0.8
 )
 }
 \arguments{

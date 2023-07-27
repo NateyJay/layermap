@@ -7,7 +7,7 @@
 lp_dend(
   lp,
   side,
-  size = 1,
+  size = 2,
   gap = 0.2,
   cutoff = T,
   cex = 0.8,
