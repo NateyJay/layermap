@@ -17,7 +17,9 @@ lp_annotate(
   type = "rect",
   label_just = "right",
   cex.label = 0.8,
-  border = NA
+  border = NA,
+  cex.point = 1,
+  pch = 19
 )
 }
 \arguments{

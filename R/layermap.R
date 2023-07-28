@@ -1120,8 +1120,11 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
 #' @export
 #'
 #' @examples
-lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.4, palette='Viridis',
-                              show_bounding_box=F, type='rect', label_just='right', cex.label=0.8, border=NA) {
+lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.4,
+                        palette='Viridis',
+                        show_bounding_box=F, type='rect',
+                        label_just='right', cex.label=0.8, border=NA,
+                        cex.point=1, pch=19) {
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
@@ -1153,7 +1156,7 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
     if (type == 'rect') {
       rect(xy0, gr$y, xy1, gr$y + 1, col=col_ordered, border=border)
     } else if (type == 'points') {
-      points(rep(xy_mean, nrow(gr)), gr$y + 0.5, col=col_ordered, pch=19)
+      points(rep(xy_mean, nrow(gr)), gr$y + 0.5, col=col_ordered, pch=pch, cex=cex.point)
     }
 
     # if (label_just == 'right') {
@@ -1178,8 +1181,9 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 
     if (type == 'rect') {
       rect(gr$x, xy0, gr$x + 1, xy1, col=col_ordered, border=border)
+
     } else if (type == 'points') {
-      points(gr$x + 0.5, rep(xy_mean, nrow(gr)), col=col_ordered, pch=19)
+      points(gr$x + 0.5, rep(xy_mean, nrow(gr)), col=col_ordered, pch=pch)
 
     }
 

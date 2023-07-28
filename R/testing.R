@@ -161,7 +161,7 @@ show_test_plot <- function(save=F) {
 # value.df  <- read.delim("/Users/jax/Desktop/📚Publications_local/2021-NxD_data/+Figures/value.txt")
 # row.df    <- read.delim("/Users/jax/Desktop/📚Publications_local/2021-NxD_data/+Figures/row.txt")
 # column.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2021-NxD_data/+Figures/column.txt")
-
+#
 #
 #  zero_centered_colors = T
 # # zlim=c(-3,1.1)
@@ -176,6 +176,7 @@ show_test_plot <- function(save=F) {
 # round.value = 2
 #
 #
+# colors=c(up='darkred', down='darkblue', `-`='grey85')
 # par(mar=c(6,8,6,8))
 # lp <- layermap(value.df, zero_centered_colors = T,
 #                # zlim=c(-3,1.1),
@@ -189,11 +190,15 @@ show_test_plot <- function(save=F) {
 #                cex.value = 0.6,
 #                round.value = 2)
 # lp <- lp_names(lp, 1)
-# lp <- lp_names(lp, 4)
+# lp <- lp_annotate(lp, 4, 'G', size=0.6, type='points', cex.point=2, col=colors)
+# lp <- lp_annotate(lp, 4, 'N', size=0.6, type='points', cex.point=2)
+# lp <- lp_annotate(lp, 4, 'D', size=0.6, type='points', cex.point=2)
+# # lp <- lp_names(lp, 4)
 # lp <- lp_dend(lp, 2, size=2, lwd=1.5)
 # lp <- lp_dend(lp, 3, size=2, lwd=1.5)
 # lp <- lp_color_legend(lp, 4)
 # lp <- lp_group(lp, 3, 'inter')
+
 
 
 
