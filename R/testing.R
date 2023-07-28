@@ -157,12 +157,34 @@ show_test_plot <- function(save=F) {
 
 # value.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2021-NxD_data/+Figures/test.txt")
 #
+
+# value.df  <- read.delim("/Users/jax/Desktop/📚Publications_local/2021-NxD_data/+Figures/value.txt")
+# row.df    <- read.delim("/Users/jax/Desktop/📚Publications_local/2021-NxD_data/+Figures/row.txt")
+# column.df <- read.delim("/Users/jax/Desktop/📚Publications_local/2021-NxD_data/+Figures/column.txt")
+
+#
+#  zero_centered_colors = T
+# # zlim=c(-3,1.1)
+# zlim=c(-3,3)
+# column.df = column.df
+# column_groups='inter'
+# row.df = row.df
+# cluster_rows = F
+# cluster_cols = F
+# plot_values = T
+# cex.value = 0.6
+# round.value = 2
+#
 #
 # par(mar=c(6,8,6,8))
 # lp <- layermap(value.df, zero_centered_colors = T,
 #                # zlim=c(-3,1.1),
-#                zlim=c(-1,1),
-#                cluster_cols = T,
+#                zlim=c(-3,3),
+#                column.df = column.df,
+#                column_groups='inter',
+#                row.df = row.df,
+#                cluster_rows = F,
+#                cluster_cols = F,
 #                plot_values = T,
 #                cex.value = 0.6,
 #                round.value = 2)
@@ -171,7 +193,7 @@ show_test_plot <- function(save=F) {
 # lp <- lp_dend(lp, 2, size=2, lwd=1.5)
 # lp <- lp_dend(lp, 3, size=2, lwd=1.5)
 # lp <- lp_color_legend(lp, 4)
-
+# lp <- lp_group(lp, 3, 'inter')
 
 
 

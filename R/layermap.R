@@ -382,8 +382,8 @@ layermap <- function(value.df, zlim=NULL,
     }
   }
 
-  row.df <- row.df[row.names(df),]
-  column.df <- column.df[names(df),]
+  row.df <- row.df[row.names(df),, drop=F]
+  column.df <- column.df[names(df),, drop=F]
 
   # column.df[,column_groups] <- as.character(column.df[,column_groups])
   # row.df[,row_groups] <- as.character(row.df[,row_groups])
