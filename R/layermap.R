@@ -1124,7 +1124,7 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
                         palette='Viridis',
                         show_bounding_box=F, type='rect',
                         label_just='right', cex.label=0.8, border=NA,
-                        cex.point=1, pch=19) {
+                        cex.point=1, pch=19, lwd=1) {
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
@@ -1156,7 +1156,13 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
     if (type == 'rect') {
       rect(xy0, gr$y, xy1, gr$y + 1, col=col_ordered, border=border)
     } else if (type == 'points') {
-      points(rep(xy_mean, nrow(gr)), gr$y + 0.5, col=col_ordered, pch=pch, cex=cex.point)
+      if (pch %in% 21:25) {
+        points(rep(xy_mean, nrow(gr)), gr$y + 0.5, bg=col_ordered, pch=pch, cex=cex.point, lwd=lwd)
+
+      } else {
+        points(rep(xy_mean, nrow(gr)), gr$y + 0.5, col=col_ordered, pch=pch, cex=cex.point)
+
+      }
     }
 
     # if (label_just == 'right') {

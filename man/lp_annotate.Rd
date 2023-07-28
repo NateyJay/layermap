@@ -19,7 +19,8 @@ lp_annotate(
   cex.label = 0.8,
   border = NA,
   cex.point = 1,
-  pch = 19
+  pch = 19,
+  lwd = 1
 )
 }
 \arguments{
