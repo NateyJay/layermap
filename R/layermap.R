@@ -1099,6 +1099,14 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
 
 
 
+# a.df=NULL; col=NULL; size=1; gap=0.4;
+# palette='Viridis';
+# show_bounding_box=F; type='rect';
+# label_just='right'; cex.label=0.8; border=NA;
+# cex.point=1; pch=19; lwd=1;
+# show_label=T
+
+
 # a.df=NULL; col=NULL; size=1; gap=0.4; palette='Viridis'
 # show_bounding_box=F; type='rect'; label_just='right'; cex.label=0.8
 
@@ -1124,7 +1132,8 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
                         palette='Viridis',
                         show_bounding_box=F, type='rect',
                         label_just='right', cex.label=0.8, border=NA,
-                        cex.point=1, pch=19, lwd=1) {
+                        cex.point=1, pch=19, lwd=1,
+                        show_label=T) {
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
@@ -1155,9 +1164,11 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 
     if (type == 'rect') {
       rect(xy0, gr$y, xy1, gr$y + 1, col=col_ordered, border=border)
+
     } else if (type == 'points') {
       if (pch %in% 21:25) {
-        points(rep(xy_mean, nrow(gr)), gr$y + 0.5, bg=col_ordered, pch=pch, cex=cex.point, lwd=lwd)
+        col = ifelse(!is.na(col_ordered), 'black', NA)
+        points(rep(xy_mean, nrow(gr)), gr$y + 0.5, bg=col_ordered, col=col, pch=pch, cex=cex.point, lwd=lwd)
 
       } else {
         points(rep(xy_mean, nrow(gr)), gr$y + 0.5, col=col_ordered, pch=pch, cex=cex.point)
@@ -1177,11 +1188,13 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
     # }
 
   } else if (side %in% c(1,3)) {
+
     gr = lp$groups$cols
     x_vec = gr$x
     y_vec = c(xy1, xy0)
 
     col_ordered <- col[a.df[match(rownames(gr), rownames(a.df)),attribute]]
+
 
     xy_mean = mean(c(xy1,xy0))
 
@@ -1189,8 +1202,17 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
       rect(gr$x, xy0, gr$x + 1, xy1, col=col_ordered, border=border)
 
     } else if (type == 'points') {
-      points(gr$x + 0.5, rep(xy_mean, nrow(gr)), col=col_ordered, pch=pch)
+      if (pch %in% 21:25) {
+        col = ifelse(!is.na(col_ordered), 'black', NA)
+        points(gr$x + 0.5, rep(xy_mean, nrow(gr)), bg=col_ordered, col=col, pch=pch)
 
+
+
+      } else {
+        points(gr$x + 0.5, rep(xy_mean, nrow(gr)), col=col_ordered, pch=pch)
+
+
+      }
     }
 
     # if (label_just == 'right') {
@@ -1208,7 +1230,8 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
     #   points(x1+lp$gap.x*0.5, y1, pch=-9658, cex=0.5)
     # }
   }
-  lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+  if (show_label) {lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+  }
   lp$boundaries <- boundaries
   lp$legend[[attribute]] = col
   return(lp)

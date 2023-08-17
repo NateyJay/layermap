@@ -48,12 +48,14 @@ show_test_plot <- function(save=F) {
     svglite::svglite(file_name, 7, 5.4)
   }
 
+
   par(mar=c(5,7,5,10))
   lp = layermap(value.df, zero_centered_colors = T,
                     column.df=column.df, row.df=row.df,
                     column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
                 cluster_cols=T,
                 group_gap = 0.1)
+
 
   lp_color_legend(lp, 1)
 
@@ -175,7 +177,7 @@ show_test_plot <- function(save=F) {
 # cex.value = 0.6
 # round.value = 2
 #
-#
+
 # colors=c(up='darkred', down='darkblue', `-`='grey85')
 # par(mar=c(6,8,6,8))
 # lp <- layermap(value.df, zero_centered_colors = T,
@@ -190,6 +192,7 @@ show_test_plot <- function(save=F) {
 #                cex.value = 0.6,
 #                round.value = 2)
 # lp <- lp_names(lp, 1)
+# lp <- lp_blank(lp, 4, size=3)
 # lp <- lp_annotate(lp, 4, 'G', size=0.6, type='points', cex.point=2, col=colors)
 # lp <- lp_annotate(lp, 4, 'N', size=0.6, type='points', cex.point=2)
 # lp <- lp_annotate(lp, 4, 'D', size=0.6, type='points', cex.point=2)
