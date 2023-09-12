@@ -1626,7 +1626,7 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
   for (group in unique(gr$group_order)) {
     keys = row.names(gr[gr$group_order == group,])
     tab = table(df[keys,attribute])
-    print(tab)
+    # print(tab)
 
     if (side %in% c(1,3)) {
       pie.x = median(gr[keys,'x'])+0.5
