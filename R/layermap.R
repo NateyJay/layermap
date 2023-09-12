@@ -1699,7 +1699,7 @@ lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, 
   }
 
 
-  text(text.x, text.y, gr[[attribute]], srt=srt, adj=adj, font=font, col=col, cex=cex)
+  text(text.x, text.y, gr[[attribute]], srt=srt, adj=adj, font=font, col=col, cex=cex, family=family)
 
 
   if (group_label) {
