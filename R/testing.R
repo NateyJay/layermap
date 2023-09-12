@@ -59,15 +59,18 @@ show_test_plot <- function(save=F) {
 
   lp_color_legend(lp, 1)
 
-  lp = lp_group(lp, 3, 'treatment', labels=T, label_just = 'left',
+  lp = lp_group(lp, 3, 'treatment', labels=F, label_just = 'left',
                       col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),
-                      show_bounding_box = F)
+                      show_bounding_box = F, group_label = F)
+  lp = lp_group_names(lp, 3, 'treatment', font=3, gap=0)
+
 
   # lp = lp_group_pie(lp,4, 'ND')
   # lp = lp_group_pie(lp,4, 'Vidal2020')
   # lp = lp_group_pie(lp, 3, 'tissue')
 
-  lp = lp_group_pie(lp,4, 'ND', col=c('mixed'='black'))
+  lp = lp_group_pie(lp,4, 'ND', col=c('mixed'='black'), group_label = F)
+  lp = lp_group_names(lp,4, 'Nit_GOs')
   lp = lp_group_pie(lp,4, 'PlantTFDB', col=c('FALSE'='black', 'TRUE'='orange'))
 
   lp = lp_group(lp, 4, 'PlantTFDB', labels=T, label_just = 'left')

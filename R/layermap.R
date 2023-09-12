@@ -971,7 +971,7 @@ lp_colorize <- function(col, conditions, palette) {
 #' @export
 #'
 #' @examples
-lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
+lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8, group_label=T) {
 
   if (labels) {
     str_multiplier = 2
@@ -1091,8 +1091,9 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
     }
   }
 
-
-  lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+  if (group_label) {
+    lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+  }
 
   lp$legend[[attribute]] = col
   lp$boundaries <- boundaries
@@ -1578,19 +1579,9 @@ lp_dend <- function(lp, side, size=2, gap=0.2, cutoff=T, cex=0.8,
 #' @export
 #'
 #' @examples
-lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=1, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8) {
+lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=1, show_bounding_box=F, label_just='right', group_label=T, cex.label=0.8) {
 
-  if (labels) {
-    str_multiplier = 2
-
-    text.gap = strheight("G", cex=cex.label) * str_multiplier * cex.label
-
-    if (side %in% c(2,4)) {
-      # text.gap = lp_rotate(text.gap)
-      text.gap = text.gap * par()$cxy[1] / par()$cxy[2] * 1.33
-    }
-
-  } else {text.gap = 0}
+  text.gap = 0
 
 
   list2env(lp_boundaries(lp, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
@@ -1639,14 +1630,85 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
 
   }
 
-  lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
-
+  if (group_label) {
+    lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+  }
   lp$legend[[attribute]] = col
   lp$boundaries <- boundaries
   return(lp)
 }
 
 
+#' Plot group name layer
+#'
+#' @description Function for plotting a name label for a group.
+#'
+#' @param lp - layermap object .
+#' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param col - named color vector, where the names are conditions found in the attribute.
+#' @param cex - cex value for label characters.
+#' @param font
+#' @param adj
+#' @param srt
+#'
+#'
+#' @return layermap object
+#' @export
+#'
+#' @examples
+lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, srt=NULL, size=1, gap=0, cex=0.8, show_bounding_box=F, group_label=F) {
+
+  text.gap = 0
+  list2env(lp_boundaries(lp, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
+
+  if (side %in% c(1,3)) {
+    text.y = mean(c(xy0,xy1))
+    gr = lp$groups$cols
+    x_vec = gr$x
+    y_vec = c(xy1, xy0)
+    gr = aggregate(gr$x ~ gr$group_order + gr[[attribute]], gr, median)
+    names(gr) <- c("group_order", attribute,'x')
+    text.x = gr$x + 0.5
+
+  } else if (side %in% c(2,4)) {
+    text.x = mean(c(xy0,xy1))
+    gr = lp$groups$rows
+    y_vec = gr$y
+    x_vec = c(xy1, xy0)
+    gr = aggregate(gr$y ~ gr$group_order + gr[[attribute]], gr, median)
+    names(gr) <- c("group_order", attribute,'y')
+    text.y = gr$y + 0.5
+  }
+
+  print(srt)
+  if (is.null(srt)) {
+    if (side %in% c(1,3)) {
+      srt = 90
+    } else {
+      srt = 0
+    }
+  }
+
+
+  if (is.null(adj)) {
+    if (side %in% c(1,2)) {
+      adj=c(1,0.5)
+    } else if (side %in% c(3,4)) {
+      adj=c(0,0.5)
+    }
+  }
+
+
+  text(text.x, text.y, gr[[attribute]], srt=srt, adj=adj, font=font, col=col, cex=cex)
+
+
+  if (group_label) {
+    lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+  }
+
+  lp$boundaries <- boundaries
+  return(lp)
+}
 
 
 

@@ -15,7 +15,7 @@ lp_group_pie(
   cex = 1,
   show_bounding_box = F,
   label_just = "right",
-  labels = T,
+  group_label = T,
   cex.label = 0.8
 )
 }
@@ -30,9 +30,9 @@ lp_group_pie(
 
 \item{palette}{- hcl.colors palette to fill in unnamed conditions colors.}
 
-\item{labels}{- logical for whether group labels should be plotted.}
-
 \item{cex_label}{- cex value for label characters.}
+
+\item{labels}{- logical for whether group labels should be plotted.}
 }
 \value{
 layermap object

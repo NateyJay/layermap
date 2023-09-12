@@ -16,7 +16,8 @@ lp_group(
   show_bounding_box = F,
   label_just = "right",
   labels = T,
-  cex.label = 0.8
+  cex.label = 0.8,
+  group_label = T
 )
 }
 \arguments{
