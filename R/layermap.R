@@ -1616,6 +1616,7 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
 
 
   conditions = unique(df[[attribute]])
+  if (is.logical(conditions)) conditions <- as.character(conditions)
 
 
   col = lp_colorize(col, conditions, palette)
@@ -1624,13 +1625,8 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
 
   for (group in unique(gr$group_order)) {
     keys = row.names(gr[gr$group_order == group,])
-    tab = as.data.frame(table(df[keys,attribute]))
-    names(tab) <- c('condition', 'freq')
-    tab$prop = tab$freq/sum(tab$freq)
-    tab$start = NA
-    tab$stop  = cumsum(tab$prop)
-    tab$start = tab$stop - tab$prop
-
+    tab = table(df[keys,attribute])
+    print(tab)
 
     if (side %in% c(1,3)) {
       pie.x = median(gr[keys,'x'])+0.5
@@ -1638,87 +1634,10 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
       pie.y = median(gr[keys,'y'])+0.5
     }
 
-    # radius = size * cex
-
-    plotrix::floating.pie(pie.x, pie.y, tab$prop, radius=radius, col=col)
-
-
-
-
+    plotrix::floating.pie(pie.x, pie.y, tab, radius=radius, col=col[names(tab)])
 
 
   }
-#
-#
-#   last_cond = ''
-#   gis = c()
-#   clumped_groups = list()
-#   for (gi in unique(gr$group_order)) {
-#     cond = unique(gr[gr$group_order == gi, attribute])
-#
-#     if (cond == last_cond) {
-#       gis = c(gis, gi)
-#
-#     } else {
-#       clumped_groups[[length(clumped_groups)+1]] <- gis
-#       gis = c(gi)
-#
-#     }
-#     last_cond = cond
-#   }
-#   clumped_groups[[length(clumped_groups)+1]] <- gis
-#
-#
-#   ## Plotting
-#   if (side %in% c(1,3)) {
-#     x_vec = gr$x
-#     y_vec = c(box.y1, box.y2)
-#     half.y1 = mean(c(box.y1, box.y2)) + abs(box.y2-box.y1)*0.2
-#     half.y2 = mean(c(box.y1, box.y2)) - abs(box.y2-box.y1)*0.2
-#
-#     # half.y = mean(c(box.y1, box.y2))
-#     for (clump_i in seq_along(clumped_groups)) {
-#       clump = clumped_groups[[clump_i]]
-#
-#       g.df <- gr[gr$group_order %in% clump,]
-#       cond = g.df[[attribute]][1]
-#       # segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col='black', lwd=3, lend=1)
-#       # segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col=col[cond], lwd=2.5, lend=1)
-#       rect(min(g.df$x, na.rm=T), box.y1, max(g.df$x, na.rm=T)+1, box.y2, col=col[cond])
-#       if (labels) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=cex.label) }
-#
-#       # for (gi in clump){
-#       #   g.df <- gr[gr$group_order == gi,]
-#       #   rect(min(g.df$x), box.y1, max(g.df$x)+1, box.y2, col=col[as.vector(cond)])
-#       # abline(h=c(box.y1, box.y2))
-#       # }
-#     }
-#
-#   } else if (side %in% c(2,4)) {
-#     y_vec = gr$y
-#     x_vec = c(box.x1, box.x2)
-#     half.x1 = mean(c(box.x1, box.x2)) + abs(box.x2-box.x1)*0.2
-#     half.x2 = mean(c(box.x1, box.x2)) - abs(box.x2-box.x1)*0.2
-#     # half.x = mean(c(box.x1, box.x2))
-#
-#     for (clump_i in seq_along(clumped_groups)) {
-#       clump = clumped_groups[[clump_i]]
-#
-#       g.df <- gr[gr$group_order %in% clump,]
-#       cond = g.df[[attribute]][1]
-#       # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col='black', lwd=3, lend=1)
-#       # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col=col[cond], lwd=2.5, lend=1)
-#       rect(box.x1, min(g.df$y, na.rm=T), box.x2, max(g.df$y, na.rm=T)+1, col=col[cond])
-#       if (labels) { text(text.x, mean(c(min(g.df$y), max(g.df$y)+1)), srt=90, cond, cex=cex) }
-#
-#       # for (gi in clump){
-#       #   g.df <- gr[gr$group_order == gi,]
-#       #   rect(box.x1, min(g.df$y), box.x2, max(g.df$y)+1, col=col[cond])
-#       #   # abline(v=c(box.x1, box.x2))
-#       # }
-#     }
-#   }
-
 
   lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
 
