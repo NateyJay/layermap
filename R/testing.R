@@ -63,11 +63,17 @@ show_test_plot <- function(save=F) {
                       col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),
                       show_bounding_box = F)
 
+  lp = lp_group_pie(lp,4, 'ND')
+  lp = lp_group_pie(lp,4, 'Vidal2020')
+  lp = lp_group_pie(lp, 3, 'tissue')
+
+  lp = lp_group_pie(lp,4, 'ND', col=c('mixed'='black'))
+
 
   lp = lp_annotate(lp, 3, 'tissue', label_just = 'left',
                          col=setNames('red', 'Root'))
 
-  lp = lp_group(lp, 4, 'PlantTFDB', labels=T, label_just = 'left')
+  lp = lp_group(lp, 4, 'PlantTFDB', labels=T, label_just = 'left', srt.label=90)
   lp = lp_group(lp, 4, 'Nit_GOs', labels=F, label_just = 'left')
 
 
