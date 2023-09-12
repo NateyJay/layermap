@@ -1656,7 +1656,7 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
 #' @export
 #'
 #' @examples
-lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, srt=NULL, size=1, gap=0, cex=0.8, show_bounding_box=F, group_label=F) {
+lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, family='', srt=NULL, size=1, gap=0, cex=0.8, show_bounding_box=F, group_label=F) {
 
   text.gap = 0
   list2env(lp_boundaries(lp, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
