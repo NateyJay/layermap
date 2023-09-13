@@ -1649,12 +1649,14 @@ lp_dend <- function(lp, side, size=2, gap=0.2, cutoff=T, cex=0.8,
 #' @export
 #'
 #' @examples
-lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=1, show_bounding_box=F, label_just='right', group_label=T, cex.label=0.8) {
+lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=1, show_bounding_box=F, label_just='right', group_label=T, cex.label=0.8,
+                         trace=T, trace.lty=1, trace.lwd=0.8, trace.gap=1.5) {
 
   text.gap = 0
 
 
   list2env(lp_boundaries(lp, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
+
 
   if (side %in% c(1,3)) {
     pie.y = mean(c(xy0,xy1))
@@ -1680,9 +1682,25 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
   if (is.logical(conditions)) conditions <- as.character(conditions)
 
 
+
   col = lp_colorize(col, conditions, palette)
 
-  ## Finding groups which are identical and consecutive
+  # if (trace) {
+  #   if (side %in% c(1,3)) {
+  #     segments(min(x_vec), pie.y, max(x_vec)+1, pie.y, lty=3)
+  #   } else if (side %in% c(2,4)) {
+  #     segments(pie.x, min(y_vec), pie.x, max(y_vec)+1, lty=3)
+  #   }
+  #
+  # }
+
+  if (side %in% c(1,3)) {
+    trace.gap = radius * trace.gap
+  } else if (side %in% c(2,4)) {
+    lp_3 = lp_boundaries(lp, side=3, size=size, gap=gap)
+    trace.gap = abs((lp_3$xy1 - lp_3$xy0)/2) * cex * trace.gap
+  }
+  last = -1 * trace.gap
 
   for (group in unique(gr$group_order)) {
     keys = row.names(gr[gr$group_order == group,])
@@ -1691,13 +1709,37 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
 
     if (side %in% c(1,3)) {
       pie.x = median(gr[keys,'x'])+0.5
+      if (trace & abs(pie.x-last)/2 > trace.gap) {
+        segments(last+trace.gap, pie.y, pie.x-trace.gap, pie.y, lty=trace.lty, lwd=trace.lwd)
+      }
+      last = pie.x
+
     } else if (side %in% c(2,4)) {
       pie.y = median(gr[keys,'y'])+0.5
+      if (trace & abs(pie.y-last)/2 > trace.gap) {
+        segments(pie.x, last+trace.gap, pie.x, pie.y-trace.gap, lty=trace.lty, lwd=trace.lwd)
+      }
+      last = pie.y
+
     }
 
     plotrix::floating.pie(pie.x, pie.y, tab, radius=radius, col=col[names(tab)])
 
 
+  }
+
+  if (trace) {
+    if (side %in% c(1,3)) {
+      if (abs((max(x_vec)+1)-last)/2 > trace.gap) {
+        segments(last+trace.gap, pie.y, max(x_vec)+1, pie.y, lty=trace.lty, lwd=trace.lwd)
+      }
+
+    } else if (side %in% c(2,4)) {
+      if (abs((max(y_vec)+1)-last)/2 > trace.gap) {
+        segments(pie.x, last+trace.gap, pie.x, max(y_vec)+1, lty=trace.lty, lwd=trace.lwd)
+      }
+
+    }
   }
 
   if (group_label) {
