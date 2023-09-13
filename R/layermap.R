@@ -1331,7 +1331,7 @@ lp_legend <- function(lp, side, attributes=NULL, cex=0.6, gap=0.4,
   lines = length(unlist(leg)) + length(leg) + 3
 
 
-  list2env(lp_boundaries(lp, side, size=0, gap, text.gap=0, show_bounding_box = show_bounding_box), environment())
+  list2env(lp_boundaries(lp, side, size=0, gap, text.gap=0, show_bounding_box = F), environment())
 
   # par(mar=rep(0.3,4))
 
