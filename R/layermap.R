@@ -1650,7 +1650,7 @@ lp_dend <- function(lp, side, size=2, gap=0.2, cutoff=T, cex=0.8,
 #'
 #' @examples
 lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=1, show_bounding_box=F, label_just='right', group_label=T, cex.label=0.8,
-                         trace=T, trace.lty=1, trace.lwd=0.8, trace.gap=1.5) {
+                         trace=T, trace.lty=1, trace.lwd=0.8, trace.gap=1.5, trace.col='black') {
 
   text.gap = 0
 
@@ -1710,14 +1710,14 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
     if (side %in% c(1,3)) {
       pie.x = median(gr[keys,'x'])+0.5
       if (trace & abs(pie.x-last)/2 > trace.gap) {
-        segments(last+trace.gap, pie.y, pie.x-trace.gap, pie.y, lty=trace.lty, lwd=trace.lwd)
+        segments(last+trace.gap, pie.y, pie.x-trace.gap, pie.y, lty=trace.lty, lwd=trace.lwd, col=trace.col)
       }
       last = pie.x
 
     } else if (side %in% c(2,4)) {
       pie.y = median(gr[keys,'y'])+0.5
       if (trace & abs(pie.y-last)/2 > trace.gap) {
-        segments(pie.x, last+trace.gap, pie.x, pie.y-trace.gap, lty=trace.lty, lwd=trace.lwd)
+        segments(pie.x, last+trace.gap, pie.x, pie.y-trace.gap, lty=trace.lty, lwd=trace.lwd, col=trace.col)
       }
       last = pie.y
 
@@ -1731,12 +1731,12 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
   if (trace) {
     if (side %in% c(1,3)) {
       if (abs((max(x_vec)+1)-last)/2 > trace.gap) {
-        segments(last+trace.gap, pie.y, max(x_vec)+1, pie.y, lty=trace.lty, lwd=trace.lwd)
+        segments(last+trace.gap, pie.y, max(x_vec)+1, pie.y, lty=trace.lty, lwd=trace.lwd, col=trace.col)
       }
 
     } else if (side %in% c(2,4)) {
       if (abs((max(y_vec)+1)-last)/2 > trace.gap) {
-        segments(pie.x, last+trace.gap, pie.x, max(y_vec)+1, lty=trace.lty, lwd=trace.lwd)
+        segments(pie.x, last+trace.gap, pie.x, max(y_vec)+1, lty=trace.lty, lwd=trace.lwd, col=trace.col)
       }
 
     }
