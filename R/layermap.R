@@ -1319,61 +1319,111 @@ lp_color_legend <- function(lp, side, size=1, gap=0.4, ratio=3, adj=0, round=1) 
 #' @export
 #'
 #' @examples
-lp_legend <- function(lp, add=F) {
+lp_legend <- function(lp, side, attributes=NULL, cex=0.6, gap=0.8,
+                      title.col='black', title.cex=NULL, title.font=4) {
+
+  if (is.null(title.cex)) {
+    title.cex = cex
+  }
 
   leg <- lp$legend
   lines = length(unlist(leg)) + length(leg) + 3
 
-  par(mar=rep(0.3,4))
 
+  list2env(lp_boundaries(lp, side, size, gap, text.gap=0, show_bounding_box = show_bounding_box), environment())
 
-  leg.df <- data.frame()
-  i = 0
-  for (grp in names(leg)) {
-    i = i + 1
-    for (col_i in 1:length(leg[[grp]])) {
-      i = i + 1
-      col = leg[[grp]][col_i]
-      cond = names(leg[[grp]])[col_i]
+  # par(mar=rep(0.3,4))
 
-      leg.df <- rbind(leg.df, data.frame(group=grp, color=col, condition=cond, y=i))
+  if (side == 1) {
+    y=xy1
+    x=0
+    xjust=0
+    yjust=1
 
+  } else if (side == 2) {
+    x=xy0
+    xjust=1
+    yjust=1
+    y=lp$ymax
 
-      # print(paste(grp, col_i, col, cond, sep='  '))
-      # text(1,i, grp)
-      # text(3,i,cond)
-      # points(2,i,pch=22, bg=col, cex=3)
+  } else if (side == 3) {
+    y=xy1
+    xjust=0
+    yjust=0
+    x=0
+
+  } else if (side == 4) {
+    x=xy1
+    xjust=0
+    yjust=1
+    y=lp$ymax
+
+  }
+
+  if (is.null(attributes)) {
+    attributes = names(leg)
+  }
+
+  for (a in attributes) {
+
+    l = legend(x,y, names(leg[[a]]), fill=leg[[a]], cex=cex, xjust=xjust, yjust=yjust,
+               title=a,
+               title.col=title.col, title.cex=title.cex, title.font=title.font)
+
+    if (side %in% c(1,3)) {
+      x = x + l$rect$w + lp$gap.x
+    } else {
+      y = y - l$rect$h - lp$gap.y
     }
   }
 
+#
+#     i = i + 1
+#     for (col_i in 1:length(leg[[grp]])) {
+#       i = i + 1
+#       col = leg[[grp]][col_i]
+#       cond = names(leg[[grp]])[col_i]
+#
+#       leg.df <- rbind(leg.df, data.frame(group=grp, color=col, condition=cond, y=i))
+#
+#
+#       # print(paste(grp, col_i, col, cond, sep='  '))
+#       # text(1,i, grp)
+#       # text(3,i,cond)
+#       # points(2,i,pch=22, bg=col, cex=3)
+#     }
+#   }
+#
+#
+#
+#   if (!add) {
+#     plot(1,1,type='n', xlim=c(0,lines), ylim=c(0,lines), xlab='', ylab='', axes=F)
+#   }
+#
+#
+#   grp_width = max(strwidth(names(leg)))*1.2
+#
+#   for (grp in unique(leg.df$group)) {
+#     df <- leg.df[leg.df$group == grp,]
+#
+#     x1 = 1
+#     x2 = x1 + grp_width
+#     y1 = min(df$y)
+#     y2 = max(df$y) + 1
+#
+#     rect(x1, y1, x2, y2, col='grey90')
+#     text(mean(c(x1,x2)), mean(c(y1,y2)), grp)
+#
+#     for (i in 1:nrow(df)) {
+#       rect(x2+1.1, df$y[i]+0.1, x2+1.9, df$y[i]+0.9, col=df$color[i])
+#       text(x2+3, df$y[i]+0.5, df$condition[i], adj=c(0,0.5))
+#
+#     }
+#
+#   }
 
-
-  if (!add) {
-    plot(1,1,type='n', xlim=c(0,lines), ylim=c(0,lines), xlab='', ylab='', axes=F)
-  }
-
-
-  grp_width = max(strwidth(names(leg)))*1.2
-
-  for (grp in unique(leg.df$group)) {
-    df <- leg.df[leg.df$group == grp,]
-
-    x1 = 1
-    x2 = x1 + grp_width
-    y1 = min(df$y)
-    y2 = max(df$y) + 1
-
-    rect(x1, y1, x2, y2, col='grey90')
-    text(mean(c(x1,x2)), mean(c(y1,y2)), grp)
-
-    for (i in 1:nrow(df)) {
-      rect(x2+1.1, df$y[i]+0.1, x2+1.9, df$y[i]+0.9, col=df$color[i])
-      text(x2+3, df$y[i]+0.5, df$condition[i], adj=c(0,0.5))
-
-    }
-
-  }
-
+  lp$boundaries <- boundaries
+  return(lp)
 }
 
 
