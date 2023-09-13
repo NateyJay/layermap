@@ -11,11 +11,13 @@ lp_group_names(
   col = "black",
   font = 1,
   adj = NULL,
+  family = "",
   srt = NULL,
   size = 1,
   gap = 0,
   cex = 0.8,
-  show_bounding_box = F
+  show_bounding_box = F,
+  group_label = F
 )
 }
 \arguments{

@@ -49,7 +49,7 @@ show_test_plot <- function(save=F) {
   }
 
 
-  par(mar=c(5,7,5,10))
+  par(mar=c(7,7,5,10))
   lp = layermap(value.df, zero_centered_colors = T,
                     column.df=column.df, row.df=row.df,
                     column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
@@ -57,23 +57,28 @@ show_test_plot <- function(save=F) {
                 group_gap = 0.1)
 
 
-  lp_color_legend(lp, 1)
+  lp = lp_color_legend(lp, 1)
 
-  lp = lp_group(lp, 3, 'treatment', labels=F, label_just = 'left',
-                      col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),
-                      show_bounding_box = F, group_label = F)
-  lp = lp_group_names(lp, 3, 'treatment', font=3, gap=0)
+  # lp = lp_group(lp, 3, 'treatment', labels=F, label_just = 'left',
+  #                     col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),
+  #                     show_bounding_box = F, group_label = F)
+  # lp = lp_group_names(lp, 3, 'treatment', font=3, gap=0)
 
 
   # lp = lp_group_pie(lp,4, 'ND')
   # lp = lp_group_pie(lp,4, 'Vidal2020')
-  # lp = lp_group_pie(lp, 3, 'tissue')
+  lp = lp_group_pie(lp, 3, 'tissue')
 
   lp = lp_group_pie(lp,4, 'ND', col=c('mixed'='black'), group_label = F)
   lp = lp_group_names(lp,4, 'Nit_GOs')
   lp = lp_group_pie(lp,4, 'PlantTFDB', col=c('FALSE'='black', 'TRUE'='orange'))
 
-  lp_legend(lp, 2, title.font=4)
+  lp = lp_legend(lp, 1, title.font=4)
+  lp = lp_legend(lp, 2, title.font=4)
+
+  lp = lp_legend(lp, 3, title.font=4)
+  lp = lp_legend(lp, 4, title.font=4)
+
 
   lp = lp_group(lp, 4, 'PlantTFDB', labels=T, label_just = 'left')
   lp = lp_group(lp, 4, 'Nit_GOs', labels=F, label_just = 'left')

@@ -4,13 +4,24 @@
 \alias{lp_legend}
 \title{Plot simple categorical legend}
 \usage{
-lp_legend(lp, add = F)
+lp_legend(
+  lp,
+  side,
+  attributes = NULL,
+  cex = 0.6,
+  gap = 0.8,
+  title.col = "black",
+  title.cex = NULL,
+  title.font = 4
+)
 }
 \arguments{
 \item{lp}{- layermap object}
 
-\item{add}{- logical for whether this should plot a new window. Experimental.}
+\item{side}{- value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).}
+
+\item{attribute}{- name for the attributes which will be plotted in the layer. Defaults to plotting all of them.}
 }
 \description{
-Makes a simple heatmap color legend for a layermap object.
+Makes a simple color legend for a layermap object.
 }
