@@ -71,7 +71,7 @@ show_test_plot <- function(save=F) {
 
   lp = lp_group_pie(lp,4, 'ND', col=c('mixed'='black'), label_just = 'left')
   lp = lp_group_names(lp,4, 'Nit_GOs')
-  lp = lp_group_pie(lp,4, 'PlantTFDB', col=c('FALSE'='black', 'TRUE'='orange'), trace.lty=3)
+  lp = lp_group_pie(lp,4, 'PlantTFDB', col=c('FALSE'='black', 'TRUE'='orange'))
 
   lp = lp_legend(lp, 1, title.font=4)
   lp = lp_legend(lp, 2, title.font=4)
