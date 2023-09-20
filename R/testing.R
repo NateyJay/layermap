@@ -59,7 +59,7 @@ show_test_plot <- function(save=F) {
 
   lp = lp_color_legend(lp, 1)
 
-  lp = lp_annotate(lp, 2, 'ND')
+  lp = lp_annotate(lp, 2, 'ND', label="TEST", group.border = 'black')
   lp = lp_annotate(lp, 3, 'tissue')
   lp = lp_names(lp, 2, 'ND')
   lp = lp_legend(lp, 4)

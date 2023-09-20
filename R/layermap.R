@@ -1133,12 +1133,13 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
 #' @examples
 lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.4,
                         palette='Viridis',
-                        show_bounding_box=F, type='rect',
+                        show_bounding_box=F, type='rect', label=attribute,
                         label_just='right', cex.label=0.8, border=NA, group.border=NA,
                         cex.point=1, pch=19, bg=NA, lwd=1,
                         show_label=T) {
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
+
 
   if (is.null(a.df)) {
     if (side %in% c(1,3)) {
@@ -1210,7 +1211,7 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
   }
 
 
-  if (show_label) {lp_label(lp, gr$xmean, gr$ymean, side=side, text=attribute, just=label_just, cex=cex.label)
+  if (show_label) {lp_label(lp, gr$xmean, gr$ymean, side=side, text=label, just=label_just, cex=cex.label)
   }
   lp$boundaries <- boundaries
   lp$legend[[attribute]] = col
