@@ -59,6 +59,11 @@ show_test_plot <- function(save=F) {
 
   lp = lp_color_legend(lp, 1)
 
+  lp = lp_annotate(lp, 2, 'ND')
+  lp = lp_annotate(lp, 3, 'tissue')
+  lp = lp_names(lp, 2, 'ND')
+  lp = lp_legend(lp, 4)
+
   # lp = lp_group(lp, 3, 'treatment', labels=F, label_just = 'left',
   #                     col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),
   #                     show_bounding_box = F, group_label = F)
