@@ -41,6 +41,8 @@ show_test_plot <- function(save=F) {
   row.df <- read.delim("test/rows.txt")
   value.df <- read.delim("test/values.txt")
 
+  row.df$numeric <- sample(c(1:10, NA), nrow(row.df), replace=T)
+
 
 
   if (save) {
@@ -57,12 +59,15 @@ show_test_plot <- function(save=F) {
                 group_gap = 0.1)
 
 
+
+  lp = lp_annotate(lp, 4,'numeric', group.border = 'black')
   lp = lp_color_legend(lp, 1)
 
   lp = lp_annotate(lp, 2, 'ND', label="TEST", group.border = 'black')
   lp = lp_annotate(lp, 3, 'tissue')
   lp = lp_names(lp, 2, 'ND')
-  lp = lp_legend(lp, 4)
+  lp = lp_legend(lp, 4, gap=1.5)
+
 
   # lp = lp_group(lp, 3, 'treatment', labels=F, label_just = 'left',
   #                     col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),

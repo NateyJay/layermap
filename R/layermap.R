@@ -696,8 +696,11 @@ layermap <- function(value.df, zlim=NULL,
              groups=groups,
              plotting.df=m.df,
              boundaries = boundaries,
-             legend = list())
+             legend = list(),
+             color_legend = list())
 
+  out$color_legend[['main']] = list(palette=palette, reverse_palette=reverse_palette, zlim=zlim)
+  return(out)
 }
 
 
@@ -1136,7 +1139,7 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
                         show_bounding_box=F, type='rect', label=attribute,
                         label_just='right', cex.label=0.8, border=NA, group.border=NA,
                         cex.point=1, pch=19, bg=NA, lwd=1,
-                        show_label=T) {
+                        show_label=T, zlim=NULL) {
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
@@ -1177,8 +1180,17 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 
   conditions = unique(a.df[[attribute]])
 
-  if (is.null(col)) {
-    col = lp_colorize(col, conditions, palette)
+  if (is.numeric(conditions)) {
+    col = vector_to_colors(conditions, zlim=zlim, palette=palette)
+
+    if (is.null(zlim)) {
+      zlim=c(min(conditions, na.rm = T), max(conditions, na.rm = T))
+    }
+
+  } else {
+    if (is.null(col)) {
+      col = lp_colorize(col, conditions, palette)
+    }
   }
 
 
@@ -1214,7 +1226,12 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
   if (show_label) {lp_label(lp, gr$xmean, gr$ymean, side=side, text=label, just=label_just, cex=cex.label)
   }
   lp$boundaries <- boundaries
-  lp$legend[[attribute]] = col
+
+  if (is.numeric(conditions)) {
+    lp$color_legend[[attribute]] = list(palette=palette, reverse_palette=reverse_palette, zlim=zlim)
+  } else {
+    lp$legend[[attribute]] = col
+  }
   return(lp)
 }
 
@@ -1238,30 +1255,35 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 #'
 #' @examples
 
-lp_color_legend <- function(lp, side, size=1, gap=0.4, ratio=3, adj=0, round=1) {
+lp_color_legend <- function(lp, side, attributes=NULL, size=1, gap=0.4, size_p = 0.25, gap_p=0.05, ratio=4, adj=0, round=1,
+                            cex=0.6, title.cex=NULL) {
+
+  if (is.null(title.cex)) {
+    title.cex = cex
+  }
+
+  col_n = 50
+  leg <- lp$color_legend
+  # lines = length(leg) *2
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = F), environment())
 
+  if (is.null(attributes)){
+    attributes = names(leg)
+  }
+
   if (side %in% c(1,3)) {
+
     y0 = xy0
     y1 = xy1
 
-    w = lp_line_to_coord(lp$xmax, lp$ymax, side=2, line=size*ratio)
+    w = lp$xmax * size_p
+    g = lp$xmax * gap_p
 
-    centerpoint = (lp$xmax - w) * adj + w/2
-
-    x0 = centerpoint - w/2
-    x1 = centerpoint + w/2
-
-
-    c = 1:length(lp$color_scale)
-
-    rect(x0+w*(c-1)/length(c), y0, x1, y1, col=lp$color_scale[c], border = NA)
-    rect(x0,y0,x1,y1, lwd=1.5)
-
-    text(x0, mean(c(y0,y1)), round(lp$zlim[1],round), pos=2)
-    text(x1, mean(c(y0,y1)), round(lp$zlim[2],round), pos=4)
-
+    leg.df <- data.frame(name=attributes, y0=y0, y1=y1, w = w)
+    leg.df$x.text = cumsum(leg.df$w) - leg.df$w
+    leg.df$x0 = leg.df$x.text + g
+    leg.df$x1 = leg.df$x0 + leg.df$w - g - g
 
 
 
@@ -1270,28 +1292,55 @@ lp_color_legend <- function(lp, side, size=1, gap=0.4, ratio=3, adj=0, round=1) 
     x0 = xy0
     x1 = xy1
 
-    w = lp_line_to_coord(lp$xmax, lp$ymax, side=1, line=size*ratio)
+    w = lp$ymax * size_p
+    g = lp$ymax * gap_p
 
-    centerpoint = (lp$ymax - w) * adj + w/2
+    leg.df <- data.frame(name=attributes, x0=x0, x1=x1, w = w)
+    leg.df$y.text = lp$ymax - cumsum(leg.df$w) + w
+    leg.df$y0 = leg.df$y.text - g
+    leg.df$y1 = leg.df$y0 - leg.df$w + g + g
 
-    y0 = centerpoint - w/2
-    y1 = centerpoint + w/2
-
-    c = 1:length(lp$color_scale)
-
-    rect(x0, y0+w*(c-1)/length(c), x1, y1, col=lp$color_scale[c], border = NA)
-    rect(x0,y0,x1,y1, lwd=1.5)
-
-    text(mean(c(x0,x1)), y0, round(lp$zlim[1],round), pos=1)
-    text(mean(c(x0,x1)), y1, round(lp$zlim[2],round), pos=3)
 
   }
+
+
+  for (n in leg.df$name) {
+    df = leg.df[leg.df$name == n,]
+    col = rev(hcl.colors(col_n, leg[[n]]$palette, rev=leg[[n]]$reverse_palette))
+    zlim = rev(leg[[n]]$zlim)
+
+    if (side %in% c(2,4)) {
+      text(df$x1, df$y.text, n, adj=c(0,1), cex=title.cex, font=3)
+      rect(df$x0, df$y0 - (df$y0 - df$y1)*(c-1)/length(c), df$x1, df$y1,
+           col=col, border=NA)
+      rect(df$x0, df$y0, df$x1, df$y1, lwd=1.5)
+
+      text(df$x0, c(df$y1,df$y0), c(zlim[2], zlim[1]), pos=side, cex=cex, offset=0.25)
+
+    } else if (side %in% c(1,3)) {
+      text(df$x.text, df$y1, n, adj=c(0,0), cex=title.cex, font=3)
+      rect(df$x0 - (df$x0 - df$x1)*(c-1)/length(c), df$y0, df$x1, df$y1,
+           col=col, border=NA)
+      rect(df$x0, df$y0, df$x1, df$y1, lwd=1.5)
+
+      text(c(df$x1,df$x0), df$y0, c(zlim[2], zlim[1]), pos=side, cex=cex, offset=0.25)
+
+    }
+
+  }
+
+
+
+
 
   lp$boundaries <- boundaries
   return(lp)
 }
 
 
+
+# attributes=NULL; cex=0.6; gap=0.4
+# title.col='black'; title.cex=NULL; title.font=3
 
 #' Plot simple categorical legend
 #'
@@ -1806,6 +1855,39 @@ lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, 
   lp$boundaries <- boundaries
   return(lp)
 }
+
+
+
+vector_to_colors <- function(values, zlim=NULL, na.color='grey', zero_centered_colors=F, palette='viridis', reverse_palette=F) {
+
+  color_n = 100
+  color_scale = hcl.colors(color_n, palette=palette, rev=reverse_palette)
+
+  if (!is.null(zlim)) {
+    if (zero_centered_colors) {
+      message("warning: zero_centered_colors overrided due to zlim inclusion")
+    }
+  } else if (zero_centered_colors) {
+
+    max_dist_from_zero = max(abs(values), na.rm=T)
+    zlim = c(max_dist_from_zero * -1, max_dist_from_zero)
+  } else {
+    zlim = c(min(values, na.rm=T), max(values, na.rm=T))
+  }
+
+  message(str_glue("zlim: {zlim[1]} to {zlim[2]}"))
+
+  color_i <- round((values - zlim[1]) / (zlim[2]-zlim[1]) * (color_n-1)) +1
+  color_i[color_i < 1] <- 1
+  color_i[color_i > color_n] <- color_n
+
+  color <- color_scale[color_i]
+  if (!isFALSE(na.color)) {
+    color[is.na(color)] <- na.color
+  }
+  return(color)
+}
+
 
 
 
