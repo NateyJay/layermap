@@ -16,7 +16,12 @@ lp_group_pie(
   show_bounding_box = F,
   label_just = "right",
   group_label = T,
-  cex.label = 0.8
+  cex.label = 0.8,
+  trace = T,
+  trace.lty = 1,
+  trace.lwd = 0.8,
+  trace.gap = 1.5,
+  trace.col = "black"
 )
 }
 \arguments{

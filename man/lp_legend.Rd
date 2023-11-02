@@ -9,10 +9,10 @@ lp_legend(
   side,
   attributes = NULL,
   cex = 0.6,
-  gap = 0.8,
+  gap = 0.4,
   title.col = "black",
   title.cex = NULL,
-  title.font = 4
+  title.font = 3
 )
 }
 \arguments{

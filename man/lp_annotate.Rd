@@ -15,13 +15,17 @@ lp_annotate(
   palette = "Viridis",
   show_bounding_box = F,
   type = "rect",
+  label = attribute,
   label_just = "right",
   cex.label = 0.8,
   border = NA,
+  group.border = NA,
   cex.point = 1,
   pch = 19,
+  bg = NA,
   lwd = 1,
-  show_label = T
+  show_label = T,
+  zlim = NULL
 )
 }
 \arguments{

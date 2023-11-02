@@ -4,7 +4,20 @@
 \alias{lp_color_legend}
 \title{Plot color gradient legend}
 \usage{
-lp_color_legend(lp, side, size = 1, gap = 0.4, ratio = 3, adj = 0, round = 1)
+lp_color_legend(
+  lp,
+  side,
+  attributes = NULL,
+  size = 1,
+  gap = 0.4,
+  size_p = 0.25,
+  gap_p = 0.05,
+  ratio = 4,
+  adj = 0,
+  round = 1,
+  cex = 0.6,
+  title.cex = NULL
+)
 }
 \arguments{
 \item{lp}{- layermap object}
