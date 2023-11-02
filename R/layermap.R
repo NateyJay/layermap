@@ -1183,28 +1183,27 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 
   if (is.numeric(conditions)) {
     if (is.null(zlim)) {
-      zlim=c(min(conditions, na.rm = T), max(conditions, na.rm = T))
+      zlim=c(min(a.df[[attribute]], na.rm = T), max(a.df[[attribute]], na.rm = T))
     }
-    col = vector_to_colors(conditions, zlim=zlim, palette=palette,
+    col = vector_to_colors(a.df[[attribute]], zlim=zlim, palette=palette,
                            reverse_palette = reverse_palette,
                            zero_centered_colors = zero_centered_colors)
+
+    gr$col <- col[match(rownames(gr), rownames(a.df))]
 
 
   } else {
     if (is.null(col)) {
       col = lp_colorize(col, conditions, palette)
     }
+    gr$col <- col[a.df[[attribute]]]
   }
 
 
-  gr$col <- col[match(rownames(gr), rownames(a.df))]
 
   if (type == 'points' & pch %in% c(21:25)) {
-    gr$bg = col[match(rownames(gr), rownames(a.df))]
+    gr$bg = gr$col
     gr$col = 'black'
-
-  } else {
-    gr$col <- col[match(rownames(gr), rownames(a.df))]
 
   }
 
