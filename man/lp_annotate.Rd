@@ -25,7 +25,9 @@ lp_annotate(
   bg = NA,
   lwd = 1,
   show_label = T,
-  zlim = NULL
+  zlim = NULL,
+  reverse_palette = F,
+  zero_centered_colors = F
 )
 }
 \arguments{

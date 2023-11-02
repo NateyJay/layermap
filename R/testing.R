@@ -42,6 +42,7 @@ show_test_plot <- function(save=F) {
   value.df <- read.delim("test/values.txt")
 
   row.df$numeric <- sample(c(1:10, NA), nrow(row.df), replace=T)
+  row.df$norm <- rnorm(nrow(row.df), 1)
 
 
 
@@ -61,7 +62,9 @@ show_test_plot <- function(save=F) {
 
 
   lp = lp_annotate(lp, 4,'numeric', group.border = 'black')
-  lp = lp_color_legend(lp, 1)
+  lp = lp_annotate(lp, 4,'norm', group.border = 'black', palette='PuOr', zlim=c(-1,1))
+  # lp = lp_names(lp, 4,'norm')
+  lp = lp_color_legend(lp, 4)
 
   lp = lp_annotate(lp, 2, 'ND', label="TEST", group.border = 'black')
   lp = lp_annotate(lp, 3, 'tissue')

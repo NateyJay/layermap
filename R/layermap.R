@@ -1104,13 +1104,14 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
 }
 
 
-
+#
 # a.df=NULL; col=NULL; size=1; gap=0.4;
 # palette='Viridis';
 # show_bounding_box=F; type='rect';
 # label_just='right'; cex.label=0.8; border=NA;
 # cex.point=1; pch=19; lwd=1;
 # show_label=T
+# zlim=NULL
 
 
 # a.df=NULL; col=NULL; size=1; gap=0.4; palette='Viridis'
@@ -1139,7 +1140,7 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
                         show_bounding_box=F, type='rect', label=attribute,
                         label_just='right', cex.label=0.8, border=NA, group.border=NA,
                         cex.point=1, pch=19, bg=NA, lwd=1,
-                        show_label=T, zlim=NULL) {
+                        show_label=T, zlim=NULL, reverse_palette=F, zero_centered_colors=F) {
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
@@ -1181,11 +1182,13 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
   conditions = unique(a.df[[attribute]])
 
   if (is.numeric(conditions)) {
-    col = vector_to_colors(conditions, zlim=zlim, palette=palette)
-
     if (is.null(zlim)) {
       zlim=c(min(conditions, na.rm = T), max(conditions, na.rm = T))
     }
+    col = vector_to_colors(conditions, zlim=zlim, palette=palette,
+                           reverse_palette = reverse_palette,
+                           zero_centered_colors = zero_centered_colors)
+
 
   } else {
     if (is.null(col)) {
@@ -1194,14 +1197,14 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
   }
 
 
-  gr$col <- col[a.df[match(rownames(gr), rownames(a.df)),attribute]]
+  gr$col <- col[match(rownames(gr), rownames(a.df))]
 
   if (type == 'points' & pch %in% c(21:25)) {
-    gr$bg = col[a.df[match(rownames(gr), rownames(a.df)),attribute]]
+    gr$bg = col[match(rownames(gr), rownames(a.df))]
     gr$col = 'black'
 
   } else {
-    gr$col <- col[a.df[match(rownames(gr), rownames(a.df)),attribute]]
+    gr$col <- col[match(rownames(gr), rownames(a.df))]
 
   }
 
@@ -1303,9 +1306,9 @@ lp_color_legend <- function(lp, side, attributes=NULL, size=1, gap=0.4, size_p =
 
   }
 
-
   for (n in leg.df$name) {
     df = leg.df[leg.df$name == n,]
+    c = 1:col_n
     col = rev(hcl.colors(col_n, leg[[n]]$palette, rev=leg[[n]]$reverse_palette))
     zlim = rev(leg[[n]]$zlim)
 
@@ -1315,15 +1318,16 @@ lp_color_legend <- function(lp, side, attributes=NULL, size=1, gap=0.4, size_p =
            col=col, border=NA)
       rect(df$x0, df$y0, df$x1, df$y1, lwd=1.5)
 
-      text(df$x0, c(df$y1,df$y0), c(zlim[2], zlim[1]), pos=side, cex=cex, offset=0.25)
+      text(df$x0, c(df$y1,df$y0), round(c(zlim[2], zlim[1]), round), pos=side, cex=cex, offset=0.25)
 
     } else if (side %in% c(1,3)) {
+
       text(df$x.text, df$y1, n, adj=c(0,0), cex=title.cex, font=3)
       rect(df$x0 - (df$x0 - df$x1)*(c-1)/length(c), df$y0, df$x1, df$y1,
            col=col, border=NA)
       rect(df$x0, df$y0, df$x1, df$y1, lwd=1.5)
 
-      text(c(df$x1,df$x0), df$y0, c(zlim[2], zlim[1]), pos=side, cex=cex, offset=0.25)
+      text(c(df$x1,df$x0), df$y0, round(c(zlim[2], zlim[1]), round), pos=side, cex=cex, offset=0.25)
 
     }
 
