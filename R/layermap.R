@@ -1144,6 +1144,7 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
+  message(attribute)
 
   if (is.null(a.df)) {
     if (side %in% c(1,3)) {
@@ -1196,7 +1197,14 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
     if (is.null(col)) {
       col = lp_colorize(col, conditions, palette)
     }
-    gr$col <- col[a.df[[attribute]]]
+
+    gr$attribute_value <- a.df[match(rownames(gr), rownames(a.df)),attribute]
+    gr$col <- col[gr$attribute_value]
+#
+#     print(head(a.df))
+#     print(head(gr))
+#     print(col)
+
   }
 
 
@@ -1214,7 +1222,6 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
   } else if (type == 'points') {
     points(gr$xmean, gr$ymean,
            bg=gr$bg, col=gr$col, pch=pch, cex=cex.point)
-
   }
 
   if (!is.na(group.border)) {
@@ -1321,7 +1328,8 @@ lp_color_legend <- function(lp, side, attributes=NULL, size=1, gap=0.4, size_p =
 
     } else if (side %in% c(1,3)) {
 
-      text(df$x.text, df$y1, n, adj=c(0,0), cex=title.cex, font=3)
+      if
+      text(df$x.text, df$y1, n, adj=c(0,-0.5), cex=title.cex, font=3)
       rect(df$x0 - (df$x0 - df$x1)*(c-1)/length(c), df$y0, df$x1, df$y1,
            col=col, border=NA)
       rect(df$x0, df$y0, df$x1, df$y1, lwd=1.5)
@@ -1499,7 +1507,7 @@ lp_legend <- function(lp, side, attributes=NULL, cex=0.6, gap=0.4,
 #'
 #' @examples
 lp_names <- function(lp, side, attribute=F, names=NULL, size=1, gap=0.4, autobox=T, cex=0.8,
-                           show_bounding_box = F, just='auto', col='black') {
+                           show_bounding_box = F, just='auto', col='black', font=1) {
 
 
   if (side %in% c(1,3)) {
@@ -1557,18 +1565,18 @@ lp_names <- function(lp, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
 
   if (just == 'right') {
     if (side %in% c(1,3)) {
-      text(gr$x+0.5, xy1, labels, cex=cex, srt=90, adj=c(1,0.5), col=col)
+      text(gr$x+0.5, xy1, labels, cex=cex, srt=90, adj=c(1,0.5), col=col, font=font)
 
     } else if (side %in% c(2,4)) {
-      text(xy0, gr$y+0.5, labels, cex=cex, srt=0, adj=c(1,0.5), col=col)
+      text(xy0, gr$y+0.5, labels, cex=cex, srt=0, adj=c(1,0.5), col=col, font=font)
 
     }
   } else if (just == 'left') {
     if (side %in% c(1,3)) {
-      text(gr$x+0.5, xy0, labels, cex=cex, srt=90, adj=c(0,0.5), col=col)
+      text(gr$x+0.5, xy0, labels, cex=cex, srt=90, adj=c(0,0.5), col=col, font=font)
 
     } else if (side %in% c(2,4)) {
-      text(xy1, gr$y+0.5, labels, cex=cex, srt=0, adj=c(0,0.5), col=col)
+      text(xy1, gr$y+0.5, labels, cex=cex, srt=0, adj=c(0,0.5), col=col, font=font)
 
     }
   }
