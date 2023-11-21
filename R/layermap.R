@@ -270,7 +270,7 @@ ADsvg = function(file) {
 
 
 
-# value.df; xlim=NULL; ylim=NULL;
+# xlim=NULL; ylim=NULL;
 # column.df=NULL; row.df=NULL;
 # column_groups=c(); row_groups=c();
 # palette='PuOr'; reverse_palette=T;
@@ -1492,7 +1492,8 @@ lp_legend <- function(lp, side, attributes=NULL, cex=0.6, gap=0.4,
 }
 
 
-
+# names=NULL; size=1; gap=0.4; autobox=T; cex=0.8
+# show_bounding_box = F; just='auto'; col='black'; font=1
 
 #' Plot name layer
 #'
