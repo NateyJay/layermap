@@ -15,7 +15,8 @@ lp_names(
   cex = 0.8,
   show_bounding_box = F,
   just = "auto",
-  col = "black"
+  col = "black",
+  font = 1
 )
 }
 \arguments{

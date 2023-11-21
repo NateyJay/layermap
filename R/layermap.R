@@ -1328,7 +1328,7 @@ lp_color_legend <- function(lp, side, attributes=NULL, size=1, gap=0.4, size_p =
 
     } else if (side %in% c(1,3)) {
 
-      if
+      # if
       text(df$x.text, df$y1, n, adj=c(0,-0.5), cex=title.cex, font=3)
       rect(df$x0 - (df$x0 - df$x1)*(c-1)/length(c), df$y0, df$x1, df$y1,
            col=col, border=NA)
