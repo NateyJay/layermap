@@ -956,6 +956,9 @@ lp_colorize <- function(col, conditions, palette) {
 
 
 
+# col= NULL; palette="Zissou 1"; size=1; gap=0.4; cex=0.8; show_bounding_box=F; label_just='right'; labels=T; cex.label=0.8; group_label=T
+
+
 #' Plot group layer
 #'
 #' @description Function for plotting a group layer based on column or row attributes.
@@ -1104,14 +1107,14 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
 }
 
 
-#
+
 # a.df=NULL; col=NULL; size=1; gap=0.4;
 # palette='Viridis';
 # show_bounding_box=F; type='rect';
 # label_just='right'; cex.label=0.8; border=NA;
 # cex.point=1; pch=19; lwd=1;
 # show_label=T
-# zlim=NULL
+# zlim=NULL; reverse_palette = F; zero_centered_colors = F
 
 
 # a.df=NULL; col=NULL; size=1; gap=0.4; palette='Viridis'
@@ -1178,6 +1181,8 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
     gr$ymean=mean(c(xy1,xy0))
   }
 
+
+  print(head(a.df))
 
 
   conditions = unique(a.df[[attribute]])
@@ -1797,6 +1802,10 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
 }
 
 
+
+col= 'black'; font=1; adj=NULL; family=''; srt=NULL; size=1; gap=0; cex=0.8; show_bounding_box=F; group_label=F
+
+
 #' Plot group name layer
 #'
 #' @description Function for plotting a name label for a group.
@@ -1856,6 +1865,9 @@ lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, 
     }
   }
 
+  # print(text.x)
+  # print(text.y)
+  # print(gr[[attribute]])
 
   text(text.x, text.y, gr[[attribute]], srt=srt, adj=adj, font=font, col=col, cex=cex, family=family)
 
