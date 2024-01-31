@@ -1270,7 +1270,8 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 #' @examples
 
 lp_color_legend <- function(lp, side, attributes=NULL, size=1, gap=0.4, size_p = 0.25, gap_p=0.05, ratio=4, adj=0, round=1,
-                            cex=0.6, title.cex=NULL) {
+                            cex=0.6, title.cex=NULL,
+                            main='') {
 
   if (is.null(title.cex)) {
     title.cex = cex
@@ -1322,6 +1323,8 @@ lp_color_legend <- function(lp, side, attributes=NULL, size=1, gap=0.4, size_p =
     c = 1:col_n
     col = rev(hcl.colors(col_n, leg[[n]]$palette, rev=leg[[n]]$reverse_palette))
     zlim = rev(leg[[n]]$zlim)
+
+    if (n == 'main' | main != "") n <- main
 
     if (side %in% c(2,4)) {
       text(df$x1, df$y.text, n, adj=c(0,1), cex=title.cex, font=3)
