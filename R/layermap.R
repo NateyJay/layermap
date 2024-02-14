@@ -267,9 +267,6 @@ ADsvg = function(file) {
 
 
 
-
-
-
 # xlim=NULL; ylim=NULL;
 # column.df=NULL; row.df=NULL;
 # column_groups=c(); row_groups=c();
@@ -582,6 +579,7 @@ layermap <- function(value.df, zlim=NULL,
         color_n = 100
         color_scale = hcl.colors(color_n, palette=palette, rev=reverse_palette)
 
+
     } else {
       color_n = length(color_scale)
     }
@@ -601,9 +599,13 @@ layermap <- function(value.df, zlim=NULL,
 
     message(str_glue("zlim: {zlim[1]} to {zlim[2]}"))
 
+
+
+
     m.df$color_i <- round((m.df$value - zlim[1]) / (zlim[2]-zlim[1]) * (color_n-1)) +1
     m.df$color_i[m.df$color_i < 1] <- 1
     m.df$color_i[m.df$color_i > color_n] <- color_n
+
 
     m.df$color <- color_scale[m.df$color_i]
 
