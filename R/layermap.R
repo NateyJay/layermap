@@ -301,7 +301,8 @@ layermap <- function(value.df, zlim=NULL,
                          dim_reference="din", force_numeric=F,
                      plot_values=F,
                      round.value=1,
-                     cex.value=0.8) {
+                     cex.value=0.8,
+                     main='') {
 
   # par(mar=c(0.3,0.3,0.3,0.3))
 
@@ -658,11 +659,22 @@ layermap <- function(value.df, zlim=NULL,
 
   plot(1,1, type='n', xlim=xlim, ylim=ylim, xlab='', ylab='', axes=F)
 
-
   rect(m.df$x, m.df$y, m.df$x+1, m.df$y+1, col=m.df$color, border=NA)
 
   if (plot_values) {
-    text(m.df$x+0.5, m.df$y+0.5, round(m.df$value, round.value), adj=c(0.5,0.5), cex=cex.value)
+
+    plotval.df <- m.df
+    plotval.df$l <- schemr::hex_to_lab(plotval.df$color)[,1]
+    plotval.df$text_col <- 'black'
+    plotval.df$text_col <- ifelse(plotval.df$l < 50, 'white','black')
+
+    row.df$y <- plotval.df$y[match(row.names(row.df), plotval.df$rows)]
+    text(plotval.df$x+0.5,
+         plotval.df$y+0.5,
+         round(plotval.df$value,round.value),
+         cex=cex.value,
+         col=plotval.df$text_col)
+    # text(m.df$x+0.5, m.df$y+0.5, round(m.df$value, round.value), adj=c(0.5,0.5), cex=cex.value)
   }
 
   for (box in unique(m.df$box)) {
@@ -701,7 +713,12 @@ layermap <- function(value.df, zlim=NULL,
              legend = list(),
              color_legend = list())
 
-  out$color_legend[['main']] = list(palette=palette, reverse_palette=reverse_palette, zlim=zlim)
+  end_point = c(
+    ifelse(zlim[1] > min(m.df$value, na.rm=T), "≤", ""),
+    ifelse(zlim[2] < max(m.df$value, na.rm=T), "≥", "")
+    )
+
+  out$color_legend[['main']] = list(palette=palette, reverse_palette=reverse_palette, zlim=zlim, end_point=end_point)
   return(out)
 }
 
@@ -1244,7 +1261,14 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
   lp$boundaries <- boundaries
 
   if (is.numeric(conditions)) {
-    lp$color_legend[[attribute]] = list(palette=palette, reverse_palette=reverse_palette, zlim=zlim)
+
+    val = a.df[[attribute]]
+    end_point = c(
+      ifelse(zlim[1] > min(val, na.rm=T), "≤", ""),
+      ifelse(zlim[2] > max(val, na.rm=T), "≥", "")
+    )
+
+    lp$color_legend[[attribute]] = list(palette=palette, reverse_palette=reverse_palette, zlim=zlim, end_point=end_point)
   } else {
     lp$legend[[attribute]] = col
   }
@@ -1271,9 +1295,9 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 #'
 #' @examples
 
-lp_color_legend <- function(lp, side, attributes=NULL, size=1, gap=0.4, size_p = 0.25, gap_p=0.05, ratio=4, adj=0, round=1,
+lp_color_legend <- function(lp, side, attributes=NULL, size=0.5, gap=0.4, size_p = 0.25, gap_p=0.05, ratio=4, adj=0, round=1,
                             cex=0.6, title.cex=NULL,
-                            main='') {
+                            main=NULL) {
 
   if (is.null(title.cex)) {
     title.cex = cex
@@ -1298,10 +1322,10 @@ lp_color_legend <- function(lp, side, attributes=NULL, size=1, gap=0.4, size_p =
     g = lp$xmax * gap_p
 
     leg.df <- data.frame(name=attributes, y0=y0, y1=y1, w = w)
-    leg.df$x.text = cumsum(leg.df$w) - leg.df$w
-    leg.df$x0 = leg.df$x.text + g
+    # leg.df$x.text = cumsum(leg.df$w) - leg.df$w
+    leg.df$x0 = cumsum(leg.df$w) - leg.df$w + g
     leg.df$x1 = leg.df$x0 + leg.df$w - g - g
-
+    leg.df$x.text <- apply(leg.df[,c('x0','x1')], 1, mean)
 
 
   } else if (side %in% c(2,4)) {
@@ -1320,43 +1344,45 @@ lp_color_legend <- function(lp, side, attributes=NULL, size=1, gap=0.4, size_p =
 
   }
 
+  leg.df$name[1] <- main
+  names(leg)[1] <- main
+
   for (n in leg.df$name) {
     df = leg.df[leg.df$name == n,]
     c = 1:col_n
-    col = rev(hcl.colors(col_n, leg[[n]]$palette, rev=leg[[n]]$reverse_palette))
-    zlim = rev(leg[[n]]$zlim)
+    col = hcl.colors(col_n, leg[[n]]$palette, rev=!leg[[n]]$reverse_palette)
+    zlim = leg[[n]]$zlim
+    ep   = leg[[n]]$end_point
 
-    if (n == 'main' | main != "") n <- main
 
     if (side %in% c(2,4)) {
       text(df$x1, df$y.text, n, adj=c(0,1), cex=title.cex, font=3)
       rect(df$x0, df$y0 - (df$y0 - df$y1)*(c-1)/length(c), df$x1, df$y1,
-           col=col, border=NA)
-      rect(df$x0, df$y0, df$x1, df$y1, lwd=1.5)
+           col=rev(col), border=NA)
+      rect(df$x0, df$y0, df$x1, df$y1, lwd=1)
 
-      text(df$x0, c(df$y1,df$y0), round(c(zlim[2], zlim[1]), round), pos=side, cex=cex, offset=0.25)
+      text(df$x0, c(df$y0,df$y1),
+           str_c(ep, round(zlim, round)),
+           pos=side, cex=cex, offset=0.25)
 
     } else if (side %in% c(1,3)) {
 
-      # if
-      text(df$x.text, df$y1, n, adj=c(0,-0.5), cex=title.cex, font=3)
-      rect(df$x0 - (df$x0 - df$x1)*(c-1)/length(c), df$y0, df$x1, df$y1,
-           col=col, border=NA)
-      rect(df$x0, df$y0, df$x1, df$y1, lwd=1.5)
 
-      text(c(df$x1,df$x0), df$y0, round(c(zlim[2], zlim[1]), round), pos=side, cex=cex, offset=0.25)
+      text(df$x.text, df$y1, n, adj=c(0.5,-0.5), cex=title.cex, font=3)
+      rect(df$x0 - (df$x0 - df$x1)*(c-1)/length(c), df$y0, df$x1, df$y1,
+           col=rev(col), border=NA)
+      rect(df$x0, df$y0, df$x1, df$y1, lwd=1)
+
+      text(c(df$x0,df$x1), df$y0, str_c(ep, round(zlim, round)), pos=side, cex=cex, offset=0.25)
 
     }
 
   }
 
-
-
-
-
   lp$boundaries <- boundaries
   return(lp)
 }
+
 
 
 
@@ -1885,7 +1911,19 @@ lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, 
   return(lp)
 }
 
+lp_plot_values <- function(lp, l_threshold = 50, round.n=2, cex=0.6) {
 
+  p.df <- lp$plotting.df
+  p.df$l <- schemr::hex_to_lab(p.df$color)[,1]
+  p.df$text_col <- 'black'
+  p.df$text_col <- ifelse(p.df$l < l_threshold, 'white','black')
+
+  row.df$y <- p.df$y[match(row.names(row.df), p.df$rows)]
+  text(p.df$x+0.5, p.df$y+0.5, round(p.df$value, round.n),
+       cex=cex,
+       col=p.df$text_col)
+
+}
 
 vector_to_colors <- function(values, zlim=NULL, na.color='grey', zero_centered_colors=F, palette='viridis', reverse_palette=F) {
 
