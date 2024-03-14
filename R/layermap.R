@@ -1911,6 +1911,17 @@ lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, 
   return(lp)
 }
 
+#' Plot values
+#'
+#' @description Function for plotting values over main heatmap
+#'
+#' @param lp - layermap object .
+#'
+#'
+#' @return layermap object
+#' @export
+#'
+#' @examples
 lp_plot_values <- function(lp, l_threshold = 50, round.n=2, cex=0.6) {
 
   p.df <- lp$plotting.df
