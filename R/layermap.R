@@ -1979,7 +1979,9 @@ lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, 
 lp_plot_values <- function(lp, l_threshold = 50, round.n=2, cex=0.6) {
 
   p.df <- lp$plotting.df
-  p.df$l <- schemr::hex_to_lab(p.df$color)[,1]
+  colors = p.df$color
+  colors[is.na(colors)] <- '#FFFFFF'
+  p.df$l <- schemr::hex_to_lab(colors)[,1]
   p.df$text_col <- 'black'
   p.df$text_col <- ifelse(p.df$l < l_threshold, 'white','black')
 
