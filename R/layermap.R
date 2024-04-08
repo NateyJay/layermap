@@ -281,28 +281,55 @@ ADsvg = function(file) {
 #'
 #' @description Backbone function for layermap. This makes the basic heatmap structure and plots it. Requires a dataframe of just numerical values with named rows/columns. Row and column attributes are provided through additional dataframes keyed to the value dataframe names.
 #'
-#' @param value.df - numerical dataframe or matrix with column name and row names.
-#' @param row.df - attribute dataframe which will be used for layer plotting functions on sides 2 and 4. Rownames correspond to value.df rownames.
-#' @param column.df - attribute dataframe which will be used for layer plotting functions on sides 1 and 3. Rownames correspond to value.df colnames.
+#' @param value.df numerical dataframe or matrix with column name and row names.
+#' @param row.df attribute dataframe which will be used for layer plotting functions on sides 2 and 4. Rownames correspond to value.df rownames.
+#' @param column.df attribute dataframe which will be used for layer plotting functions on sides 1 and 3. Rownames correspond to value.df colnames.
+#'
+#' @param zlim value limits for color scaling. Defaults to the range of found values.
+#' @param column_groups a vector of fields from the column.df which will be used to group accross the column axis
+#' @param row_groups same as column_groups, except with rows.
+#'
+#' @param palette option specifying the color palette used for the main heat map. Must be an hcl.pals() defined palette (defaults to PuOr).
+#'
+#' @param reverse_palette boolean value specifying the the orientation of the color palette. Defaults to T, which is best for PuOr.
+#'
+#' @param zero_centered_colors an override option to make sure the z-axis (colors) are centered on 0. This is mainly useful for unspecified zlim.
+#'
+#' @param color_scale an option to specify a custom color set. Accepts an unnamed vector of colors (for numerical data) but can also take named colors if plotting categorical data.
+#'
+#' @param cluster_cols a boolean value showing whether columns should be hierarchically clustered. Clustering is performed within groups, and may give bugs if you have group which do not respond well to clustering (i.e. size of 1)
+#'
+#' @param cluster_rows like above, with rows.
+#'
+#' @param group_gap graphical paramter for the dimension in lines by which groups are separated.
+#'
+#' @param border color for group box borders
+#'
+#' @param force_numeric an override value to treat char or factor data like numeric. This may generate NAs or lost data.
+#'
+#' @param main
+#'
 #'
 #'
 #' @return lp object
 #' @export
 #'
 #' @examples
-layermap <- function(value.df, zlim=NULL,
-                         column.df=NULL, row.df=NULL,
-                         column_groups=c(), row_groups=c(),
-                         palette='PuOr', reverse_palette=T,
-                         zero_centered_colors=F, color_scale=NULL,
-                         cluster_cols=F, cluster_rows=T,
-                         group_gap=0.1, border='grey25',
-                         # plot_margin=c(0.2,0.2,0.2,0.2),
-                         dim_reference="din", force_numeric=F,
-                     plot_values=F,
-                     round.value=1,
-                     cex.value=0.8,
-                     main='') {
+layermap <- function(value.df,
+                     zlim=NULL,
+                     column.df=NULL,
+                     row.df=NULL,
+                     column_groups=c(),
+                     row_groups=c(),
+                     palette='PuOr',
+                     reverse_palette=T,
+                     zero_centered_colors=F,
+                     color_scale=NULL,
+                     cluster_cols=F,
+                     cluster_rows=T,
+                     group_gap=0.1,
+                     border='grey25',
+                     force_numeric=F) {
 
   # par(mar=c(0.3,0.3,0.3,0.3))
 
@@ -354,6 +381,15 @@ layermap <- function(value.df, zlim=NULL,
   if (length(row_groups) > 0 & is.null(row.df)) {
     stop("row groups given with no row.df")
   }
+
+  if (!setequal(row.names(row.df), row.names(value.df))) {
+    stop("rownames(row.df) does not match rownames(value.df)")
+  }
+
+  if (!setequal(rownames(column.df), colnames(value.df))) {
+    stop("rownames(row.df) does not match colnames(value.df)")
+  }
+
 
   if (any(!column_groups %in% colnames(column.df))) {
     bad_names <- paste(column_groups[which(!column_groups %in% colnames(column.df))], collapse=', ')
@@ -580,7 +616,6 @@ layermap <- function(value.df, zlim=NULL,
         color_n = 100
         color_scale = hcl.colors(color_n, palette=palette, rev=reverse_palette)
 
-
     } else {
       color_n = length(color_scale)
     }
@@ -660,22 +695,22 @@ layermap <- function(value.df, zlim=NULL,
   plot(1,1, type='n', xlim=xlim, ylim=ylim, xlab='', ylab='', axes=F)
 
   rect(m.df$x, m.df$y, m.df$x+1, m.df$y+1, col=m.df$color, border=NA)
-
-  if (plot_values) {
-
-    plotval.df <- m.df
-    plotval.df$l <- schemr::hex_to_lab(plotval.df$color)[,1]
-    plotval.df$text_col <- 'black'
-    plotval.df$text_col <- ifelse(plotval.df$l < 50, 'white','black')
-
-    row.df$y <- plotval.df$y[match(row.names(row.df), plotval.df$rows)]
-    text(plotval.df$x+0.5,
-         plotval.df$y+0.5,
-         round(plotval.df$value,round.value),
-         cex=cex.value,
-         col=plotval.df$text_col)
-    # text(m.df$x+0.5, m.df$y+0.5, round(m.df$value, round.value), adj=c(0.5,0.5), cex=cex.value)
-  }
+#
+#   if (plot_values) {
+#
+#     plotval.df <- m.df
+#     plotval.df$l <- schemr::hex_to_lab(plotval.df$color)[,1]
+#     plotval.df$text_col <- 'black'
+#     plotval.df$text_col <- ifelse(plotval.df$l < 50, 'white','black')
+#
+#     row.df$y <- plotval.df$y[match(row.names(row.df), plotval.df$rows)]
+#     text(plotval.df$x+0.5,
+#          plotval.df$y+0.5,
+#          round(plotval.df$value,round.value),
+#          cex=cex.value,
+#          col=plotval.df$text_col)
+#     # text(m.df$x+0.5, m.df$y+0.5, round(m.df$value, round.value), adj=c(0.5,0.5), cex=cex.value)
+#   }
 
   for (box in unique(m.df$box)) {
     box.df <- m.df[m.df$box == box,]
@@ -916,6 +951,7 @@ lp_line_to_coord <- function(xmax, ymax, side, line) {
   return(out)
 
 }
+
 
 
 
@@ -1834,7 +1870,10 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
 
 
 
-col= 'black'; font=1; adj=NULL; family=''; srt=NULL; size=1; gap=0; cex=0.8; show_bounding_box=F; group_label=F
+# col= 'black'; font=1; adj=NULL; family=''; srt=NULL; size=1; gap=0; cex=0.8; show_bounding_box=F; group_label=F
+
+
+
 
 
 #' Plot group name layer
@@ -1910,6 +1949,8 @@ lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, 
   lp$boundaries <- boundaries
   return(lp)
 }
+
+
 
 #' Plot values
 #'
