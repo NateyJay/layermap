@@ -268,7 +268,6 @@ ADsvg = function(file) {
 
 
 
-value.df <- d.df
 # xlim=NULL; ylim=NULL;
 # column.df=NULL; row.df=NULL;
 # column_groups=c(); row_groups=c();

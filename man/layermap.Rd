@@ -19,19 +19,41 @@ layermap(
   cluster_rows = T,
   group_gap = 0.1,
   border = "grey25",
-  dim_reference = "din",
-  force_numeric = F,
-  plot_values = F,
-  round.value = 1,
-  cex.value = 0.8
+  force_numeric = F
 )
 }
 \arguments{
-\item{value.df}{- numerical dataframe or matrix with column name and row names.}
+\item{value.df}{numerical dataframe or matrix with column name and row names.}
 
-\item{column.df}{- attribute dataframe which will be used for layer plotting functions on sides 1 and 3. Rownames correspond to value.df colnames.}
+\item{zlim}{value limits for color scaling. Defaults to the range of found values.}
 
-\item{row.df}{- attribute dataframe which will be used for layer plotting functions on sides 2 and 4. Rownames correspond to value.df rownames.}
+\item{column.df}{attribute dataframe which will be used for layer plotting functions on sides 1 and 3. Rownames correspond to value.df colnames.}
+
+\item{row.df}{attribute dataframe which will be used for layer plotting functions on sides 2 and 4. Rownames correspond to value.df rownames.}
+
+\item{column_groups}{a vector of fields from the column.df which will be used to group accross the column axis}
+
+\item{row_groups}{same as column_groups, except with rows.}
+
+\item{palette}{option specifying the color palette used for the main heat map. Must be an hcl.pals() defined palette (defaults to PuOr).}
+
+\item{reverse_palette}{boolean value specifying the the orientation of the color palette. Defaults to T, which is best for PuOr.}
+
+\item{zero_centered_colors}{an override option to make sure the z-axis (colors) are centered on 0. This is mainly useful for unspecified zlim.}
+
+\item{color_scale}{an option to specify a custom color set. Accepts an unnamed vector of colors (for numerical data) but can also take named colors if plotting categorical data.}
+
+\item{cluster_cols}{a boolean value showing whether columns should be hierarchically clustered. Clustering is performed within groups, and may give bugs if you have group which do not respond well to clustering (i.e. size of 1)}
+
+\item{cluster_rows}{like above, with rows.}
+
+\item{group_gap}{graphical paramter for the dimension in lines by which groups are separated.}
+
+\item{border}{color for group box borders}
+
+\item{force_numeric}{an override value to treat char or factor data like numeric. This may generate NAs or lost data.}
+
+\item{main}{}
 }
 \value{
 lp object

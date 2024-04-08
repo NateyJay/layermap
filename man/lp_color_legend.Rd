@@ -8,7 +8,7 @@ lp_color_legend(
   lp,
   side,
   attributes = NULL,
-  size = 1,
+  size = 0.5,
   gap = 0.4,
   size_p = 0.25,
   gap_p = 0.05,
@@ -16,7 +16,8 @@ lp_color_legend(
   adj = 0,
   round = 1,
   cex = 0.6,
-  title.cex = NULL
+  title.cex = NULL,
+  main = NULL
 )
 }
 \arguments{
