@@ -41,9 +41,9 @@ These are:
 You can easily test the assumptions for naming like this:
 ```
 ## setequal() can tell if they have the same values (order is unimportant)
-setequal(row.names(row.df), row.names(value.df))
+setequal(rownames(row.df), rownames(value.df))
 [1] TRUE
-setequal(row.names(column.df), col.names(value.df))
+setequal(rownames(column.df), colnames(value.df))
 [1] TRUE
 
 ## reordering the value.df based on names can also do this.
@@ -182,4 +182,22 @@ To-do list
 
 - [ ] Color scale layer in addition to annotate.
 - [ ] manual setting of zlim for input.
+
+
+
+
+
+
+## FAQs and problems
+
+Not so sure theses have all been asked, but here we address some problems encountered by users (and hopefully solutions)
+
+#### Devtools results in an install error.
+
+Linux systems sometimes manage their R packages by the system package manager (`apt` in Ubuntu). This means you probably need to install it on the command line with a command like: `sudo apt-get install r-cran-devtools`
+
+For more, see:
+https://stackoverflow.com/questions/48469005/install-devtools-package-in-ubuntu-vm
+
+
 
