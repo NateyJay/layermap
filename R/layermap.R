@@ -267,6 +267,8 @@ ADsvg = function(file) {
 
 
 
+
+value.df <- d.df
 # xlim=NULL; ylim=NULL;
 # column.df=NULL; row.df=NULL;
 # column_groups=c(); row_groups=c();
@@ -381,6 +383,17 @@ layermap <- function(value.df,
   if (length(row_groups) > 0 & is.null(row.df)) {
     stop("row groups given with no row.df")
   }
+
+
+  if (is.null(row.df)) {
+    row.df <- data.frame(row.names=rownames(value.df))
+  }
+
+  if (is.null(column.df)) {
+    column.df <- data.frame(row.names=colnames(value.df))
+  }
+
+
 
   if (!setequal(row.names(row.df), row.names(value.df))) {
     stop("rownames(row.df) does not match rownames(value.df)")
