@@ -765,7 +765,7 @@ layermap <- function(value.df,
     ifelse(zlim[2] < max(m.df$value, na.rm=T), "≥", "")
     )
 
-  out$color_legend[['main']] = list(palette=palette, reverse_palette=reverse_palette, zlim=zlim, end_point=end_point)
+  out$color_legend[['']] = list(palette=palette, reverse_palette=reverse_palette, zlim=zlim, end_point=end_point)
   return(out)
 }
 
@@ -1345,7 +1345,7 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 
 lp_color_legend <- function(lp, side, attributes=NULL, size=0.5, gap=0.4, size_p = 0.25, gap_p=0.05, ratio=4, adj=0, round=1,
                             cex=0.6, title.cex=NULL,
-                            main=NULL) {
+                            main='') {
 
   if (is.null(title.cex)) {
     title.cex = cex
@@ -1396,11 +1396,12 @@ lp_color_legend <- function(lp, side, attributes=NULL, size=0.5, gap=0.4, size_p
   names(leg)[1] <- main
 
   for (n in leg.df$name) {
+    leg_i = match(names(leg), n)
     df = leg.df[leg.df$name == n,]
     c = 1:col_n
-    col = hcl.colors(col_n, leg[[n]]$palette, rev=!leg[[n]]$reverse_palette)
-    zlim = leg[[n]]$zlim
-    ep   = leg[[n]]$end_point
+    col = hcl.colors(col_n, leg[[leg_i]]$palette, rev=!leg[[leg_i]]$reverse_palette)
+    zlim = leg[[leg_i]]$zlim
+    ep   = leg[[leg_i]]$end_point
 
 
     if (side %in% c(2,4)) {
