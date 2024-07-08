@@ -17,7 +17,7 @@ lp_color_legend(
   round = 1,
   cex = 0.6,
   title.cex = NULL,
-  main = NULL
+  main = ""
 )
 }
 \arguments{

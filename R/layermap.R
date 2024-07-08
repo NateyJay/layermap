@@ -1206,7 +1206,7 @@ lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1,
 #'
 #' @examples
 lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.4,
-                        palette='Viridis',
+                        palette='Viridis', colors=NULL,
                         show_bounding_box=F, type='rect', label=attribute,
                         label_just='right', cex.label=0.8, border=NA, group.border=NA,
                         cex.point=1, pch=19, bg=NA, lwd=1,
@@ -1251,32 +1251,38 @@ lp_annotate <- function(lp, side, attribute, a.df=NULL, col=NULL, size=1, gap=0.
 
   print(head(a.df))
 
-
   conditions = unique(a.df[[attribute]])
 
-  if (is.numeric(conditions)) {
-    if (is.null(zlim)) {
-      zlim=c(min(a.df[[attribute]], na.rm = T), max(a.df[[attribute]], na.rm = T))
-    }
-    col = vector_to_colors(a.df[[attribute]], zlim=zlim, palette=palette,
-                           reverse_palette = reverse_palette,
-                           zero_centered_colors = zero_centered_colors)
+  if (!is.null(colors)) {
 
-    gr$col <- col[match(rownames(gr), rownames(a.df))]
-
+    gr$col <- a.df[match(rownames(gr), rownames(a.df)), colors]
 
   } else {
-    if (is.null(col)) {
-      col = lp_colorize(col, conditions, palette)
+
+    if (is.numeric(conditions)) {
+      if (is.null(zlim)) {
+        zlim=c(min(a.df[[attribute]], na.rm = T), max(a.df[[attribute]], na.rm = T))
+      }
+      col = vector_to_colors(a.df[[attribute]], zlim=zlim, palette=palette,
+                             reverse_palette = reverse_palette,
+                             zero_centered_colors = zero_centered_colors)
+
+      gr$col <- col[match(rownames(gr), rownames(a.df))]
+
+
+    } else {
+      if (is.null(col)) {
+        col = lp_colorize(col, conditions, palette)
+      }
+
+      gr$attribute_value <- a.df[match(rownames(gr), rownames(a.df)),attribute]
+      gr$col <- col[gr$attribute_value]
+  #
+  #     print(head(a.df))
+  #     print(head(gr))
+  #     print(col)
+
     }
-
-    gr$attribute_value <- a.df[match(rownames(gr), rownames(a.df)),attribute]
-    gr$col <- col[gr$attribute_value]
-#
-#     print(head(a.df))
-#     print(head(gr))
-#     print(col)
-
   }
 
 
