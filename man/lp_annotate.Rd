@@ -13,6 +13,7 @@ lp_annotate(
   size = 1,
   gap = 0.4,
   palette = "Viridis",
+  colors = NULL,
   show_bounding_box = F,
   type = "rect",
   label = attribute,
