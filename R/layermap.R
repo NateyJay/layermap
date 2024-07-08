@@ -2,8 +2,8 @@
 
 # devtools::install_github('NateyJay/layermap')
 
-require(stringr)
-require(dendextend)
+# require(stringr)
+# require(dendextend)
 
 
 #' ndendrogram object converter
@@ -27,12 +27,12 @@ as.ndendrogram <- function(d) {
 
 
   ## getting node attributes
-  xy.df$members <- get_nodes_attr(d, 'members')
-  # xy.df$nodePar <- get_nodes_attr(d, 'nodePar')
-  xy.df$height  <- get_nodes_attr(d, 'height')
-  xy.df$leaf    <- get_nodes_attr(d, 'leaf')
+  xy.df$members <- dendextend::get_nodes_attr(d, 'members')
+  # xy.df$nodePar <- dendextend::get_nodes_attr(d, 'nodePar')
+  xy.df$height  <- dendextend::get_nodes_attr(d, 'height')
+  xy.df$leaf    <- dendextend::get_nodes_attr(d, 'leaf')
   xy.df$leaf[is.na(xy.df$leaf)] <- F
-  xy.df$label   <- get_nodes_attr(d, 'label')
+  xy.df$label   <- dendextend::get_nodes_attr(d, 'label')
 
   xy.df$claimed = F; xy.df$to1 <- NA; xy.df$to2 <- NA
   xy.df$claimed[1] <- T
