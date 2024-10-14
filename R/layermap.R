@@ -346,6 +346,9 @@ layermap <- function(value.df,
                      force_numeric=F,
                      column.df=col.df) {
 
+  require(stringr)
+  require(dendextend)
+
   # par(mar=c(0.3,0.3,0.3,0.3))
 
   par(xpd=T)
