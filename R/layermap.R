@@ -1,5 +1,18 @@
 
 
+
+
+### To do:
+# [ ] allow optional inclusion of a hclust or tree to use instead of standard clustering
+# [ ] override NA clustering problems by giving an NA.value option
+# [ ] column/row select for clustering
+# [ ] plotting points inside of boxes (varying size, color, type)
+# [x] allow col.df in invocation
+# [ ] more sensible sizing defaults for color legend (to short, thin)
+# [ ] auto-require essential tools (stringr, dendextend)
+
+
+
 # devtools::install_github('NateyJay/layermap')
 
 # require(stringr)
@@ -318,7 +331,7 @@ ADsvg = function(file) {
 #' @examples
 layermap <- function(value.df,
                      zlim=NULL,
-                     column.df=NULL,
+                     col.df=NULL,
                      row.df=NULL,
                      column_groups=c(),
                      row_groups=c(),
@@ -330,7 +343,8 @@ layermap <- function(value.df,
                      cluster_rows=T,
                      group_gap=0.1,
                      border='grey25',
-                     force_numeric=F) {
+                     force_numeric=F,
+                     column.df=col.df) {
 
   # par(mar=c(0.3,0.3,0.3,0.3))
 
@@ -1991,6 +2005,7 @@ lp_plot_values <- function(lp, l_threshold = 50, round.n=2, cex=0.6) {
   p.df$text_col <- 'black'
   p.df$text_col <- ifelse(p.df$l < l_threshold, 'white','black')
 
+  row.df <- lp$row.df
   row.df$y <- p.df$y[match(row.names(row.df), p.df$rows)]
   text(p.df$x+0.5, p.df$y+0.5, round(p.df$value, round.n),
        cex=cex,
