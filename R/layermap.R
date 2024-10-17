@@ -420,12 +420,12 @@ layermap <- function(value.df,
 
   if (any(!column_groups %in% colnames(column.df))) {
     bad_names <- paste(column_groups[which(!column_groups %in% colnames(column.df))], collapse=', ')
-    stop(str_c("column_groups not found in column.df header -> ", bad_names))
+    stop(stringr::str_c("column_groups not found in column.df header -> ", bad_names))
   }
 
   if (any(!row_groups %in% colnames(row.df))) {
     bad_names <- paste(row_groups[which(!row_groups %in% colnames(row.df))], collapse=', ')
-    stop(str_c("row_groups not found in row.df header -> ", bad_names))
+    stop(stringr::str_c("row_groups not found in row.df header -> ", bad_names))
   }
 
   for (g in column_groups) {
@@ -660,7 +660,7 @@ layermap <- function(value.df,
       zlim = c(min(m.df$value, na.rm=T), max(m.df$value, na.rm=T))
     }
 
-    message(str_glue("zlim: {zlim[1]} to {zlim[2]}"))
+    message(stringr::str_glue("zlim: {zlim[1]} to {zlim[2]}"))
 
 
 
@@ -1994,7 +1994,7 @@ vector_to_colors <- function(values, zlim=NULL, na.color='grey', zero_centered_c
     zlim = c(min(values, na.rm=T), max(values, na.rm=T))
   }
 
-  message(str_glue("zlim: {zlim[1]} to {zlim[2]}"))
+  message(stringr::str_glue("zlim: {zlim[1]} to {zlim[2]}"))
 
   color_i <- round((values - zlim[1]) / (zlim[2]-zlim[1]) * (color_n-1)) +1
   color_i[color_i < 1] <- 1
