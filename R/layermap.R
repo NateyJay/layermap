@@ -1059,7 +1059,8 @@ lp_colorize <- function(col, conditions, palette) {
 #' @export
 #'
 #' @examples
-lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=0.8, show_bounding_box=F, label_just='right', labels=T, cex.label=0.8, group_label=T) {
+lp_group <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=0.8,
+                     show_bounding_box=F, label_just='right', labels=T, cex.label=0.8, group_label=T) {
 
   if (labels) {
     str_multiplier = 2
@@ -1546,51 +1547,6 @@ lp_legend <- function(lp, side, attributes=NULL, cex=0.6, gap=0.4,
     }
   }
 
-#
-#     i = i + 1
-#     for (col_i in 1:length(leg[[grp]])) {
-#       i = i + 1
-#       col = leg[[grp]][col_i]
-#       cond = names(leg[[grp]])[col_i]
-#
-#       leg.df <- rbind(leg.df, data.frame(group=grp, color=col, condition=cond, y=i))
-#
-#
-#       # print(paste(grp, col_i, col, cond, sep='  '))
-#       # text(1,i, grp)
-#       # text(3,i,cond)
-#       # points(2,i,pch=22, bg=col, cex=3)
-#     }
-#   }
-#
-#
-#
-#   if (!add) {
-#     plot(1,1,type='n', xlim=c(0,lines), ylim=c(0,lines), xlab='', ylab='', axes=F)
-#   }
-#
-#
-#   grp_width = max(strwidth(names(leg)))*1.2
-#
-#   for (grp in unique(leg.df$group)) {
-#     df <- leg.df[leg.df$group == grp,]
-#
-#     x1 = 1
-#     x2 = x1 + grp_width
-#     y1 = min(df$y)
-#     y2 = max(df$y) + 1
-#
-#     rect(x1, y1, x2, y2, col='grey90')
-#     text(mean(c(x1,x2)), mean(c(y1,y2)), grp)
-#
-#     for (i in 1:nrow(df)) {
-#       rect(x2+1.1, df$y[i]+0.1, x2+1.9, df$y[i]+0.9, col=df$color[i])
-#       text(x2+3, df$y[i]+0.5, df$condition[i], adj=c(0,0.5))
-#
-#     }
-#
-#   }
-
 
   boundaries[side] = extent
   lp$boundaries <- boundaries
@@ -1716,6 +1672,13 @@ lp_names <- function(lp, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
 #' @examples
 lp_dend <- function(lp, side, size=2, gap=0.2, cutoff=T, cex=0.8,
   show_bounding_box = F, ...) {
+
+
+  if (side %in% c(1,3) & !lp$cluster_cols) {
+    stop("Error: cannot make dendrogram for unclustered columns (try making the layermap with cluster_cols=T)")
+  } else if (side %in% c(2,4) & !lp$cluster_rows) {
+    stop("Error: cannot make dendrogram for unclustered rows (try making the layermap with cluster_rows=T)")
+  }
 
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
