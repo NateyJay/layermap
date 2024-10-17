@@ -9,14 +9,12 @@
 # [ ] plotting points inside of boxes (varying size, color, type)
 # [x] allow col.df in invocation
 # [ ] more sensible sizing defaults for color legend (to short, thin)
-# [ ] auto-require essential tools (stringr, dendextend)
+# [x] auto-require essential tools (stringr, dendextend)
+# [ ] cutree and kmeans implementation
+# [ ] warning if you try to make a dend for unclustered axes
 
 
 
-# devtools::install_github('NateyJay/layermap')
-
-# require(stringr)
-# require(dendextend)
 
 
 #' ndendrogram object converter
@@ -249,8 +247,8 @@ ADsvg = function(file) {
   }
   </style>
 </defs>"
-  temp_value = str_replace(as.character(as.numeric(Sys.time())), "\\.", "_")
-  temp_file = str_glue("temp_{temp_value}.svg")
+  temp_value = stringr::str_replace(as.character(as.numeric(Sys.time())), "\\.", "_")
+  temp_file = stringr::str_glue("temp_{temp_value}.svg")
 
   writeLines("", con=temp_file, sep='')
 
@@ -346,8 +344,8 @@ layermap <- function(value.df,
                      force_numeric=F,
                      column.df=col.df) {
 
-  require(stringr)
-  require(dendextend)
+  # require(stringr)
+  # require(dendextend)
 
   # par(mar=c(0.3,0.3,0.3,0.3))
 
@@ -374,7 +372,7 @@ layermap <- function(value.df,
       data_type = 'categorical'
 
     }
-    message(str_glue("{length(value_categories)} categories found"))
+    message(stringr::str_glue("{length(value_categories)} categories found"))
   } else {
     data_type = 'numerical'
   }
@@ -701,7 +699,7 @@ layermap <- function(value.df,
   ## getting id's for each box
   m.df$box.x = groups$cols$group_order[match(m.df$column.df, rownames(groups$cols))]
   m.df$box.y = groups$rows$group_order[match(m.df$rows, rownames(groups$rows))]
-  m.df$box <- str_c(m.df$box.x, m.df$box.y, sep=',')
+  m.df$box <- stringr::str_c(m.df$box.x, m.df$box.y, sep=',')
   m.df$box.y <- NULL
   m.df$box.x <- NULL
 
@@ -1434,7 +1432,7 @@ lp_color_legend <- function(lp, side, attributes=NULL, size=0.5, gap=0.4, size_p
       rect(df$x0, df$y0, df$x1, df$y1, lwd=1)
 
       text(df$x0, c(df$y0,df$y1),
-           str_c(ep, round(zlim, round)),
+           stringr::str_c(ep, round(zlim, round)),
            pos=side, cex=cex, offset=0.25)
 
     } else if (side %in% c(1,3)) {
@@ -1445,7 +1443,7 @@ lp_color_legend <- function(lp, side, attributes=NULL, size=0.5, gap=0.4, size_p
            col=rev(col), border=NA)
       rect(df$x0, df$y0, df$x1, df$y1, lwd=1)
 
-      text(c(df$x0,df$x1), df$y0, str_c(ep, round(zlim, round)), pos=side, cex=cex, offset=0.25)
+      text(c(df$x0,df$x1), df$y0, stringr::str_c(ep, round(zlim, round)), pos=side, cex=cex, offset=0.25)
 
     }
 
