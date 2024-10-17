@@ -54,7 +54,7 @@ show_test_plot <- function(save=F) {
 
   par(mar=c(7,7,5,10))
   lp = layermap(value.df, zero_centered_colors = T,
-                    column.df=column.df, row.df=row.df,
+                    col.df=column.df, row.df=row.df,
                     column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
                 cluster_cols=T,
                 group_gap = 0.1)
@@ -64,7 +64,7 @@ show_test_plot <- function(save=F) {
   lp = lp_annotate(lp, 4,'numeric', group.border = 'black')
   lp = lp_annotate(lp, 4,'norm', group.border = 'black', palette='PuOr', zlim=c(-1,1))
   # lp = lp_names(lp, 4,'norm')
-  lp = lp_color_legend(lp, 4)
+  # lp = lp_color_legend(lp, 4)
 
   lp = lp_annotate(lp, 2, 'ND', label="TEST", group.border = 'black')
   lp = lp_annotate(lp, 3, 'tissue')
