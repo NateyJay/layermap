@@ -10,4 +10,7 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 Imports:
-	stringr,	dendextend
+	stringr,	dendextend,
+	schemr,
+	reshape2,
+	plotrix
