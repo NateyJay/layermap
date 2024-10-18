@@ -9,6 +9,7 @@ lp_legend(
   side,
   attribute,
   cex = 0.8,
+  gap = 0.2,
   title = attribute,
   title.col = "black",
   title.cex = NULL,
