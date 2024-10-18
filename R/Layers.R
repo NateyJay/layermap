@@ -931,7 +931,7 @@ lp_group_pie <- function(lp,
   if (side %in% c(1,3)) {
     pie.y = mean(c(xy0,xy1))
     gr = lp$groups$cols
-    df = column.df
+    df = lp$column.df
     lp_4 = lp_boundaries(lp, side=4, size=size, gap=gap)
     radius = abs((lp_4$xy1 - lp_4$xy0)/2) * cex
     x_vec = gr$x
@@ -940,7 +940,7 @@ lp_group_pie <- function(lp,
   } else if (side %in% c(2,4)) {
     pie.x = mean(c(xy0,xy1))
     gr = lp$groups$rows
-    df = row.df
+    df = lp$row.df
     radius = abs((xy1-xy0) /2) * cex
     y_vec = gr$y
     x_vec = c(xy1, xy0)
