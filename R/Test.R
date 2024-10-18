@@ -3,88 +3,65 @@
 
 
 
-# show_test_plot <- function(save=F) {
-#
-#
-#   column.df <- read.delim("test/columns.txt")
-#   column.df$treatment <- factor(column.df$treatment, levels=c("Nitrate", "Drought", "ABA"))
-#
-#   row.df <- read.delim("test/rows.txt")
-#   value.df <- read.delim("test/values.txt")
-#
-#   row.df$numeric <- sample(c(1:10, NA), nrow(row.df), replace=T)
-#   row.df$norm <- rnorm(nrow(row.df), 1)
-#
-#
-#
-#   if (save) {
-#     file_name = "test/test.svg"
-#     svglite::svglite(file_name, 7, 5.4)
-#   }
-#
-#
-#   par(mar=c(7,7,5,10))
-#   lp = layermap(value.df, zero_centered_colors = T,
-#                     col.df=column.df, row.df=row.df,
-#                     column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
-#                 cluster_cols=T,
-#                 group_gap = 0.1)
-#
-#
-#
-#   lp = lp_annotate(lp, 4,'numeric', group.border = 'black')
-#   lp = lp_annotate(lp, 4,'norm', group.border = 'black', palette='PuOr', zlim=c(-1,1))
-#   # lp = lp_names(lp, 4,'norm')
-#   # lp = lp_color_legend(lp, 4)
-#
-#   lp = lp_annotate(lp, 2, 'ND', label="TEST", group.border = 'black')
-#   lp = lp_annotate(lp, 3, 'tissue')
-#   lp = lp_names(lp, 2, 'ND')
-#   lp = lp_legend(lp, 4, gap=1.5)
-#
-#
-#   # lp = lp_group(lp, 3, 'treatment', labels=F, label_just = 'left',
-#   #                     col=setNames(c('seagreen','tomato'), c('Nitrate','ABA')),
-#   #                     show_bounding_box = F, group_label = F)
-#   # lp = lp_group_names(lp, 3, 'treatment', font=3, gap=0)
-#
-#
-#   # lp = lp_group_pie(lp,4, 'ND')
-#   # lp = lp_group_pie(lp,4, 'Vidal2020')
-#   lp = lp_group_pie(lp, 3, 'tissue')
-#
-#   lp = lp_group_pie(lp,4, 'ND', col=c('mixed'='black'), label_just = 'left')
-#   lp = lp_group_names(lp,4, 'Nit_GOs')
-#   lp = lp_group_pie(lp,4, 'PlantTFDB', col=c('FALSE'='black', 'TRUE'='orange'))
-#
-#   lp = lp_legend(lp, 1, title.font=4)
-#   lp = lp_legend(lp, 2, title.font=4)
-#
-#   lp = lp_legend(lp, 3, title.font=4)
-#   lp = lp_legend(lp, 4, title.font=4)
-#
-#
-#   lp = lp_group(lp, 4, 'PlantTFDB', labels=T, label_just = 'left')
-#   lp = lp_group(lp, 4, 'Nit_GOs', labels=F, label_just = 'left')
-#
-#
-#   lp = lp_annotate(lp, 3, 'tissue', label_just = 'left',
-#                          col=setNames('red', 'Root'))
-#
-#   lp = lp_group(lp, 4, 'PlantTFDB', labels=T, label_just = 'left', srt.label=90)
-#   lp = lp_group(lp, 4, 'Nit_GOs', labels=F, label_just = 'left')
-#
-#
-#   lp = lp_names(lp, 2, cex=0.5)
-#   lp = lp_names(lp, 2, 'symbol', cex=0.5)
-#   lp = lp_dend(lp, 4, lwd=1.5, gap=0.4)
-#
-#   if (save) {
-#     dev.off()
-#     ADsvg(file_name)
-#   }
-# }
+#' Test example 2
+#'
+#' @description Makes a layermap based on the a layermap dataset of Nitrogen- and Drought-related genes in these treatments.
+#' @export
+#'
+lp_example_2 <- function(save=F) {
 
+  data(ND)
+
+  value.df  = ND$values
+  column.df = ND$columns
+  row.df    = ND$rows
+
+  # if (save) {
+  #   file_name = "test/test.svg"
+  #   svglite::svglite(file_name, 7, 5.4)
+  # }
+
+
+  par(mar=c(7,12,5,15))
+  lp = layermap(value.df, zero_centered_colors = T,
+                    col.df=column.df, row.df=row.df,
+                    column_groups=c('treatment'), row_groups=c("PlantTFDB", 'Nit_GOs'),
+                cluster_cols=T,
+                group_gap = 0.1)
+
+
+
+  lp = lp_annotate(lp, 4,'numeric', group.border = 'black', label.just = 'left')
+  lp = lp_annotate(lp, 4,'norm', group.border = 'black', palette='PuOr', zlim=c(-1,1), label.just = 'left')
+  # lp = lp_names(lp, 4,'norm')
+  # lp = lp_color_legend(lp, 4)
+
+  lp = lp_annotate(lp, 2, 'ND', label="TEST", label.just = 'left', group.border = 'black')
+  lp = lp_annotate(lp, 3, 'tissue', label.just = 'left')
+  lp = lp_names(lp, 2, 'ND')
+
+
+  lp = lp_group_pie(lp, 3, 'tissue')
+
+  # lp = lp_group_names(lp,4, 'Nit_GOs')
+  lp = lp_group(lp,4, 'PlantTFDB', col=c('FALSE'='black', 'TRUE'='orange'), label.just = 'left')
+
+
+
+
+  lp = lp_names(lp, 2, cex=0.5)
+  lp = lp_names(lp, 2, 'symbol', cex=0.5)
+  lp = lp_dend(lp, 4, lwd=1.5, gap=0.4)
+
+  lp = lp_legend(lp, 4, "ND", gap=1.5)
+
+  # if (save) {
+  #   dev.off()
+  #   ADsvg(file_name)
+  # }
+}
+
+# lp_example_2()
 
 # Built-in tests ---------------------------------------------------------------
 
