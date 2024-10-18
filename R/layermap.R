@@ -15,6 +15,9 @@
 # [ ] cutree and kmeans implementation
 # [x] error if you try to make a dend for unclustered axes
 
+# [ ] x and y scaling
+# [ ] substitute values in plot.values
+
 ### New functionality ideas:
 
 
@@ -161,10 +164,14 @@ layermap <- function(value.df,
 
   if (is.null(row.df)) {
     row.df <- data.frame(row.names=rownames(value.df))
+  } else {
+    row.df <- as.data.frame(row.df)
   }
 
   if (is.null(column.df)) {
     column.df <- data.frame(row.names=colnames(value.df))
+  } else {
+    column.df <- as.data.frame(column.df)
   }
 
 
@@ -398,7 +405,7 @@ layermap <- function(value.df,
   m.df <- df
   m.df$rows <- rownames(m.df)
   m.df <- reshape2::melt(m.df, id.vars='rows')
-  colnames(m.df)[2] <- 'column.df'
+  colnames(m.df)[2] <- 'cols'
 
   if (data_type == "numerical") {
     message('numeric coloring')
@@ -457,15 +464,16 @@ layermap <- function(value.df,
 
 
   m.df$y <- groups$rows$y[match(m.df$rows, rownames(groups$rows))]
-  m.df$x <- groups$cols$x[match(m.df$column.df, rownames(groups$cols))]
+  m.df$x <- groups$cols$x[match(m.df$cols, rownames(groups$cols))]
 
 
   ## getting id's for each box
-  m.df$box.x = groups$cols$group_order[match(m.df$column.df, rownames(groups$cols))]
+  m.df$box.x = groups$cols$group_order[match(m.df$cols, rownames(groups$cols))]
   m.df$box.y = groups$rows$group_order[match(m.df$rows, rownames(groups$rows))]
   m.df$box <- stringr::str_c(m.df$box.x, m.df$box.y, sep=',')
   m.df$box.y <- NULL
   m.df$box.x <- NULL
+
 
 
 
@@ -518,8 +526,10 @@ layermap <- function(value.df,
 
   # lines= c(0,0,0,0) - 0.5
 
-  leg = list(main=setNames(unique(m.df$color), unique(m.df$value)))
-
+  leg = list()
+  if (class(m.df$value) == 'character') {
+    leg[['main']] <- setNames(unique(m.df$color), unique(m.df$value))
+  }
 
   out = list(xlim=xlim,
              ylim=ylim,

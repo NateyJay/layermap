@@ -126,7 +126,7 @@ lp_group <- function(lp,
       # segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col='black', lwd=3, lend=1)
       # segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col=col[cond], lwd=2.5, lend=1)
       rect(min(g.df$x, na.rm=T), box.y1, max(g.df$x, na.rm=T)+1, box.y2, col=col[cond])
-      if (labels) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=cex.label) }
+      if (plot_names) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=cex.label) }
 
       # for (gi in clump){
       #   g.df <- gr[gr$group_order == gi,]
@@ -150,7 +150,7 @@ lp_group <- function(lp,
       # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col='black', lwd=3, lend=1)
       # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col=col[cond], lwd=2.5, lend=1)
       rect(box.x1, min(g.df$y, na.rm=T), box.x2, max(g.df$y, na.rm=T)+1, col=col[cond])
-      if (labels) { text(text.x, mean(c(min(g.df$y), max(g.df$y)+1)), srt=90, cond, cex=cex) }
+      if (plot_names) { text(text.x, mean(c(min(g.df$y), max(g.df$y)+1)), srt=90, cond, cex=cex) }
 
       # for (gi in clump){
       #   g.df <- gr[gr$group_order == gi,]
@@ -260,6 +260,7 @@ lp_annotate <- function(lp, side, attribute,
     gr$x1=xy0
     gr$ymean=gr$y+0.5
     gr$xmean=mean(c(xy1,xy0))
+    a.df = lp$row.df
 
   } else if (side %in% c(1,3)) {
     gr = lp$groups$cols
@@ -270,16 +271,16 @@ lp_annotate <- function(lp, side, attribute,
     gr$y1=xy0
     gr$xmean=gr$x+0.5
     gr$ymean=mean(c(xy1,xy0))
+    a.df = lp$column.df
   }
 
 
-  print(head(a.df))
 
   conditions = unique(a.df[[attribute]])
 
-  if (!is.null(colors)) {
+  if (!is.null(col)) {
 
-    gr$col <- a.df[match(rownames(gr), rownames(a.df)), colors]
+    gr$col <- a.df[match(rownames(gr), rownames(a.df)), col]
 
   } else {
 
@@ -1116,11 +1117,21 @@ lp_group_names <- function(lp,
 
 
 
+
+# lp
+# alt.df=NULL
+# round.n=2
+# cex=0.6
+# light_color='white'
+# dark_color='black'
+# l_threshold = 50
+
 #' Plot values
 #'
 #' @description Function for plotting values over main heatmap
 #'
 #' @param lp layermap object.
+#' @param alt.df an alternative data.frame which will provide the values. Useful if the figure is colored with a different value than you want to show inside (for example scaled data). Should be in the same format as the value.df. NAs are not plotted
 #'
 #' @param cex text size.
 #' @param round.n number of decimals included in value.
@@ -1133,12 +1144,13 @@ lp_group_names <- function(lp,
 #' @export
 #'
 #' @examples
-lp_plot_values <- function(lp,
+lp_plot_values <- function(lp, alt.df=NULL,
                            round.n=2,
                            cex=0.6,
                            light_color='white',
                            dark_color='black',
                            l_threshold = 50) {
+
 
   p.df <- lp$plotting.df
   colors = p.df$color
@@ -1147,9 +1159,13 @@ lp_plot_values <- function(lp,
   p.df$text_col <- dark_color
   p.df$text_col <- ifelse(p.df$l < l_threshold, light_color, dark_color)
 
-  row.df <- lp$row.df
-  row.df$y <- p.df$y[match(row.names(row.df), p.df$rows)]
-
+  if (!is.null(alt.df)) {
+    a.df <- alt.df
+    a.df$rownames <- rownames(a.df)
+    a.df <- reshape2::melt(a.df, id.vars='rownames')
+    names(a.df) <- c('rownames','colnames','values')
+    p.df$value <- a.df$values[match(stringr::str_c(p.df$rows,p.df$cols), stringr::str_c(a.df$rownames, a.df$colnames))]
+  }
 
   message(class(lp$plotting.df$value))
   if (class(lp$plotting.df$value) == 'numeric') p.df$value = round(p.df$value, round.n)

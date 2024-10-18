@@ -258,3 +258,41 @@ show_test_plot <- function(save=F) {
 # ADsvg(file_name)
 
 
+
+# New tests ---------------------------------------------------------------
+
+data('mtcars')
+
+x <- scale(mtcars)
+
+heatmap(x, scale='row')
+
+m.df <- mtcars
+
+val.df <- scale(mtcars)
+row.df <- mtcars
+
+
+lp = layermap(val.df, reverse_palette = F,
+              palette = 'RdYlBu',
+              cluster_cols=T,
+              row.df = row.df,
+              row_groups = 'am')
+
+lp = lp_group(lp, 2, 'am')
+lp = lp_annotate(lp, 2, 'mpg', zlim=c(15,30), palette='reds')
+lp = lp_dend(lp, 2)
+lp = lp_dend(lp, 3)
+lp = lp_names(lp, 4)
+lp = lp_names(lp, 1)
+lp_plot_values(lp, alt.df=mtcars)
+
+
+data("iris")
+
+i.df <- iris
+
+i.df <- reshape2::dcast(i.df, Species ~ Sepal.Length, )
+
+
+
