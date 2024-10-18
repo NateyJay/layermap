@@ -209,10 +209,6 @@ lp_group <- function(lp,
 #' @param cex.point relating to the size of the point plotted.
 #' @param pch character type for point.
 #'
-#'
-#'
-#'
-#'
 #' @param plot_label logical for whether layer labels should be plotted.
 #' @param label text to be used as the label name.
 #' @param cex.label cex value relating to layer label text size.
@@ -1115,7 +1111,11 @@ lp_plot_values <- function(lp,
 
   row.df <- lp$row.df
   row.df$y <- p.df$y[match(row.names(row.df), p.df$rows)]
-  text(p.df$x+0.5, p.df$y+0.5, round(p.df$value, round.n),
+
+
+  if (class(lp$plotting.df$value) == 'numeric') p.df$value = round(p.df$value, round.n)
+
+  text(p.df$x+0.5, p.df$y+0.5, p.df$value,
        cex=cex,
        col=p.df$text_col)
 
