@@ -1,8 +1,7 @@
 
 
 
-# col= NULL; palette="Zissou 1"; size=1; gap=0.4; cex=0.8; show_bounding_box=F; label_just='right'; labels=T; cex.label=0.8; group_label=T
-
+# size=1; gap=0.4; palette="Zissou 1"; col= NULL; show_bounding_box=F; plot_names=T; cex.names=0.8; plot_label=T; cex.label=0.8; label_just='right'
 
 #' Plot group layer
 #'
@@ -85,7 +84,7 @@ lp_group <- function(lp,
 
 
 
-  conditions = unique(gr[[attribute]])
+  conditions = unique(as.character(gr[[attribute]]))
 
 
   col = lp_colorize(col, conditions, palette)
@@ -146,7 +145,7 @@ lp_group <- function(lp,
       clump = clumped_groups[[clump_i]]
 
       g.df <- gr[gr$group_order %in% clump,]
-      cond = g.df[[attribute]][1]
+      cond = as.character(g.df[[attribute]][1])
       # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col='black', lwd=3, lend=1)
       # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col=col[cond], lwd=2.5, lend=1)
       rect(box.x1, min(g.df$y, na.rm=T), box.x2, max(g.df$y, na.rm=T)+1, col=col[cond])
@@ -288,9 +287,11 @@ lp_annotate <- function(lp, side, attribute,
       if (is.null(zlim)) {
         zlim=c(min(a.df[[attribute]], na.rm = T), max(a.df[[attribute]], na.rm = T))
       }
-      col = vector_to_colors(a.df[[attribute]], zlim=zlim, palette=palette,
-                             reverse_palette = reverse_palette,
-                             zero_centered_colors = zero_centered_colors)
+      ls = vector_to_colors(a.df[[attribute]], zlim=zlim, palette=palette,
+                           reverse_palette = reverse_palette,
+                           zero_centered_colors = zero_centered_colors)
+      col         = ls$color
+      color_scale = ls$color_scale
 
       gr$col <- col[match(rownames(gr), rownames(a.df))]
 
@@ -347,7 +348,7 @@ lp_annotate <- function(lp, side, attribute,
       ifelse(zlim[2] > max(val, na.rm=T), "≥", "")
     )
 
-    lp$color_legend[[attribute]] = list(palette=palette, reverse_palette=reverse_palette, zlim=zlim, end_point=end_point)
+    lp$color_legend[[attribute]] = list(colors=color_scale, zlim=zlim, end_point=end_point)
   } else {
     lp$legend[[attribute]] = col
   }
@@ -388,7 +389,7 @@ lp_annotate <- function(lp, side, attribute,
 
 lp_color_legend <- function(lp,
                             side,
-                            attributes=NULL,
+                            attributes=c('main'),
                             size=0.5,
                             gap=1.5,
                             size_p = 0.4,
@@ -396,21 +397,19 @@ lp_color_legend <- function(lp,
                             round=1,
                             cex=0.6,
                             cex.title=NULL,
-                            main='') {
+                            titles=attributes) {
 
   if (is.null(cex.title)) {
     cex.title = cex
   }
 
-  col_n = 50
-  leg <- lp$color_legend
   # lines = length(leg) *2
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = F), environment())
 
-  if (is.null(attributes)){
-    attributes = names(leg)
-  }
+
+  # leg <- lp$color_legend[[attribute]]
+
 
   if (side %in% c(1,3)) {
 
@@ -421,6 +420,7 @@ lp_color_legend <- function(lp,
     g = lp$xmax * gap_p
 
     leg.df <- data.frame(name=attributes, y0=y0, y1=y1, w = w)
+
     # leg.df$x.text = cumsum(leg.df$w) - leg.df$w
     leg.df$x0 = cumsum(leg.df$w) - leg.df$w + g
     leg.df$x1 = leg.df$x0 + leg.df$w - g - g
@@ -443,20 +443,25 @@ lp_color_legend <- function(lp,
 
   }
 
-  leg.df$name[1] <- main
-  names(leg)[1] <- main
+#   leg.df$name[1] <- main
+#   names(leg)[1] <- main
 
-  for (n in leg.df$name) {
-    leg_i = match(names(leg), n)
+  for (leg_i in 1:nrow(leg.df)) {
+    n <- leg.df$name[leg_i]
+
+    leg = lp$color_legend[[n]]
+
     df = leg.df[leg.df$name == n,]
-    c = 1:col_n
-    col = hcl.colors(col_n, leg[[leg_i]]$palette, rev=!leg[[leg_i]]$reverse_palette)
-    zlim = leg[[leg_i]]$zlim
-    ep   = leg[[leg_i]]$end_point
+
+    # col = hcl.colors(col_n, leg[[leg_i]]$palette, rev=!leg[[leg_i]]$reverse_palette)
+    col  = leg$colors
+    zlim = leg$zlim
+    ep   = leg$end_point
+    c    = 1:length(col)
 
 
     if (side %in% c(2,4)) {
-      text(df$x1, df$y.text, n, adj=c(0,1), cex=title.cex, font=3)
+      text(df$x1, df$y.text, titles[leg_i], adj=c(0,1), cex=title.cex, font=3)
       rect(df$x0, df$y0 - (df$y0 - df$y1)*(c-1)/length(c), df$x1, df$y1,
            col=rev(col), border=NA)
       rect(df$x0, df$y0, df$x1, df$y1, lwd=1)
@@ -466,9 +471,7 @@ lp_color_legend <- function(lp,
            pos=side, cex=cex, offset=0.25)
 
     } else if (side %in% c(1,3)) {
-
-
-      text(df$x.text, df$y1, n, adj=c(0.5,-0.5), cex=title.cex, font=3)
+      text(df$x.text, df$y1, titles[leg_i], adj=c(0.5,-0.5), cex=title.cex, font=3)
       rect(df$x0 - (df$x0 - df$x1)*(c-1)/length(c), df$y0, df$x1, df$y1,
            col=rev(col), border=NA)
       rect(df$x0, df$y0, df$x1, df$y1, lwd=1)
@@ -478,6 +481,7 @@ lp_color_legend <- function(lp,
     }
 
   }
+
 
   lp$boundaries <- boundaries
   return(lp)
@@ -520,8 +524,9 @@ lp_color_legend <- function(lp,
 #' @examples
 lp_legend <- function(lp,
                       side,
-                      attribute='main',
+                      attribute,
                       cex=0.8,
+                      title=attribute,
                       title.col='black',
                       title.cex=NULL,
                       title.font=3,
@@ -588,7 +593,7 @@ lp_legend <- function(lp,
 
 
   l = legend(x,y, names(leg), fill=leg, cex=cex, xjust=xjust, yjust=yjust,
-             title=attribute,
+             title=title,
              title.col=title.col, title.cex=title.cex, title.font=title.font,
              ncol=ncol)
 

@@ -374,5 +374,5 @@ vector_to_colors <- function(values, zlim=NULL, na.color='grey', zero_centered_c
   if (!isFALSE(na.color)) {
     color[is.na(color)] <- na.color
   }
-  return(color)
+  return(list(color=color, color_scale=color_scale))
 }
