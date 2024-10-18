@@ -62,7 +62,9 @@ layermap(
 lp object
 }
 \description{
-Backbone function for layermap. This makes the basic heatmap structure and plots it. Requires a dataframe of just numerical values with named rows/columns. Row and column attributes are provided through additional dataframes keyed to the value dataframe names. \n\n Returns a layermap object (usually named lp) which is used in lp_* plotting methods to add layers. Each one of these steps will take lp as an input and return it modified as an output.
+Backbone function for layermap. This makes the basic heatmap structure and plots it. Requires a dataframe of just numerical values with named rows/columns. Row and column attributes are provided through additional dataframes keyed to the value dataframe names.
+
+Returns a layermap object (usually named lp) which is used in lp_* plotting methods to add layers. Each one of these steps will take lp as an input and return it modified as an output.
 }
 \examples{
 data('mtcars')

@@ -91,6 +91,7 @@
 #' Test example 1
 #'
 #' @description Makes a layermap based on the mtcars dataset
+#' @export
 #'
 lp_example_1 = function() {
   data('mtcars')
