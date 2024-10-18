@@ -94,7 +94,7 @@
 #' @examples
 #' @examples scaled_mtcars <- scale(mtcars)
 #' @examples
-#' @examples heatmap(scaled_mtcars, scale='row')
+#' @examples heatmap(scaled_mtcars, scale='none')
 #' @examples
 #' @examples
 #' @examples val.df <- scaled_mtcars
