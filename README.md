@@ -84,7 +84,7 @@ Margin sizes can be changed using `par(mar)`, as always. Example: `par(mar=c(2,3
 
 Layer dimensions are decided by predominantly 2 attributes: the size of the layer and the gap between this layer and the prior, both in terms of lines. The defaults are `size=4` and `gap=0.4`, meaning that most layers will be 1.5x the size of the gap.
 
-#### Export
+#### Saving
 Proportion in export is always difficult to work out. Since layer dimensions are based on margins, if you change the plotting area the layers will be dramatically affected. This means, that you will need to replot all the layers. A recommended workflow using R-studio is to reform the plotting window and margin sizes until they meet they look good and then export that same plotting window size. `svglite` is an excellent package for exporting vector graphics.
 
 Example for plotting window size:
@@ -110,7 +110,12 @@ Groups are derived from attribute columns in the `row.df` and `column.df`. As th
 * `row_groups` and/or `col_groups` - vectors of which columns for the respective dataframes should be grouped. These values must be found in the attributes columns of those dataframes.
 * `group_gap` - the distance (in proportion of plotting area) by which groups should be separated. Default = 0.02.
 
-Group layers can be added using the `lp_group()` function. Multiple group layers may be plotted, if multiple group attributes were specified.
+Group layers can be added using several different functions:
+
+`lp_group()` shows rectangles labeling each group. If you have multiple groups, you can do this multiple times.
+`lp_group_names()` is similar, except it only labels the group and does not include any box.
+`lp_group_pie` shows a pie chart for each grouped section, showing the makeup relating to a categorical attribute.
+
 
 Other layers
 ------------
@@ -122,6 +127,17 @@ Several other layer functions allow building a custom plot.
 `lp_annotate()` adds colored category annotations. These are unlabeled and generally useful to see how clustering relates to categories.
 
 `lp_text()` adds text labels to an axis. Useful to show gene names, symbols (or both!). A r-base character related options.
+
+
+Legends
+-------
+
+Layermap can incorporate legends into the margins as well.
+
+`lp_color_legend()` makes 1 or more legends relating to numerical scales found in the main plotting space, or plotted attributes. You need only specify the attributes you want to plot. 
+
+`lp_legend()` works on categorical legends. At the time this only works on a single attribute (more layers for more legends). 
+
 
 Colors
 ------
@@ -174,16 +190,26 @@ To-do list
 ----------
 
 - [x] Make a simple install guide.  
-- [ ] Complete help documents within R.  
-- [ ] Complete more reproducible examples. 
-- [ ] Improve catagorical legend plotting.
+- [x] Complete help documents within R.  
+- [x] Complete more reproducible examples. 
+- [x] Improve catagorical legend plotting.
 - [x] Make legend for color gradients. ***Urgent***
 - [x] Compatibility function for AD2.
 
-- [ ] Color scale layer in addition to annotate.
-- [ ] manual setting of zlim for input.
+- [x] Color scale layer in addition to annotate.
+- [x] manual setting of zlim for input.
 
-
+- [x] allow optional inclusion of a hclust or tree to use instead of standard clustering
+- [?] override NA clustering problems by giving an NA.value option
+- [ ] ~~column/row select for clustering only based on part of the matrix~~ this can be done by supplying your own hclust with dend_row/col
+- [ ] plotting points inside of boxes (varying size, color, type)
+- [x] allow col.df in invocation
+- [x] more sensible sizing defaults for color legend (to short, thin)
+- [x] auto-require essential tools (stringr, dendextend)
+- [ ] cutree and kmeans implementation
+- [x] error if you try to make a dend for unclustered axes-
+- [ ] ~~x and y scaling~~ this makes more sense to do as a pre-processing step. 
+- [x] substitute values in lp_plot_values
 
 
 
