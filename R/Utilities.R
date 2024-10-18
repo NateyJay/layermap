@@ -1,11 +1,10 @@
 
 
 
-#' empty for now
+#' Layer boundaries
 #'
-#' @description empty for now
+#' @description Utility for defining layer boundaries
 #'
-#' @param still empty
 #'
 #' @return
 #' @export
@@ -122,9 +121,7 @@ lp_boundaries <- function(lp, side, size, gap, text.gap=0, text.restriction=F, s
 #'
 #' @description Utility for plotting labels on layers
 #'
-#' @param to be added
 #'
-#' @return named color vector
 #' @export
 #'
 #' @examples
@@ -218,9 +215,9 @@ lp_line_to_coord <- function(xmax, ymax, side, line) {
 #'
 #' @description Utility for getting named color vector used in layermap layer functions.
 #'
-#' @param col - named color vector
-#' @param conditions - list of conditions to colorize
-#' @param palette - hcl.colors palette used to fill in unnamed colors
+#' @param col named color vector
+#' @param conditions list of conditions to colorize
+#' @param palette hcl.colors palette used to fill in unnamed colors
 #'
 #' @return named color vector
 #' @export
@@ -254,7 +251,7 @@ lp_colorize <- function(col, conditions, palette) {
 #'
 #' @description Affinity Designer (and possibly other) vector graphics softwares do not import svgs produced through svglite correctly. As this tool produces superior (small) svgs, this utility is meant to fix the file by adding a more explicit header. Overwrites the input file.
 #'
-#' @param file - an svg file produced as the output of svglite::svglite()
+#' @param file an svg file produced as the output of svglite::svglite()
 #'
 #'
 #' @export
@@ -342,6 +339,14 @@ ADsvg = function(file) {
 
 
 
+#' Utility to produce a color palette
+#'
+#' @description A simple utility used by many lp functions to define color scales for a vector using an hcl.palette.
+#'
+#' @return a vector of colors
+#' @export
+#'
+#' @examples
 vector_to_colors <- function(values, zlim=NULL, na.color='grey', zero_centered_colors=F, palette='viridis', reverse_palette=F) {
 
   color_n = 100

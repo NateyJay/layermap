@@ -2,9 +2,9 @@
 
 #' ndendrogram object converter
 #'
-#' @description utility to make a usable dendrogram for more complex plotting
+#' @description Utility to make a usable dendrogram for more complex plotting
 #'
-#' @param d - Base or dendextend Dendrogram object from R
+#' @param d Base or dendextend Dendrogram object from R
 #'
 #' @return ndendrogram object
 #' @export
@@ -88,8 +88,8 @@ as.ndendrogram <- function(d) {
 #'
 #' @description plot.ndendrogram plots an ndendgrogram object in specific locations
 #'
-#' @param d - an ndendrogram object
-#' @param horiz - logical assigns whether the dendrogram is plotted vertical or horizontal.
+#' @param d an ndendrogram object
+#' @param horiz logical assigns whether the dendrogram is plotted vertical or horizontal.
 #'
 #' @return
 #' @export
