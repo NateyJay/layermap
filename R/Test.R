@@ -88,7 +88,7 @@
 
 # Built-in tests ---------------------------------------------------------------
 
-example1 = function() {
+lp_example_1 = function() {
   data('mtcars')
 
   scaled_mtcars <- scale(mtcars)
