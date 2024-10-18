@@ -67,7 +67,7 @@ Backbone function for layermap. This makes the basic heatmap structure and plots
 \examples{
 data('mtcars')
 scaled_mtcars <- scale(mtcars)
-heatmap(scaled_mtcars, scale='row')
+heatmap(scaled_mtcars, scale='none')
 val.df <- scaled_mtcars
 row.df <- mtcars
 par(mar=c(5,8,3,14))

@@ -14,7 +14,7 @@ lp_color_legend(
   gap_p = 0.05,
   round = 1,
   cex = 0.6,
-  cex.title = NULL,
+  title.cex = NULL,
   titles = attributes
 )
 }
@@ -37,7 +37,7 @@ lp_color_legend(
 
 \item{cex}{legend label size.}
 
-\item{cex.title}{legend title size.}
+\item{title.cex}{legend title size.}
 
 \item{main}{legend title.}
 }

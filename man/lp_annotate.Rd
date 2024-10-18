@@ -17,15 +17,15 @@ lp_annotate(
   zero_centered_colors = F,
   show_bounding_box = F,
   type = "rect",
-  cex.label = 0.8,
+  label.cex = 0.8,
   border = NA,
   group.border = NA,
   lwd = 1,
-  cex.point = 1,
+  point.cex = 1,
   pch = 19,
   plot_label = T,
   label = attribute,
-  label_just = "right"
+  label.just = "right"
 )
 }
 \arguments{
@@ -53,7 +53,7 @@ lp_annotate(
 
 \item{type}{option for the plotting form: c('rect','point'). rect shows a bordered box and point is a pch-defined shape.}
 
-\item{cex.label}{cex value relating to layer label text size.}
+\item{label.cex}{cex value relating to layer label text size.}
 
 \item{border}{color for rect border. Default is to not plot the border ("NA").}
 
@@ -61,7 +61,7 @@ lp_annotate(
 
 \item{lwd}{border line width.}
 
-\item{cex.point}{relating to the size of the point plotted.}
+\item{point.cex}{relating to the size of the point plotted.}
 
 \item{pch}{character type for point.}
 
@@ -69,7 +69,7 @@ lp_annotate(
 
 \item{label}{text to be used as the label name.}
 
-\item{label_just}{the justification side for a layer label (right or left).}
+\item{label.just}{the justification side for a layer label (right or left).}
 }
 \value{
 layermap object

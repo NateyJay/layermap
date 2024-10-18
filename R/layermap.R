@@ -522,22 +522,6 @@ layermap <- function(value.df,
   plot(1,1, type='n', xlim=xlim, ylim=ylim, xlab='', ylab='', axes=F)
 
   rect(m.df$x, m.df$y, m.df$x+1, m.df$y+1, col=m.df$color, border=NA)
-  #
-  #   if (plot_values) {
-  #
-  #     plotval.df <- m.df
-  #     plotval.df$l <- schemr::hex_to_lab(plotval.df$color)[,1]
-  #     plotval.df$text_col <- 'black'
-  #     plotval.df$text_col <- ifelse(plotval.df$l < 50, 'white','black')
-  #
-  #     row.df$y <- plotval.df$y[match(row.names(row.df), plotval.df$rows)]
-  #     text(plotval.df$x+0.5,
-  #          plotval.df$y+0.5,
-  #          round(plotval.df$value,round.value),
-  #          cex=cex.value,
-  #          col=plotval.df$text_col)
-  #     # text(m.df$x+0.5, m.df$y+0.5, round(m.df$value, round.value), adj=c(0.5,0.5), cex=cex.value)
-  #   }
 
   for (box in unique(m.df$box)) {
     box.df <- m.df[m.df$box == box,]

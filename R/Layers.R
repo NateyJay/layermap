@@ -1,7 +1,7 @@
 
 
 
-# size=1; gap=0.4; palette="Zissou 1"; col= NULL; show_bounding_box=F; plot_names=T; cex.names=0.8; plot_label=T; cex.label=0.8; label_just='right'
+# size=1; gap=0.4; palette="Zissou 1"; col= NULL; show_bounding_box=F; plot_names=T; names.cex=0.8; plot_label=T; label.cex=0.8; label.just='right'
 
 #' Plot group layer
 #'
@@ -17,11 +17,11 @@
 #' @param show_bounding_box shows the bounding space for this layer (useful for troubleshooting)
 #'
 #' @param plot_names logical for whether names should be plotted for groups.
-#' @param cex.names cex value relating to name text size.
+#' @param names.cex cex value relating to name text size.
 #'
 #' @param plot_label logical for whether layer labels should be plotted.
-#' @param cex.label cex value relating to layer label text size.
-#' @param label_just the justification side for a layer label (right or left).
+#' @param label.cex cex value relating to layer label text size.
+#' @param label.just the justification side for a layer label (right or left).
 #'
 #' @return layermap object
 #' @export
@@ -36,15 +36,15 @@ lp_group <- function(lp,
                      col= NULL,
                      show_bounding_box=F,
                      plot_names=T,
-                     cex.names=0.8,
+                     names.cex=0.8,
                      plot_label=T,
-                     cex.label=0.8,
-                     label_just='right') {
+                     label.cex=0.8,
+                     label.just='right') {
 
   if (plot_names) {
     str_multiplier = 2
 
-    text.gap = strheight("G", cex=cex.names) * str_multiplier * cex.names
+    text.gap = strheight("G", cex=names.cex) * str_multiplier * names.cex
 
     if (side %in% c(2,4)) {
       # text.gap = lp_rotate(text.gap)
@@ -125,7 +125,7 @@ lp_group <- function(lp,
       # segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col='black', lwd=3, lend=1)
       # segments(min(g.df$x), half.y, max(g.df$x)+1, half.y, col=col[cond], lwd=2.5, lend=1)
       rect(min(g.df$x, na.rm=T), box.y1, max(g.df$x, na.rm=T)+1, box.y2, col=col[cond])
-      if (plot_names) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=cex.label) }
+      if (plot_names) { text(mean(c(min(g.df$x), max(g.df$x)+1)), text.y, cond, cex=label.cex) }
 
       # for (gi in clump){
       #   g.df <- gr[gr$group_order == gi,]
@@ -149,7 +149,7 @@ lp_group <- function(lp,
       # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col='black', lwd=3, lend=1)
       # segments(half.x, min(g.df$y), half.x, max(g.df$y)+1, col=col[cond], lwd=2.5, lend=1)
       rect(box.x1, min(g.df$y, na.rm=T), box.x2, max(g.df$y, na.rm=T)+1, col=col[cond])
-      if (plot_names) { text(text.x, mean(c(min(g.df$y), max(g.df$y)+1)), srt=90, cond, cex=cex.names) }
+      if (plot_names) { text(text.x, mean(c(min(g.df$y), max(g.df$y)+1)), srt=90, cond, cex=names.cex) }
 
       # for (gi in clump){
       #   g.df <- gr[gr$group_order == gi,]
@@ -160,7 +160,7 @@ lp_group <- function(lp,
   }
 
   if (plot_label) {
-    lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+    lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label.just, cex=label.cex)
   }
 
   lp$legend[[attribute]] = col
@@ -173,14 +173,14 @@ lp_group <- function(lp,
 # a.df=NULL; col=NULL; size=1; gap=0.4;
 # palette='Viridis';
 # show_bounding_box=F; type='rect';
-# label_just='right'; cex.label=0.8; border=NA;
-# cex.point=1; pch=19; lwd=1;
+# label.just='right'; label.cex=0.8; border=NA;
+# point.cex=1; pch=19; lwd=1;
 # show_label=T
 # zlim=NULL; reverse_palette = F; zero_centered_colors = F
 
 
 # a.df=NULL; col=NULL; size=1; gap=0.4; palette='Viridis'
-# show_bounding_box=F; type='rect'; label_just='right'; cex.label=0.8
+# show_bounding_box=F; type='rect'; label.just='right'; label.cex=0.8
 
 #' Plot annotation layer
 #'
@@ -205,13 +205,13 @@ lp_group <- function(lp,
 #' @param border color for rect border. Default is to not plot the border ("NA").
 #' @param group.border color for border around whole group of attribute boxes. Default is to not plot the border ("NA").
 #' @param lwd border line width.
-#' @param cex.point relating to the size of the point plotted.
+#' @param point.cex relating to the size of the point plotted.
 #' @param pch character type for point.
 #'
 #' @param plot_label logical for whether layer labels should be plotted.
 #' @param label text to be used as the label name.
-#' @param cex.label cex value relating to layer label text size.
-#' @param label_just the justification side for a layer label (right or left).
+#' @param label.cex cex value relating to layer label text size.
+#' @param label.just the justification side for a layer label (right or left).
 #'
 #' @return layermap object
 #' @export
@@ -231,17 +231,17 @@ lp_annotate <- function(lp, side, attribute,
 
                         type='rect',
 
-                        cex.label=0.8,
+                        label.cex=0.8,
                         border=NA,
                         group.border=NA,
 
                         lwd=1,
-                        cex.point=1,
+                        point.cex=1,
                         pch=19,
 
                         plot_label=T,
                         label=attribute,
-                        label_just='right') {
+                        label.just='right') {
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
@@ -325,7 +325,7 @@ lp_annotate <- function(lp, side, attribute,
          lwd=lwd)
   } else if (type == 'points') {
     points(gr$xmean, gr$ymean,
-           bg=gr$bg, col=gr$col, pch=pch, cex=cex.point)
+           bg=gr$bg, col=gr$col, pch=pch, cex=point.cex)
   }
 
   if (!is.na(group.border)) {
@@ -336,7 +336,7 @@ lp_annotate <- function(lp, side, attribute,
   }
 
 
-  if (plot_label) {lp_label(lp, gr$xmean, gr$ymean, side=side, text=label, just=label_just, cex=cex.label)
+  if (plot_label) {lp_label(lp, gr$xmean, gr$ymean, side=side, text=label, just=label.just, cex=label.cex)
   }
   lp$boundaries <- boundaries
 
@@ -378,7 +378,7 @@ lp_annotate <- function(lp, side, attribute,
 #'
 #' @param round the number of decimals included in the legend labels.
 #' @param cex legend label size.
-#' @param cex.title legend title size.
+#' @param title.cex legend title size.
 #' @param main legend title.
 #'
 #'
@@ -396,11 +396,11 @@ lp_color_legend <- function(lp,
                             gap_p=0.05,
                             round=1,
                             cex=0.6,
-                            cex.title=NULL,
+                            title.cex=NULL,
                             titles=attributes) {
 
-  if (is.null(cex.title)) {
-    cex.title = cex
+  if (is.null(title.cex)) {
+    title.cex = cex
   }
 
   # lines = length(leg) *2
@@ -881,8 +881,8 @@ lp_dend <- function(lp,
 #'
 #' @param cex size value for pie.
 #' @param plot_label logical for whether labels should be plotted.
-#' @param label_just justification side for layer label.
-#' @param cex.label label size.
+#' @param label.just justification side for layer label.
+#' @param label.cex label size.
 #'
 #' @param trace outline of pie.
 #' @param trace.lty trace line type.
@@ -911,9 +911,9 @@ lp_group_pie <- function(lp,
                          show_bounding_box=F,
 
                          cex=1,
-                         label_just='right',
+                         label.just='right',
                          plot_label=T,
-                         cex.label=0.8,
+                         label.cex=0.8,
 
                          trace=T,
                          trace.lty=1,
@@ -1012,7 +1012,7 @@ lp_group_pie <- function(lp,
   }
 
   if (plot_label) {
-    lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+    lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label.just, cex=label.cex)
   }
   lp$legend[[attribute]] = col
   lp$boundaries <- boundaries
@@ -1113,7 +1113,7 @@ lp_group_names <- function(lp,
 
 
   if (plot_label) {
-    lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
+    lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label.just, cex=label.cex)
   }
 
   lp$boundaries <- boundaries

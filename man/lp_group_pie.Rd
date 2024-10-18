@@ -14,9 +14,9 @@ lp_group_pie(
   col = NULL,
   show_bounding_box = F,
   cex = 1,
-  label_just = "right",
+  label.just = "right",
   plot_label = T,
-  cex.label = 0.8,
+  label.cex = 0.8,
   trace = T,
   trace.lty = 1,
   trace.lwd = 0.8,
@@ -43,11 +43,11 @@ lp_group_pie(
 
 \item{cex}{size value for pie.}
 
-\item{label_just}{justification side for layer label.}
+\item{label.just}{justification side for layer label.}
 
 \item{plot_label}{logical for whether labels should be plotted.}
 
-\item{cex.label}{label size.}
+\item{label.cex}{label size.}
 
 \item{trace}{outline of pie.}
 

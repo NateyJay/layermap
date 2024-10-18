@@ -14,10 +14,10 @@ lp_group(
   col = NULL,
   show_bounding_box = F,
   plot_names = T,
-  cex.names = 0.8,
+  names.cex = 0.8,
   plot_label = T,
-  cex.label = 0.8,
-  label_just = "right"
+  label.cex = 0.8,
+  label.just = "right"
 )
 }
 \arguments{
@@ -39,13 +39,13 @@ lp_group(
 
 \item{plot_names}{logical for whether names should be plotted for groups.}
 
-\item{cex.names}{cex value relating to name text size.}
+\item{names.cex}{cex value relating to name text size.}
 
 \item{plot_label}{logical for whether layer labels should be plotted.}
 
-\item{cex.label}{cex value relating to layer label text size.}
+\item{label.cex}{cex value relating to layer label text size.}
 
-\item{label_just}{the justification side for a layer label (right or left).}
+\item{label.just}{the justification side for a layer label (right or left).}
 }
 \value{
 layermap object
