@@ -518,6 +518,8 @@ layermap <- function(value.df,
 
   # lines= c(0,0,0,0) - 0.5
 
+  leg = list(main=setNames(unique(m.df$color), unique(m.df$value)))
+
 
   out = list(xlim=xlim,
              ylim=ylim,
@@ -536,7 +538,7 @@ layermap <- function(value.df,
              groups=groups,
              plotting.df=m.df,
              boundaries = boundaries,
-             legend = list(),
+             legend = leg,
              color_legend = list())
 
   end_point = c(

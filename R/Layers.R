@@ -484,6 +484,14 @@ lp_color_legend <- function(lp,
 
 
 
+#
+# lp <- layermap(data.frame(A=c('a','a','j','k'), B=c('k','k','j','z')))
+# lp <- lp_legend(lp, 3)
+# lp <- lp_legend(lp, 4)
+
+
+# side=1; attributes=NULL; cex=0.6; gap=0.4;
+# title.col='black'; title.cex=NULL; title.font=3
 
 # attributes=NULL; cex=0.6; gap=0.4
 # title.col='black'; title.cex=NULL; title.font=3
@@ -492,28 +500,58 @@ lp_color_legend <- function(lp,
 #'
 #' @description Makes a simple color legend for a layermap object.
 #'
-#' @param lp - layermap object
-#' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
-#' @param attribute - name for the attributes which will be plotted in the layer. Defaults to plotting all of them.
+#' @param lp layermap object
+#' @param side value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param attribute name for the attribute which is used for the legend. Defaults to "main", the main colors if categorical
+#' @param size the space (in lines) for this layer in the margin.
+#'
+#' @param cex total legend size.
+#'
+#' @param title.col title color.
+#' @param title.cex title size.
+#' @param title.font title font.
+#'
+#' @param ncol number of columns for the legend. Defaults to single columns for the sides and 3 for the top/bottom.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-lp_legend <- function(lp, side, attributes=NULL, cex=0.6, gap=0.4,
-                      title.col='black', title.cex=NULL, title.font=3) {
+lp_legend <- function(lp,
+                      side,
+                      attribute='main',
+                      cex=0.8,
+                      title.col='black',
+                      title.cex=NULL,
+                      title.font=3,
+                      ncol='auto') {
 
   if (is.null(title.cex)) {
     title.cex = cex
   }
 
-  leg <- lp$legend
+  leg <- lp$legend[[attribute]]
   lines = length(unlist(leg)) + length(leg) + 3
 
 
   list2env(lp_boundaries(lp, side, size=0, gap, text.gap=0, show_bounding_box = F), environment())
 
   # par(mar=rep(0.3,4))
+
+
+  if (ncol == 'auto') {
+    if (side %in% c(1,3)) {
+      if (length(leg) >= 3) {
+        ncol = 3
+      } else {
+        ncol = length(leg)
+      }
+    } else {
+      ncol=1
+    }
+
+  }
+
 
   if (side == 1) {
     y=xy1
@@ -547,33 +585,33 @@ lp_legend <- function(lp, side, attributes=NULL, cex=0.6, gap=0.4,
 
   extent = lp$boundaries[side]
 
-  for (a in attributes) {
 
-    l = legend(x,y, names(leg[[a]]), fill=leg[[a]], cex=cex, xjust=xjust, yjust=yjust,
-               title=a,
-               title.col=title.col, title.cex=title.cex, title.font=title.font)
+  l = legend(x,y, names(leg), fill=leg, cex=cex, xjust=xjust, yjust=yjust,
+             title=attribute,
+             title.col=title.col, title.cex=title.cex, title.font=title.font,
+             ncol=ncol)
 
 
-    if (side == 1) {
-      if (l$rect$top - l$rect$h < extent) extent = l$rect$top - l$rect$h
+  if (side == 1) {
+    if (l$rect$top - l$rect$h < extent) extent = l$rect$top - l$rect$h
 
-    } else if (side == 2) {
-      if (l$rect$left < extent) extent = l$rect$left
+  } else if (side == 2) {
+    if (l$rect$left < extent) extent = l$rect$left
 
-    } else if (side == 3) {
-      if (l$rect$top > extent) extent = l$rect$top
+  } else if (side == 3) {
+    if (l$rect$top > extent) extent = l$rect$top
 
-    } else if (side == 4) {
-      if (l$rect$left + l$rect$w > extent) extent = l$rect$left + l$rect$w
+  } else if (side == 4) {
+    if (l$rect$left + l$rect$w > extent) extent = l$rect$left + l$rect$w
 
-    }
-
-    if (side %in% c(1,3)) {
-      x = x + l$rect$w + lp$gap.x
-    } else {
-      y = y - l$rect$h - lp$gap.y
-    }
   }
+
+  if (side %in% c(1,3)) {
+    x = x + l$rect$w + lp$gap.x
+  } else {
+    y = y - l$rect$h - lp$gap.y
+  }
+
 
 
   boundaries[side] = extent
