@@ -16,5 +16,6 @@ Data from a meta-analsis of N and D projects in the SRA. L2FC data for a set of 
 \examples{
 data(ND)
 
+
 }
 \keyword{datasets}

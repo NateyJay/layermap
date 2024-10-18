@@ -19,7 +19,9 @@ lp_color_legend(
 )
 }
 \arguments{
-\item{lp}{- layermap object}
+\item{lp}{\itemize{
+\item layermap object
+}}
 
 \item{side}{value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).}
 

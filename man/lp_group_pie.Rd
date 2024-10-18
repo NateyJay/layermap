@@ -55,9 +55,13 @@ lp_group_pie(
 
 \item{trace.col}{}
 
-\item{cex_label}{- cex value for label characters.}
+\item{cex_label}{\itemize{
+\item cex value for label characters.
+}}
 
-\item{labels}{- logical for whether group labels should be plotted.}
+\item{labels}{\itemize{
+\item logical for whether group labels should be plotted.
+}}
 }
 \value{
 layermap object
