@@ -1,5 +1,32 @@
 
 
+# Authoring commands ------------------------------------------------------
+
+# use_description(list(
+#   "Authors@R" = utils::person(
+#     "Nate", "Johnson",
+#     email = "jax523@gmail.com",
+#     role = c("aut", "cre"),
+#     comment = c(ORCID = "0000-0002-5279-9964")
+#   ),
+#   Version = "0.1.0",
+#   Title = "layermap: a simple, processive heatmap library for publication-ready figures",
+#   Description = "A simple library meant to help users make publication quality heatmaps, with a syntax suited to modular annotations on the sides (layers). This allows the user to define a custom image, with custom grouping, clustering, ordering, coloring, and labels, all of which are easily readable with vector-graphics software.",
+#   Language =  "en",
+#   Encoding = 'UTF-8',
+#   LazyData = "true"
+# ))
+# use_package('stringr')
+# use_package('dendextend')
+# use_package('schemr')
+# use_package('reshape2')
+# use_package('plotrix')
+#
+# use_gpl3_license()
+
+
+
+
 # Project overview --------------------------------------------------------
 
 
