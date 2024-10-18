@@ -7,7 +7,7 @@
 ADsvg(file)
 }
 \arguments{
-\item{file}{- an svg file produced as the output of svglite::svglite()}
+\item{file}{an svg file produced as the output of svglite::svglite()}
 }
 \description{
 Affinity Designer (and possibly other) vector graphics softwares do not import svgs produced through svglite correctly. As this tool produces superior (small) svgs, this utility is meant to fix the file by adding a more explicit header. Overwrites the input file.

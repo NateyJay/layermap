@@ -56,11 +56,34 @@ layermap(
 
 \item{column.df}{attribute dataframe which will be used for layer plotting functions on sides 1 and 3. Rownames correspond to value.df colnames. Also can be called as col.df}
 
-\item{main}{}
+\item{main}{name for the overall plot.}
 }
 \value{
 lp object
 }
 \description{
-Backbone function for layermap. This makes the basic heatmap structure and plots it. Requires a dataframe of just numerical values with named rows/columns. Row and column attributes are provided through additional dataframes keyed to the value dataframe names.
+Backbone function for layermap. This makes the basic heatmap structure and plots it. Requires a dataframe of just numerical values with named rows/columns. Row and column attributes are provided through additional dataframes keyed to the value dataframe names. \n\n Returns a layermap object (usually named lp) which is used in lp_* plotting methods to add layers. Each one of these steps will take lp as an input and return it modified as an output.
+}
+\examples{
+data('mtcars')
+scaled_mtcars <- scale(mtcars)
+heatmap(scaled_mtcars, scale='row')
+val.df <- scaled_mtcars
+row.df <- mtcars
+par(mar=c(5,8,3,14))
+lp = layermap(val.df, reverse_palette = F,
+              palette = 'RdYlBu',
+              cluster_cols=T,
+              row.df = row.df,
+              row_groups = 'am')
+lp = lp_group(lp, 2, 'am')
+lp = lp_annotate(lp, 2, 'mpg', zlim=c(15,30), palette='reds')
+lp = lp_dend(lp, 2)
+lp = lp_dend(lp, 3)
+lp = lp_names(lp, 4)
+lp = lp_names(lp, 1)
+lp_plot_values(lp, alt.df=mtcars)
+lp = lp_color_legend(lp, 1, c('main','mpg'), titles=c('scaled value', 'miles per gallon'))
+lp = lp_legend(lp, 4, 'am', title='Auto?')
+
 }

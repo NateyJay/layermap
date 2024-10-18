@@ -90,34 +90,33 @@
 #' @export
 #'
 #' @examples
-#'
-#' data('mtcars')
-#'
-#' scaled_mtcars <- scale(mtcars)
-#'
-#' heatmap(scaled_mtcars, scale='row')
-#'
-#'
-#' val.df <- scaled_mtcars
-#' row.df <- mtcars
-#'
-#'
-#' par(mar=c(5,8,3,14))
-#' lp = layermap(val.df, reverse_palette = F,
-#'               palette = 'RdYlBu',
-#'               cluster_cols=T,
-#'               row.df = row.df,
-#'               row_groups = 'am')
-#'
-#' lp = lp_group(lp, 2, 'am')
-#' lp = lp_annotate(lp, 2, 'mpg', zlim=c(15,30), palette='reds')
-#' lp = lp_dend(lp, 2)
-#' lp = lp_dend(lp, 3)
-#' lp = lp_names(lp, 4)
-#' lp = lp_names(lp, 1)
-#' lp_plot_values(lp, alt.df=mtcars)
-#' lp = lp_color_legend(lp, 1, c('main','mpg'), titles=c('scaled value', 'miles per gallon'))
-#' lp = lp_legend(lp, 4, 'am', title='Auto?')
+#' @examples data('mtcars')
+#' @examples
+#' @examples scaled_mtcars <- scale(mtcars)
+#' @examples
+#' @examples heatmap(scaled_mtcars, scale='row')
+#' @examples
+#' @examples
+#' @examples val.df <- scaled_mtcars
+#' @examples row.df <- mtcars
+#' @examples
+#' @examples
+#' @examples par(mar=c(5,8,3,14))
+#' @examples lp = layermap(val.df, reverse_palette = F,
+#' @examples               palette = 'RdYlBu',
+#' @examples               cluster_cols=T,
+#' @examples               row.df = row.df,
+#' @examples               row_groups = 'am')
+#' @examples
+#' @examples lp = lp_group(lp, 2, 'am')
+#' @examples lp = lp_annotate(lp, 2, 'mpg', zlim=c(15,30), palette='reds')
+#' @examples lp = lp_dend(lp, 2)
+#' @examples lp = lp_dend(lp, 3)
+#' @examples lp = lp_names(lp, 4)
+#' @examples lp = lp_names(lp, 1)
+#' @examples lp_plot_values(lp, alt.df=mtcars)
+#' @examples lp = lp_color_legend(lp, 1, c('main','mpg'), titles=c('scaled value', 'miles per gallon'))
+#' @examples lp = lp_legend(lp, 4, 'am', title='Auto?')
 #'
 layermap <- function(value.df,
                      zlim=NULL,

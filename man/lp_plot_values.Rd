@@ -6,6 +6,7 @@
 \usage{
 lp_plot_values(
   lp,
+  alt.df = NULL,
   round.n = 2,
   cex = 0.6,
   light_color = "white",
@@ -15,6 +16,8 @@ lp_plot_values(
 }
 \arguments{
 \item{lp}{layermap object.}
+
+\item{alt.df}{an alternative data.frame which will provide the values. Useful if the figure is colored with a different value than you want to show inside (for example scaled data). Should be in the same format as the value.df. NAs are not plotted}
 
 \item{round.n}{number of decimals included in value.}
 

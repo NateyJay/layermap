@@ -7,11 +7,11 @@
 lp_colorize(col, conditions, palette)
 }
 \arguments{
-\item{col}{- named color vector}
+\item{col}{named color vector}
 
-\item{conditions}{- list of conditions to colorize}
+\item{conditions}{list of conditions to colorize}
 
-\item{palette}{- hcl.colors palette used to fill in unnamed colors}
+\item{palette}{hcl.colors palette used to fill in unnamed colors}
 }
 \value{
 named color vector

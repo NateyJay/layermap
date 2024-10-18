@@ -7,20 +7,33 @@
 lp_legend(
   lp,
   side,
-  attributes = NULL,
-  cex = 0.6,
-  gap = 0.4,
+  attribute,
+  cex = 0.8,
+  title = attribute,
   title.col = "black",
   title.cex = NULL,
-  title.font = 3
+  title.font = 3,
+  ncol = "auto"
 )
 }
 \arguments{
-\item{lp}{- layermap object}
+\item{lp}{layermap object}
 
-\item{side}{- value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).}
+\item{side}{value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).}
 
-\item{attribute}{- name for the attributes which will be plotted in the layer. Defaults to plotting all of them.}
+\item{attribute}{name for the attribute which is used for the legend. Defaults to "main", the main colors if categorical}
+
+\item{cex}{total legend size.}
+
+\item{title.col}{title color.}
+
+\item{title.cex}{title size.}
+
+\item{title.font}{title font.}
+
+\item{ncol}{number of columns for the legend. Defaults to single columns for the sides and 3 for the top/bottom.}
+
+\item{size}{the space (in lines) for this layer in the margin.}
 }
 \description{
 Makes a simple color legend for a layermap object.

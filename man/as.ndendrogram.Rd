@@ -7,11 +7,11 @@
 as.ndendrogram(d)
 }
 \arguments{
-\item{d}{- Base or dendextend Dendrogram object from R}
+\item{d}{Base or dendextend Dendrogram object from R}
 }
 \value{
 ndendrogram object
 }
 \description{
-utility to make a usable dendrogram for more complex plotting
+Utility to make a usable dendrogram for more complex plotting
 }

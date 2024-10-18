@@ -19,9 +19,9 @@
 )
 }
 \arguments{
-\item{d}{- an ndendrogram object}
+\item{d}{an ndendrogram object}
 
-\item{horiz}{- logical assigns whether the dendrogram is plotted vertical or horizontal.}
+\item{horiz}{logical assigns whether the dendrogram is plotted vertical or horizontal.}
 }
 \description{
 plot.ndendrogram plots an ndendgrogram object in specific locations

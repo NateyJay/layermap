@@ -2,7 +2,7 @@
 % Please edit documentation in R/Utilities.R
 \name{lp_boundaries}
 \alias{lp_boundaries}
-\title{empty for now}
+\title{Layer boundaries}
 \usage{
 lp_boundaries(
   lp,
@@ -14,9 +14,6 @@ lp_boundaries(
   show_bounding_box = F
 )
 }
-\arguments{
-\item{still}{empty}
-}
 \description{
-empty for now
+Utility for defining layer boundaries
 }

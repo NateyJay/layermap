@@ -6,12 +6,6 @@
 \usage{
 lp_label(lp, x_vec, y_vec, side, text, just, offset = 0.9, cex)
 }
-\arguments{
-\item{to}{be added}
-}
-\value{
-named color vector
-}
 \description{
 Utility for plotting labels on layers
 }
