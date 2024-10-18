@@ -8,26 +8,24 @@ lp_annotate(
   lp,
   side,
   attribute,
-  col = NULL,
   size = 1,
   gap = 0.4,
   palette = "Viridis",
-  colors = NULL,
+  reverse_palette = F,
+  col = NULL,
+  zlim = NULL,
+  zero_centered_colors = F,
   show_bounding_box = F,
   type = "rect",
-  label = attribute,
-  label_just = "right",
   cex.label = 0.8,
   border = NA,
   group.border = NA,
+  lwd = 1,
   cex.point = 1,
   pch = 19,
-  bg = NA,
-  lwd = 1,
-  show_label = T,
-  zlim = NULL,
-  reverse_palette = F,
-  zero_centered_colors = F
+  plot_label = T,
+  label = attribute,
+  label_just = "right"
 )
 }
 \arguments{
@@ -37,19 +35,41 @@ lp_annotate(
 
 \item{attribute}{name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.}
 
-\item{col}{a named vector, where colors are the values and names are conditions that are defined in the attribute/group that is plotted.}
-
 \item{size}{the space (in lines) for this layer in the margin.}
 
 \item{gap}{the space (in lines) between this layer and the prior layer.}
 
 \item{palette}{hcl.colors palette to fill in unnamed conditions colors.}
 
+\item{reverse_palette}{logical setting the order for the palette.}
+
+\item{col}{a named vector, where colors are the values and names are conditions that are defined in the attribute/group that is plotted.}
+
+\item{zlim}{vector for the c(min, max) values for the z-scale (colors). Values over or under will be truncated to the marginal colors.}
+
+\item{zero_centered_colors}{an option to force the center of the palette/colors to coincide with zero. Useful for data fold-change data or other data where zero is neutral.}
+
 \item{show_bounding_box}{shows the bounding space for this layer (useful for troubleshooting)}
 
-\item{cex.label}{- cex value for label characters.}
+\item{type}{option for the plotting form: c('rect','point'). rect shows a bordered box and point is a pch-defined shape.}
 
-\item{layer_just}{- the justification side for a layer label (right or left).}
+\item{cex.label}{cex value relating to layer label text size.}
+
+\item{border}{color for rect border. Default is to not plot the border ("NA").}
+
+\item{group.border}{color for border around whole group of attribute boxes. Default is to not plot the border ("NA").}
+
+\item{lwd}{border line width.}
+
+\item{cex.point}{relating to the size of the point plotted.}
+
+\item{pch}{character type for point.}
+
+\item{plot_label}{logical for whether layer labels should be plotted.}
+
+\item{label}{text to be used as the label name.}
+
+\item{label_just}{the justification side for a layer label (right or left).}
 }
 \value{
 layermap object

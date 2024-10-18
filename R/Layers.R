@@ -1,7 +1,6 @@
 
 
 
-
 # col= NULL; palette="Zissou 1"; size=1; gap=0.4; cex=0.8; show_bounding_box=F; label_just='right'; labels=T; cex.label=0.8; group_label=T
 
 
@@ -11,29 +10,42 @@
 #'
 #' @param lp layermap object.
 #' @param side value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param attribute name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
 #' @param size the space (in lines) for this layer in the margin.
 #' @param gap the space (in lines) between this layer and the prior layer.
-#' @param attribute name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
 #' @param palette hcl.colors palette to fill in unnamed conditions colors.
 #' @param col a named vector, where colors are the values and names are conditions that are defined in the attribute/group that is plotted.
 #' @param show_bounding_box shows the bounding space for this layer (useful for troubleshooting)
 #'
+#' @param plot_names logical for whether names should be plotted for groups.
+#' @param cex.names cex value relating to name text size.
 #'
-#' @param layer_just - the justification side for a layer label (right or left).
-#' @param cex_label - cex value for label characters.
-#' @param labels - logical for whether group labels should be plotted.
+#' @param plot_label logical for whether layer labels should be plotted.
+#' @param cex.label cex value relating to layer label text size.
+#' @param label_just the justification side for a layer label (right or left).
 #'
 #' @return layermap object
 #' @export
 #'
 #' @examples
-lp_group <- function(lp, side, attribute, size=1, gap=0.4, cex=0.8, col= NULL, palette="Zissou 1",
-                     show_bounding_box=F, label_just='right', labels=T, cex.label=0.8, group_label=T) {
+lp_group <- function(lp,
+                     side,
+                     attribute,
+                     size=1,
+                     gap=0.4,
+                     palette="Zissou 1",
+                     col= NULL,
+                     show_bounding_box=F,
+                     plot_names=T,
+                     cex.names=0.8,
+                     plot_label=T,
+                     cex.label=0.8,
+                     label_just='right') {
 
-  if (labels) {
+  if (plot_names) {
     str_multiplier = 2
 
-    text.gap = strheight("G", cex=cex.label) * str_multiplier * cex.label
+    text.gap = strheight("G", cex=cex.names) * str_multiplier * cex.names
 
     if (side %in% c(2,4)) {
       # text.gap = lp_rotate(text.gap)
@@ -148,7 +160,7 @@ lp_group <- function(lp, side, attribute, size=1, gap=0.4, cex=0.8, col= NULL, p
     }
   }
 
-  if (group_label) {
+  if (plot_label) {
     lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
   }
 
@@ -177,33 +189,70 @@ lp_group <- function(lp, side, attribute, size=1, gap=0.4, cex=0.8, col= NULL, p
 #'
 #' @param lp layermap object.
 #' @param side value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param attribute name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
 #' @param size the space (in lines) for this layer in the margin.
 #' @param gap the space (in lines) between this layer and the prior layer.
-#' @param attribute name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
 #' @param palette hcl.colors palette to fill in unnamed conditions colors.
+#' @param reverse_palette logical setting the order for the palette.
 #' @param col a named vector, where colors are the values and names are conditions that are defined in the attribute/group that is plotted.
+#'
+#' @param zlim vector for the c(min, max) values for the z-scale (colors). Values over or under will be truncated to the marginal colors.
+#' @param zero_centered_colors an option to force the center of the palette/colors to coincide with zero. Useful for data fold-change data or other data where zero is neutral.
+#'
+#'
 #' @param show_bounding_box shows the bounding space for this layer (useful for troubleshooting)
 #'
+#' @param type option for the plotting form: c('rect','point'). rect shows a bordered box and point is a pch-defined shape.
+#' @param border color for rect border. Default is to not plot the border ("NA").
+#' @param group.border color for border around whole group of attribute boxes. Default is to not plot the border ("NA").
+#' @param lwd border line width.
+#' @param cex.point relating to the size of the point plotted.
+#' @param pch character type for point.
 #'
-#' @param layer_just - the justification side for a layer label (right or left).
-#' @param cex.label - cex value for label characters.
+#'
+#'
+#'
+#'
+#' @param plot_label logical for whether layer labels should be plotted.
+#' @param label text to be used as the label name.
+#' @param cex.label cex value relating to layer label text size.
+#' @param label_just the justification side for a layer label (right or left).
 #'
 #' @return layermap object
 #' @export
 #'
 #' @examples
-lp_annotate <- function(lp, side, attribute, col=NULL, size=1, gap=0.4,
-                        palette='Viridis', colors=NULL,
-                        show_bounding_box=F, type='rect', label=attribute,
-                        label_just='right', cex.label=0.8, border=NA, group.border=NA,
-                        cex.point=1, pch=19, bg=NA, lwd=1,
-                        show_label=T, zlim=NULL, reverse_palette=F, zero_centered_colors=F) {
+lp_annotate <- function(lp, side, attribute,
+                        size=1,
+                        gap=0.4,
+                        palette='Viridis',
+                        reverse_palette=F,
+                        col=NULL,
+
+                        zlim=NULL,
+                        zero_centered_colors=F,
+
+                        show_bounding_box=F,
+
+                        type='rect',
+
+                        cex.label=0.8,
+                        border=NA,
+                        group.border=NA,
+
+                        lwd=1,
+                        cex.point=1,
+                        pch=19,
+
+                        plot_label=T,
+                        label=attribute,
+                        label_just='right') {
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box), environment())
 
   message(attribute)
 
-  # attribute=names(a.df)[1]
+  type = match.arg(type, c('rect','point'))
 
 
   if (side %in% c(2,4)) {
@@ -289,7 +338,7 @@ lp_annotate <- function(lp, side, attribute, col=NULL, size=1, gap=0.4,
   }
 
 
-  if (show_label) {lp_label(lp, gr$xmean, gr$ymean, side=side, text=label, just=label_just, cex=cex.label)
+  if (plot_label) {lp_label(lp, gr$xmean, gr$ymean, side=side, text=label, just=label_just, cex=cex.label)
   }
   lp$boundaries <- boundaries
 
@@ -321,19 +370,39 @@ lp_annotate <- function(lp, side, attribute, col=NULL, size=1, gap=0.4,
 #' @description Makes a simple color gradient legend corresponding to the main heatmap.
 #'
 #' @param lp - layermap object
-#' @param add - logical for whether this should plot a new window. Experimental.
+#' @param side value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param attributes name or names of numeric attributes to form a color legend. Multiples will be plotted in the same layer beside each other with a gap.
+#' @param size the space (in lines) for this layer in the margin.
+#' @param gap the space (in lines) between this layer and the prior layer.
+#'
+#' @param size_p the proportion of the total axis which the legend should occupy (1 equates to the whole side)
+#' @param gap_p the proportion of the total axis which would be spaced between multiple legends.
+#'
+#' @param round the number of decimals included in the legend labels.
+#' @param cex legend label size.
+#' @param cex.title legend title size.
+#' @param main legend title.
+#'
 #'
 #' @return
 #' @export
 #'
 #' @examples
 
-lp_color_legend <- function(lp, side, attributes=NULL, size=0.5, gap=1.5, size_p = 0.4, gap_p=0.05, ratio=4, adj=0, round=1,
-                            cex=0.6, title.cex=NULL,
+lp_color_legend <- function(lp,
+                            side,
+                            attributes=NULL,
+                            size=0.5,
+                            gap=1.5,
+                            size_p = 0.4,
+                            gap_p=0.05,
+                            round=1,
+                            cex=0.6,
+                            cex.title=NULL,
                             main='') {
 
-  if (is.null(title.cex)) {
-    title.cex = cex
+  if (is.null(cex.title)) {
+    cex.title = cex
   }
 
   col_n = 50
@@ -517,6 +586,11 @@ lp_legend <- function(lp, side, attributes=NULL, cex=0.6, gap=0.4,
 }
 
 
+
+
+
+
+
 # names=NULL; size=1; gap=0.4; autobox=T; cex=0.8
 # show_bounding_box = F; just='auto'; col='black'; font=1
 
@@ -524,16 +598,41 @@ lp_legend <- function(lp, side, attributes=NULL, cex=0.6, gap=0.4,
 #'
 #' @description Function for plotting an name layer based on column or row attributes.
 #'
-#' @param lp - layermap object .
-#' @param side - value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
-#' @param attribute - name for the attribute which will be plotted in the layer. Default is F, which plots the rownames.
+#' @param lp layermap object.
+#' @param side value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param attribute name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
+#' @param size the space (in lines) for this layer in the margin.
+#' @param gap the space (in lines) between this layer and the prior layer.
+#'
+#' @param show_bounding_box shows the bounding space for this layer (useful for troubleshooting)
+#' @param autobox logical for to try to automatically determine the "size" value. This is sometimes challenging as text can be very long.
+#'
+#' @param cex relating to text size for names.
+#' @param just text justification, automatically justifies in relation to the heatmap.
+#' @param col text color.
+#' @param font text font.
+#'
+#'
+#' @param names an optional vector to plot only some attributes, based on row or column (names).
+#'
+#'
 #'
 #' @return layermap object
 #' @export
 #'
 #' @examples
-lp_names <- function(lp, side, attribute=F, names=NULL, size=1, gap=0.4, autobox=T, cex=0.8,
-                     show_bounding_box = F, just='auto', col='black', font=1) {
+lp_names <- function(lp,
+                     side,
+                     attribute=F,
+                     names=NULL,
+                     size=1,
+                     gap=0.4,
+                     show_bounding_box = F,
+                     autobox=T,
+                     cex=0.8,
+                     just='auto',
+                     col='black',
+                     font=1) {
 
 
   if (side %in% c(1,3)) {
@@ -579,7 +678,7 @@ lp_names <- function(lp, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
 
   list2env(lp_boundaries(lp, side, size, gap, show_bounding_box = show_bounding_box, text.restriction=text.restriction), environment())
 
-
+  just = match.arg(just, c('auto','left','right'))
   if (just == 'auto') {
     if (side %in% c(1,2)) {
       just = 'right'
@@ -630,14 +729,25 @@ lp_names <- function(lp, side, attribute=F, names=NULL, size=1, gap=0.4, autobox
 #' @param size the space (in lines) for this layer in the margin.
 #' @param gap the space (in lines) between this layer and the prior layer.
 #'
-#' @param show_bounding_box shows the bounding space for this layer (useful for troubleshooting)
+#' @param col line color.
+#' @param lwd line width.
+#'
+#' @param show_bounding_box shows the bounding space for this layer (useful for troubleshooting).
+#'
+#'
+#'
+#'
 #'
 #' @return layermap object
 #' @export
 #'
 #' @examples
-lp_dend <- function(lp, side, size=2, gap=0.2, cutoff=T, cex=0.8,
-                    show_bounding_box = F, ...) {
+lp_dend <- function(lp,
+                    side,
+                    size=2,
+                    gap=0.2,
+                    show_bounding_box = F,
+                    ...) {
 
 
   if (side %in% c(1,3) & !lp$cluster_cols) {
@@ -720,12 +830,28 @@ lp_dend <- function(lp, side, size=2, gap=0.2, cutoff=T, cex=0.8,
 #'
 #' @param lp layermap object.
 #' @param side value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param attribute name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
+#'
 #' @param size the space (in lines) for this layer in the margin.
 #' @param gap the space (in lines) between this layer and the prior layer.
-#' @param attribute name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
 #' @param palette hcl.colors palette to fill in unnamed conditions colors.
 #' @param col a named vector, where colors are the values and names are conditions that are defined in the attribute/group that is plotted.
+#'
 #' @param show_bounding_box shows the bounding space for this layer (useful for troubleshooting)
+#'
+#' @param cex size value for pie.
+#' @param plot_label logical for whether labels should be plotted.
+#' @param label_just justification side for layer label.
+#' @param cex.label label size.
+#'
+#' @param trace outline of pie.
+#' @param trace.lty trace line type.
+#' @param trace.lwd
+#' @param trace.gap
+#' @param trace.col
+#'
+#'
+#'
 #'
 #' @param cex_label - cex value for label characters.
 #' @param labels - logical for whether group labels should be plotted.
@@ -734,8 +860,26 @@ lp_dend <- function(lp, side, size=2, gap=0.2, cutoff=T, cex=0.8,
 #' @export
 #'
 #' @examples
-lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", size=1, gap=0.4, cex=1, show_bounding_box=F, label_just='right', group_label=T, cex.label=0.8,
-                         trace=T, trace.lty=1, trace.lwd=0.8, trace.gap=1.5, trace.col='black') {
+lp_group_pie <- function(lp,
+                         side,
+                         attribute,
+                         size=1,
+                         gap=0.4,
+                         palette="Zissou 1",
+                         col= NULL,
+
+                         show_bounding_box=F,
+
+                         cex=1,
+                         label_just='right',
+                         plot_label=T,
+                         cex.label=0.8,
+
+                         trace=T,
+                         trace.lty=1,
+                         trace.lwd=0.8,
+                         trace.gap=1.5,
+                         trace.col='black') {
 
   text.gap = 0
 
@@ -827,7 +971,7 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
     }
   }
 
-  if (group_label) {
+  if (plot_label) {
     lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
   }
   lp$legend[[attribute]] = col
@@ -849,24 +993,37 @@ lp_group_pie <- function(lp, side, attribute, col= NULL, palette="Zissou 1", siz
 #'
 #' @param lp layermap object.
 #' @param side value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).
+#' @param attribute name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
+#'
 #' @param size the space (in lines) for this layer in the margin.
 #' @param gap the space (in lines) between this layer and the prior layer.
-#' @param attribute name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.
-#' @param palette hcl.colors palette to fill in unnamed conditions colors.
-#' @param col a named vector, where colors are the values and names are conditions that are defined in the attribute/group that is plotted.
 #' @param show_bounding_box shows the bounding space for this layer (useful for troubleshooting)
 #'
-#' @param cex - cex value for label characters.
-#' @param font
-#' @param adj
-#' @param srt
-#'
+#' @param cex size value for names.
+#' @param col text color.
+#' @param font text font.
+#' @param adj text justification.
+#' @param srt text angle. Defaults as perpendicular to axis.
+#' @param family text family.
 #'
 #' @return layermap object
 #' @export
 #'
 #' @examples
-lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, family='', srt=NULL, size=1, gap=0, cex=0.8, show_bounding_box=F, group_label=F) {
+lp_group_names <- function(lp,
+                           side,
+                           attribute,
+                           size=1,
+                           gap=0,
+
+                           col= 'black',
+                           font=1,
+                           adj=NULL,
+                           family='',
+                           srt=NULL,
+                           cex=0.8,
+                           show_bounding_box=F,
+                           plot_label=F) {
 
   text.gap = 0
   list2env(lp_boundaries(lp, side, size, gap, text.gap, show_bounding_box = show_bounding_box), environment())
@@ -915,7 +1072,7 @@ lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, 
   text(text.x, text.y, gr[[attribute]], srt=srt, adj=adj, font=font, col=col, cex=cex, family=family)
 
 
-  if (group_label) {
+  if (plot_label) {
     lp_label(lp, x_vec, y_vec, side=side, text=attribute, just=label_just, cex=cex.label)
   }
 
@@ -931,19 +1088,30 @@ lp_group_names <- function(lp, side, attribute, col= 'black', font=1, adj=NULL, 
 #'
 #' @param lp layermap object.
 #'
+#' @param cex text size.
+#' @param round.n number of decimals included in value.
+#'
+#' @param l_threshold lightness value in lab of background color to choose if values are plotted as the light color or dark color.
+#' @param light_color text color for dark backgrounds.
+#' @param dark_color text color for light backgrounds.
 #'
 #' @return layermap object
 #' @export
 #'
 #' @examples
-lp_plot_values <- function(lp, l_threshold = 50, round.n=2, cex=0.6) {
+lp_plot_values <- function(lp,
+                           round.n=2,
+                           cex=0.6,
+                           light_color='white',
+                           dark_color='black',
+                           l_threshold = 50) {
 
   p.df <- lp$plotting.df
   colors = p.df$color
   colors[is.na(colors)] <- '#FFFFFF'
   p.df$l <- schemr::hex_to_lab(colors)[,1]
-  p.df$text_col <- 'black'
-  p.df$text_col <- ifelse(p.df$l < l_threshold, 'white','black')
+  p.df$text_col <- dark_color
+  p.df$text_col <- ifelse(p.df$l < l_threshold, light_color, dark_color)
 
   row.df <- lp$row.df
   row.df$y <- p.df$y[match(row.names(row.df), p.df$rows)]

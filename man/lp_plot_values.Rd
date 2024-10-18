@@ -4,10 +4,27 @@
 \alias{lp_plot_values}
 \title{Plot values}
 \usage{
-lp_plot_values(lp, l_threshold = 50, round.n = 2, cex = 0.6)
+lp_plot_values(
+  lp,
+  round.n = 2,
+  cex = 0.6,
+  light_color = "white",
+  dark_color = "black",
+  l_threshold = 50
+)
 }
 \arguments{
 \item{lp}{layermap object.}
+
+\item{round.n}{number of decimals included in value.}
+
+\item{cex}{text size.}
+
+\item{light_color}{text color for dark backgrounds.}
+
+\item{dark_color}{text color for light backgrounds.}
+
+\item{l_threshold}{lightness value in lab of background color to choose if values are plotted as the light color or dark color.}
 }
 \value{
 layermap object

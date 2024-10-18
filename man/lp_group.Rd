@@ -10,14 +10,14 @@ lp_group(
   attribute,
   size = 1,
   gap = 0.4,
-  cex = 0.8,
-  col = NULL,
   palette = "Zissou 1",
+  col = NULL,
   show_bounding_box = F,
-  label_just = "right",
-  labels = T,
+  plot_names = T,
+  cex.names = 0.8,
+  plot_label = T,
   cex.label = 0.8,
-  group_label = T
+  label_just = "right"
 )
 }
 \arguments{
@@ -31,17 +31,21 @@ lp_group(
 
 \item{gap}{the space (in lines) between this layer and the prior layer.}
 
-\item{col}{a named vector, where colors are the values and names are conditions that are defined in the attribute/group that is plotted.}
-
 \item{palette}{hcl.colors palette to fill in unnamed conditions colors.}
+
+\item{col}{a named vector, where colors are the values and names are conditions that are defined in the attribute/group that is plotted.}
 
 \item{show_bounding_box}{shows the bounding space for this layer (useful for troubleshooting)}
 
-\item{labels}{- logical for whether group labels should be plotted.}
+\item{plot_names}{logical for whether names should be plotted for groups.}
 
-\item{layer_just}{- the justification side for a layer label (right or left).}
+\item{cex.names}{cex value relating to name text size.}
 
-\item{cex_label}{- cex value for label characters.}
+\item{plot_label}{logical for whether layer labels should be plotted.}
+
+\item{cex.label}{cex value relating to layer label text size.}
+
+\item{label_just}{the justification side for a layer label (right or left).}
 }
 \value{
 layermap object

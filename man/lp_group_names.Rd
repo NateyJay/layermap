@@ -8,16 +8,16 @@ lp_group_names(
   lp,
   side,
   attribute,
+  size = 1,
+  gap = 0,
   col = "black",
   font = 1,
   adj = NULL,
   family = "",
   srt = NULL,
-  size = 1,
-  gap = 0,
   cex = 0.8,
   show_bounding_box = F,
-  group_label = F
+  plot_label = F
 )
 }
 \arguments{
@@ -27,19 +27,23 @@ lp_group_names(
 
 \item{attribute}{name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.}
 
-\item{col}{a named vector, where colors are the values and names are conditions that are defined in the attribute/group that is plotted.}
-
-\item{srt}{}
-
 \item{size}{the space (in lines) for this layer in the margin.}
 
 \item{gap}{the space (in lines) between this layer and the prior layer.}
 
-\item{cex}{- cex value for label characters.}
+\item{col}{text color.}
+
+\item{font}{text font.}
+
+\item{adj}{text justification.}
+
+\item{family}{text family.}
+
+\item{srt}{text angle. Defaults as perpendicular to axis.}
+
+\item{cex}{size value for names.}
 
 \item{show_bounding_box}{shows the bounding space for this layer (useful for troubleshooting)}
-
-\item{palette}{hcl.colors palette to fill in unnamed conditions colors.}
 }
 \value{
 layermap object

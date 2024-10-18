@@ -4,16 +4,7 @@
 \alias{lp_dend}
 \title{Plot dendrogram layer}
 \usage{
-lp_dend(
-  lp,
-  side,
-  size = 2,
-  gap = 0.2,
-  cutoff = T,
-  cex = 0.8,
-  show_bounding_box = F,
-  ...
-)
+lp_dend(lp, side, size = 2, gap = 0.2, show_bounding_box = F, ...)
 }
 \arguments{
 \item{lp}{layermap object.}
@@ -24,7 +15,11 @@ lp_dend(
 
 \item{gap}{the space (in lines) between this layer and the prior layer.}
 
-\item{show_bounding_box}{shows the bounding space for this layer (useful for troubleshooting)}
+\item{show_bounding_box}{shows the bounding space for this layer (useful for troubleshooting).}
+
+\item{col}{line color.}
+
+\item{lwd}{line width.}
 }
 \value{
 layermap object

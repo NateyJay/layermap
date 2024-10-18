@@ -8,14 +8,14 @@ lp_group_pie(
   lp,
   side,
   attribute,
-  col = NULL,
-  palette = "Zissou 1",
   size = 1,
   gap = 0.4,
-  cex = 1,
+  palette = "Zissou 1",
+  col = NULL,
   show_bounding_box = F,
+  cex = 1,
   label_just = "right",
-  group_label = T,
+  plot_label = T,
   cex.label = 0.8,
   trace = T,
   trace.lty = 1,
@@ -31,15 +31,29 @@ lp_group_pie(
 
 \item{attribute}{name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.}
 
-\item{col}{a named vector, where colors are the values and names are conditions that are defined in the attribute/group that is plotted.}
-
-\item{palette}{hcl.colors palette to fill in unnamed conditions colors.}
-
 \item{size}{the space (in lines) for this layer in the margin.}
 
 \item{gap}{the space (in lines) between this layer and the prior layer.}
 
+\item{palette}{hcl.colors palette to fill in unnamed conditions colors.}
+
+\item{col}{a named vector, where colors are the values and names are conditions that are defined in the attribute/group that is plotted.}
+
 \item{show_bounding_box}{shows the bounding space for this layer (useful for troubleshooting)}
+
+\item{cex}{size value for pie.}
+
+\item{label_just}{justification side for layer label.}
+
+\item{plot_label}{logical for whether labels should be plotted.}
+
+\item{cex.label}{label size.}
+
+\item{trace}{outline of pie.}
+
+\item{trace.lty}{trace line type.}
+
+\item{trace.col}{}
 
 \item{cex_label}{- cex value for label characters.}
 

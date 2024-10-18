@@ -12,18 +12,34 @@ lp_color_legend(
   gap = 1.5,
   size_p = 0.4,
   gap_p = 0.05,
-  ratio = 4,
-  adj = 0,
   round = 1,
   cex = 0.6,
-  title.cex = NULL,
+  cex.title = NULL,
   main = ""
 )
 }
 \arguments{
 \item{lp}{- layermap object}
 
-\item{add}{- logical for whether this should plot a new window. Experimental.}
+\item{side}{value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).}
+
+\item{attributes}{name or names of numeric attributes to form a color legend. Multiples will be plotted in the same layer beside each other with a gap.}
+
+\item{size}{the space (in lines) for this layer in the margin.}
+
+\item{gap}{the space (in lines) between this layer and the prior layer.}
+
+\item{size_p}{the proportion of the total axis which the legend should occupy (1 equates to the whole side)}
+
+\item{gap_p}{the proportion of the total axis which would be spaced between multiple legends.}
+
+\item{round}{the number of decimals included in the legend labels.}
+
+\item{cex}{legend label size.}
+
+\item{cex.title}{legend title size.}
+
+\item{main}{legend title.}
 }
 \description{
 Makes a simple color gradient legend corresponding to the main heatmap.

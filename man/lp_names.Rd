@@ -11,20 +11,38 @@ lp_names(
   names = NULL,
   size = 1,
   gap = 0.4,
+  show_bounding_box = F,
   autobox = T,
   cex = 0.8,
-  show_bounding_box = F,
   just = "auto",
   col = "black",
   font = 1
 )
 }
 \arguments{
-\item{lp}{- layermap object .}
+\item{lp}{layermap object.}
 
-\item{side}{- value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).}
+\item{side}{value for which side of the plot to apply the layer (1-bottom, 2-left, 3-top, 4-right).}
 
-\item{attribute}{- name for the attribute which will be plotted in the layer. Default is F, which plots the rownames.}
+\item{attribute}{name for the attribute which will be plotted in the layer. For group, this must be defined in column_groups or row_groups.}
+
+\item{names}{an optional vector to plot only some attributes, based on row or column (names).}
+
+\item{size}{the space (in lines) for this layer in the margin.}
+
+\item{gap}{the space (in lines) between this layer and the prior layer.}
+
+\item{show_bounding_box}{shows the bounding space for this layer (useful for troubleshooting)}
+
+\item{autobox}{logical for to try to automatically determine the "size" value. This is sometimes challenging as text can be very long.}
+
+\item{cex}{relating to text size for names.}
+
+\item{just}{text justification, automatically justifies in relation to the heatmap.}
+
+\item{col}{text color.}
+
+\item{font}{text font.}
 }
 \value{
 layermap object
