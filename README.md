@@ -200,7 +200,7 @@ To-do list
 - [x] manual setting of zlim for input.
 
 - [x] allow optional inclusion of a hclust or tree to use instead of standard clustering
-- [?] override NA clustering problems by giving an NA.value option
+- [ ] override NA clustering problems by giving an NA.value option. This is mainly a problem with clustering if a row is all NAs.
 - [ ] ~~column/row select for clustering only based on part of the matrix~~ this can be done by supplying your own hclust with dend_row/col
 - [ ] plotting points inside of boxes (varying size, color, type)
 - [x] allow col.df in invocation
