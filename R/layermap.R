@@ -90,6 +90,35 @@
 #' @export
 #'
 #' @examples
+#'
+#' data('mtcars')
+#'
+#' scaled_mtcars <- scale(mtcars)
+#'
+#' heatmap(scaled_mtcars, scale='row')
+#'
+#'
+#' val.df <- scaled_mtcars
+#' row.df <- mtcars
+#'
+#'
+#' par(mar=c(5,8,3,14))
+#' lp = layermap(val.df, reverse_palette = F,
+#'               palette = 'RdYlBu',
+#'               cluster_cols=T,
+#'               row.df = row.df,
+#'               row_groups = 'am')
+#'
+#' lp = lp_group(lp, 2, 'am')
+#' lp = lp_annotate(lp, 2, 'mpg', zlim=c(15,30), palette='reds')
+#' lp = lp_dend(lp, 2)
+#' lp = lp_dend(lp, 3)
+#' lp = lp_names(lp, 4)
+#' lp = lp_names(lp, 1)
+#' lp_plot_values(lp, alt.df=mtcars)
+#' lp = lp_color_legend(lp, 1, c('main','mpg'), titles=c('scaled value', 'miles per gallon'))
+#' lp = lp_legend(lp, 4, 'am', title='Auto?')
+#'
 layermap <- function(value.df,
                      zlim=NULL,
                      col.df=NULL,
@@ -556,7 +585,7 @@ layermap <- function(value.df,
     ifelse(zlim[2] < max(m.df$value, na.rm=T), "≥", "")
   )
 
-  out$color_legend[['']] = list(palette=palette, reverse_palette=reverse_palette, zlim=zlim, end_point=end_point)
+  out$color_legend[['main']] = list(colors=color_scale, zlim=zlim, end_point=end_point)
   return(out)
 }
 
