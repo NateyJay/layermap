@@ -58,7 +58,7 @@
 #' @description
 #' @description Returns a layermap object (usually named lp) which is used in lp_* plotting methods to add layers. Each one of these steps will take lp as an input and return it modified as an output.
 #'
-#' @param value.df numerical dataframe or matrix with column name and row names.
+#' @param value.df numerical dataframe or matrix with column name and row names. Everything that is not included in the dataframe will be plotted as the heatmap, meaning that including any non-numeric values will lead layermap to interpret this as a categorical heatmap.
 #' @param row.df attribute dataframe which will be used for layer plotting functions on sides 2 and 4. Rownames correspond to value.df rownames.
 #' @param column.df attribute dataframe which will be used for layer plotting functions on sides 1 and 3. Rownames correspond to value.df colnames. Also can be called as col.df
 #'

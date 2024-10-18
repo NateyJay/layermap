@@ -26,7 +26,7 @@ layermap(
 )
 }
 \arguments{
-\item{value.df}{numerical dataframe or matrix with column name and row names.}
+\item{value.df}{numerical dataframe or matrix with column name and row names. Everything that is not included in the dataframe will be plotted as the heatmap, meaning that including any non-numeric values will lead layermap to interpret this as a categorical heatmap.}
 
 \item{zlim}{value limits for color scaling. Defaults to the range of found values.}
 
