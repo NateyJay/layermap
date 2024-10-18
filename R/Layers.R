@@ -1113,6 +1113,7 @@ lp_plot_values <- function(lp,
   row.df$y <- p.df$y[match(row.names(row.df), p.df$rows)]
 
 
+  message(class(lp$plotting.df$value))
   if (class(lp$plotting.df$value) == 'numeric') p.df$value = round(p.df$value, round.n)
 
   text(p.df$x+0.5, p.df$y+0.5, p.df$value,
