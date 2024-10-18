@@ -12,7 +12,7 @@ Description: A simple library meant to help users make publication quality
     easily readable with vector-graphics software.
 License: GPL (>= 3)
 Depends: 
-    R (>=3.5.0)
+    R (>= 3.5.0)
 Encoding: UTF-8
 Language: en
 LazyData: true

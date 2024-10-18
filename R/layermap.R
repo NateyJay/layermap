@@ -17,7 +17,7 @@
 #   Language =  "en",
 #   Encoding = 'UTF-8',
 #   LazyData = "true",
-#   Depends = "R (>=3.5.0)"
+#   Depends = "R (>= 3.5.0)"
 # ))
 # use_package('stringr')
 # use_package('dendextend')
