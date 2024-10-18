@@ -11,6 +11,8 @@ Description: A simple library meant to help users make publication quality
     grouping, clustering, ordering, coloring, and labels, all of which are
     easily readable with vector-graphics software.
 License: GPL (>= 3)
+Depends: 
+    R (>=3.5.0)
 Encoding: UTF-8
 Language: en
 LazyData: true

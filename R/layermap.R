@@ -2,6 +2,8 @@
 
 # Authoring commands ------------------------------------------------------
 
+
+# library(usethis)
 # use_description(list(
 #   "Authors@R" = utils::person(
 #     "Nate", "Johnson",
@@ -14,7 +16,8 @@
 #   Description = "A simple library meant to help users make publication quality heatmaps, with a syntax suited to modular annotations on the sides (layers). This allows the user to define a custom image, with custom grouping, clustering, ordering, coloring, and labels, all of which are easily readable with vector-graphics software.",
 #   Language =  "en",
 #   Encoding = 'UTF-8',
-#   LazyData = "true"
+#   LazyData = "true",
+#   Depends = "R (>=3.5.0)"
 # ))
 # use_package('stringr')
 # use_package('dendextend')
@@ -23,7 +26,6 @@
 # use_package('plotrix')
 #
 # use_gpl3_license()
-
 
 
 
