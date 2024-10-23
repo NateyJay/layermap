@@ -183,7 +183,7 @@ lp = lp_color_legend(lp, 1)
 ```
 
 
-<p align="center"><img src="images/AnnotatedTest.png" alt="left" width="800" />
+<p align="center"><img src="images/example.png" alt="left" width="800" />
 
 
 To-do list
