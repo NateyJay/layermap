@@ -308,3 +308,19 @@ lp_color_legend()
 lp_legend()
 lp_plot_values()
 ```
+
+#### 6) More examples
+
+So far, we have tried out examples 5 (airpassengers), 3 (states), and 2 (ND).
+
+Try out all of them to see visualization examples!
+
+``` r
+
+lp_example_1() ## mtcars dataset
+lp_example_2() ## ND dataset
+lp_example_3() ## states
+lp_example_4() ## fivethirtyeight airaccidents
+lp_example_5() ## airpassengers (simple)
+
+```
