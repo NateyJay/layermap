@@ -20,8 +20,9 @@ lp_annotate(
   label.cex = 0.8,
   border = NA,
   group.border = NA,
+  group.lwd = 1,
   lwd = 1,
-  point.cex = 1,
+  pt.cex = 1,
   pch = 19,
   plot_label = T,
   label = attribute,
@@ -59,9 +60,11 @@ lp_annotate(
 
 \item{group.border}{color for border around whole group of attribute boxes. Default is to not plot the border ("NA").}
 
+\item{group.lwd}{group border line width.}
+
 \item{lwd}{border line width.}
 
-\item{point.cex}{relating to the size of the point plotted.}
+\item{pt.cex}{relating to the size of the point plotted.}
 
 \item{pch}{character type for point.}
 

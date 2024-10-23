@@ -203,9 +203,10 @@ lp_group <- function(lp,
 #'
 #' @param type option for the plotting form: c('rect','point'). rect shows a bordered box and point is a pch-defined shape.
 #' @param border color for rect border. Default is to not plot the border ("NA").
-#' @param group.border color for border around whole group of attribute boxes. Default is to not plot the border ("NA").
 #' @param lwd border line width.
-#' @param point.cex relating to the size of the point plotted.
+#' @param group.border color for border around whole group of attribute boxes. Default is to not plot the border ("NA").
+#' @param group.lwd group border line width.
+#' @param pt.cex relating to the size of the point plotted.
 #' @param pch character type for point.
 #'
 #' @param plot_label logical for whether layer labels should be plotted.
@@ -234,9 +235,10 @@ lp_annotate <- function(lp, side, attribute,
                         label.cex=0.8,
                         border=NA,
                         group.border=NA,
+                        group.lwd = 1,
 
                         lwd=1,
-                        point.cex=1,
+                        pt.cex=1,
                         pch=19,
 
                         plot_label=T,
@@ -277,41 +279,30 @@ lp_annotate <- function(lp, side, attribute,
 
   conditions = unique(a.df[[attribute]])
 
-  if (!is.null(col)) {
 
-    gr$col <- col[a.df[match(rownames(gr), rownames(a.df)), attribute]]
-    # print(gr)
+
+  if (is.numeric(conditions)) {
+    if (is.null(zlim)) {
+      zlim=c(min(a.df[[attribute]], na.rm = T), max(a.df[[attribute]], na.rm = T))
+    }
+    ls = vector_to_colors(a.df[[attribute]], zlim=zlim, palette=palette,
+                         reverse_palette = reverse_palette,
+                         zero_centered_colors = zero_centered_colors)
+    col         = ls$color
+    color_scale = ls$color_scale
+
+    gr$col <- col[match(rownames(gr), rownames(a.df))]
 
 
   } else {
 
-    if (is.numeric(conditions)) {
-      if (is.null(zlim)) {
-        zlim=c(min(a.df[[attribute]], na.rm = T), max(a.df[[attribute]], na.rm = T))
-      }
-      ls = vector_to_colors(a.df[[attribute]], zlim=zlim, palette=palette,
-                           reverse_palette = reverse_palette,
-                           zero_centered_colors = zero_centered_colors)
-      col         = ls$color
-      color_scale = ls$color_scale
+    col = lp_colorize(col, conditions, palette)
 
-      gr$col <- col[match(rownames(gr), rownames(a.df))]
+    gr$attribute_value <- a.df[match(rownames(gr), rownames(a.df)),attribute]
+    gr$col <- col[gr$attribute_value]
 
-
-    } else {
-      if (is.null(col)) {
-        col = lp_colorize(col, conditions, palette)
-      }
-
-      gr$attribute_value <- a.df[match(rownames(gr), rownames(a.df)),attribute]
-      gr$col <- col[gr$attribute_value]
-      #
-      #     print(head(a.df))
-      #     print(head(gr))
-      #     print(col)
-
-    }
   }
+
 
 
 
@@ -328,13 +319,13 @@ lp_annotate <- function(lp, side, attribute,
          lwd=lwd)
   } else if (type == 'points') {
     points(gr$xmean, gr$ymean,
-           bg=gr$bg, col=gr$col, pch=pch, cex=point.cex)
+           bg=gr$bg, col=gr$col, pch=pch, cex=pt.cex)
   }
 
   if (!is.na(group.border)) {
-    for (group in gr$group_order) {
+    for (group in unique(gr$group_order)) {
       g = gr[gr$group_order == group,]
-      rect(min(g$x0), min(g$y0), max(g$x1), max(g$y1), border=group.border, col=NA)
+      rect(min(g$x0), min(g$y0), max(g$x1), max(g$y1), border=group.border, col=NA, lwd=group.lwd)
     }
   }
 

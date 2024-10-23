@@ -74,15 +74,26 @@ lp_example_2 <- function(save=F) {
 
   lp = lp_annotate(lp, 4,'numeric', group.border = 'black', label.just = 'left')
   lp = lp_annotate(lp, 4,'norm', group.border = 'black', palette='PuOr', zlim=c(-1,1), label.just = 'left')
+
+
   # lp = lp_names(lp, 4,'norm')
   # lp = lp_color_legend(lp, 4)
 
-  lp = lp_annotate(lp, 2, 'ND', label="TEST", label.just = 'left', group.border = 'black')
-  lp = lp_annotate(lp, 3, 'tissue', label.just = 'left')
+  lp = lp_annotate(lp, 2, 'ND',
+                   col= c(NuDd='orange',
+                          mixed='white',
+                          NdDd='skyblue',
+                          NdDu='green',
+                          NuDu='purple',
+                          `ND_`='red'),
+                   type='points',
+                   pch=21,
+                   pt.cex=1, label.just='left')
   lp = lp_names(lp, 2, 'ND')
 
 
-  lp = lp_group_pie(lp, 3, 'tissue')
+  lp = lp_annotate(lp, 3, 'tissue', palette='Temps', group.border = 'black')
+  lp = lp_group_pie(lp, 3, 'tissue', palette='Temps')
 
   # lp = lp_group_names(lp,4, 'Nit_GOs')
   lp = lp_group(lp,4, 'PlantTFDB', col=c('FALSE'='black', 'TRUE'='orange'), label.just = 'left')
@@ -94,7 +105,10 @@ lp_example_2 <- function(save=F) {
   lp = lp_names(lp, 2, 'symbol', cex=0.5)
   lp = lp_dend(lp, 4, lwd=1.5, gap=0.4)
 
-  lp = lp_legend(lp, 4, "ND", gap=1.5)
+  lp = lp_legend(lp, 4, "tissue", gap=1.5)
+
+  lp = lp_dend(lp, 1)
+  lp = lp_color_legend(lp, 1, titles='Log2 fold change')
 
   # if (save) {
   #   dev.off()
@@ -261,5 +275,7 @@ lp_example_5 <- function() {
   lp <- lp_names(lp, 2)
   lp <- lp_color_legend(lp, 1, titles ='Passenger count')
 }
+
+
 
 
