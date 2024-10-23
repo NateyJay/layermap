@@ -134,15 +134,17 @@ lp_example_3 <- function() {
 
   val.df <- scale(val.df)
 
-  par(mar=c(4,16,10,4))
+  par(mar=c(4,16,8,9))
   lp <- layermap(val.df,
                  row.df=row.df,
                  col.df=col.df,
                  palette='blues',
                  column_groups = 'category',
-                 row_groups = c('region', 'division'))
+                 row_groups = c('region', 'division'),
+                 zlim=c(-2,2))
 
-  lp <- lp_names(lp, 2, 'abb')
+  lp <- lp_names(lp, 2, 'abb', cex=0.65)
+  lp <- lp_names(lp, 2, cex=0.65)
   lp <- lp_group(lp, 2, 'region')
   lp <- lp_group(lp, 2, 'division', plot_names=F, palette='Berlin')
   lp <- lp_group_names(lp, 2, 'division')
@@ -153,8 +155,8 @@ lp_example_3 <- function() {
 
   lp <- lp_dend(lp, 4)
 
-
-
+  lp <- lp_color_legend(lp, 1, titles='z-scaled value')
+  lp <- lp_legend(lp, 4, 'region', cex=0.7, gap=1)
 
   par(mar=c(4,10,10,8))
   lp <- layermap(val.df,
