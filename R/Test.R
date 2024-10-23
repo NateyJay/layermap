@@ -265,6 +265,14 @@ lp_example_4 <- function() {
 # lp_example_4()
 
 
+
+
+#' Test example 5
+#'
+#' @description A very basic layermap showing a heatmap with only the most minimal required commands.
+#' @export
+#'
+
 lp_example_5 <- function() {
   air.df <- as.data.frame(matrix(AirPassengers, ncol=12, byrow=T), row.names = 1949:1960)
   names(air.df) <- month.abb
