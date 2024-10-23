@@ -461,7 +461,7 @@ lp_color_legend <- function(lp,
     df = leg.df[leg.df$name == n,]
 
     # col = hcl.colors(col_n, leg[[leg_i]]$palette, rev=!leg[[leg_i]]$reverse_palette)
-    col  = leg$colors
+    col  = rev(leg$colors)
     zlim = leg$zlim
     ep   = leg$end_point
     c    = 1:length(col)

@@ -588,7 +588,7 @@ layermap <- function(value.df,
     ifelse(zlim[2] < max(m.df$value, na.rm=T), "≥", "")
   )
 
-  out$color_legend[['main']] = list(colors=rev(color_scale), zlim=zlim, end_point=end_point)
+  out$color_legend[['main']] = list(colors=color_scale, zlim=zlim, end_point=end_point)
   return(out)
 }
 

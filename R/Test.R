@@ -19,7 +19,7 @@ lp_example_1 = function() {
   row.df <- mtcars
 
 
-  par(mar=c(5,8,3,14))
+  par(mar=c(5,8,5,14))
   lp = layermap(val.df, reverse_palette = F,
                 palette = 'RdYlBu',
                 cluster_cols=T,
@@ -247,3 +247,17 @@ lp_example_4 <- function() {
 
 }
 # lp_example_4()
+
+
+lp_example_5 <- function() {
+  air.df <- as.data.frame(matrix(AirPassengers, ncol=12, byrow=T), row.names = 1949:1960)
+  names(air.df) <- month.abb
+
+  lp <- layermap(air.df, zlim=c(0, 500))
+  lp <- lp_dend(lp, 4)
+  lp <- lp_names(lp, 3)
+  lp <- lp_names(lp, 2)
+  lp <- lp_color_legend(lp, 1, titles ='Passenger count')
+}
+
+
