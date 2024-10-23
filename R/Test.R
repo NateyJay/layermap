@@ -58,7 +58,7 @@ lp_example_2 <- function(save=F) {
   row.df    = ND$rows
 
   # if (save) {
-  #   file_name = "test/test.svg"
+  #   file_name = "images/test.svg"
   #   svglite::svglite(file_name, 7, 5.4)
   # }
 
@@ -89,7 +89,7 @@ lp_example_2 <- function(save=F) {
                    type='points',
                    pch=21,
                    pt.cex=1, label.just='left')
-  lp = lp_names(lp, 2, 'ND')
+  lp = lp_names(lp, 2, 'ND', cex=0.5)
 
 
   lp = lp_annotate(lp, 3, 'tissue', palette='Temps', group.border = 'black')
