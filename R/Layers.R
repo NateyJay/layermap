@@ -247,7 +247,7 @@ lp_annotate <- function(lp, side, attribute,
 
   message(attribute)
 
-  type = match.arg(type, c('rect','point'))
+  type = match.arg(type, c('rect','points'))
 
 
   if (side %in% c(2,4)) {
@@ -279,7 +279,9 @@ lp_annotate <- function(lp, side, attribute,
 
   if (!is.null(col)) {
 
-    gr$col <- a.df[match(rownames(gr), rownames(a.df)), col]
+    gr$col <- col[a.df[match(rownames(gr), rownames(a.df)), attribute]]
+    # print(gr)
+
 
   } else {
 
@@ -315,7 +317,8 @@ lp_annotate <- function(lp, side, attribute,
 
   if (type == 'points' & pch %in% c(21:25)) {
     gr$bg = gr$col
-    gr$col = 'black'
+    gr$col <- NA
+    gr$col[!is.na(gr$bg)] <- 'black'
 
   }
 
@@ -348,7 +351,7 @@ lp_annotate <- function(lp, side, attribute,
       ifelse(zlim[2] > max(val, na.rm=T), "≥", "")
     )
 
-    lp$color_legend[[attribute]] = list(colors=color_scale, zlim=zlim, end_point=end_point)
+    lp$color_legend[[attribute]] = list(colors=rev(color_scale), zlim=zlim, end_point=end_point)
   } else {
     lp$legend[[attribute]] = col
   }
@@ -421,9 +424,11 @@ lp_color_legend <- function(lp,
 
     leg.df <- data.frame(name=attributes, y0=y0, y1=y1, w = w)
 
+    gs = cumsum(c(0, rep(g, nrow(leg.df)-1)))
+
     # leg.df$x.text = cumsum(leg.df$w) - leg.df$w
-    leg.df$x0 = cumsum(leg.df$w) - leg.df$w + g
-    leg.df$x1 = leg.df$x0 + leg.df$w - g - g
+    leg.df$x0 = cumsum(leg.df$w) - leg.df$w + gs
+    leg.df$x1 = leg.df$x0 + leg.df$w
     leg.df$x.text <- apply(leg.df[,c('x0','x1')], 1, mean)
 
 
@@ -435,10 +440,12 @@ lp_color_legend <- function(lp,
     w = lp$ymax * size_p
     g = lp$ymax * gap_p
 
+    gs = cumsum(c(0, rep(g, nrow(leg.df)-1)))
+
     leg.df <- data.frame(name=attributes, x0=x0, x1=x1, w = w)
-    leg.df$y.text = lp$ymax - cumsum(leg.df$w) + w
-    leg.df$y0 = leg.df$y.text - g
-    leg.df$y1 = leg.df$y0 - leg.df$w + g + g
+    leg.df$y.text = lp$ymax - cumsum(leg.df$w) + w - gs
+    leg.df$y0 = leg.df$y.text - gs
+    leg.df$y1 = leg.df$y0 - leg.df$w + gs + gs
 
 
   }
@@ -1099,11 +1106,19 @@ lp_group_names <- function(lp,
 
 
   if (is.null(adj)) {
-    if (side %in% c(1,2)) {
-      adj=c(1,0.5)
-    } else if (side %in% c(3,4)) {
-      adj=c(0,0.5)
-    }
+
+    if (srt == 0) adj=switch(side,
+                             `1`= c(0.5,1),
+                             `2`= c(1, 0.5),
+                             `3`= c(0.5, 0),
+                             `4`= c(0, 0.5))
+
+    if (srt == 90) adj=switch(side,
+                             `1`= c(1, 0.5),
+                             `2`= c(1, 0.5),
+                             `3`= c(0, 0.5),
+                             `4`= c(0, 0.5))
+
   }
 
   # print(text.x)
