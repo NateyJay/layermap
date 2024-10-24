@@ -1,6 +1,3 @@
----
----
----
 
 # R course - Session 6
 
@@ -322,5 +319,4 @@ lp_example_2() ## ND dataset
 lp_example_3() ## states
 lp_example_4() ## fivethirtyeight airaccidents
 lp_example_5() ## airpassengers (simple)
-
 ```
