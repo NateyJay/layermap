@@ -1167,6 +1167,32 @@ lp_plot_values <- function(lp, alt.df=NULL,
   p.df <- lp$plotting.df
   colors = p.df$color
   colors[is.na(colors)] <- '#FFFFFF'
+  named_colors = colors %in% colors()
+
+  name2hex <- function(c) {
+    c = col2rgb(c)
+    c = c[,1]
+    c = rgb(c[1], c[2], c[3], maxColorValue = 255)
+    return(c)
+  }
+
+  colors[named_colors] <- sapply(colors[named_colors], name2hex)
+
+
+  rgb2col = function(rgbmat){
+    # function to apply to each column of input rgbmat
+    ProcessColumn = function(col){
+      rgb(rgbmat[1, col],
+          rgbmat[2, col],
+          rgbmat[3, col],
+          maxColorValue = 255)
+    }
+    # Apply the function
+    sapply(1:ncol(rgbmat), ProcessColumn)
+  }
+
+
+
   p.df$l <- schemr::hex_to_lab(colors)[,1]
   p.df$text_col <- dark_color
   p.df$text_col <- ifelse(p.df$l < l_threshold, light_color, dark_color)

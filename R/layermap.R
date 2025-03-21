@@ -157,8 +157,7 @@ layermap <- function(value.df,
                      force_numeric=F,
                      column.df=col.df,
                      dend_cols=NULL,
-                     dend_rows=NULL,
-                     reorder=F) {
+                     dend_rows=NULL) {
 
 
   par(xpd=T)
@@ -295,13 +294,7 @@ layermap <- function(value.df,
       return(gr)
     }
     for (col in rev(unique(colnames(gr)))) {
-      if (reorder) {
-        gr <- gr[order(gr[[col]]),, drop=F]
-
-      } else {
-        gr <- gr[gr[[col]],, drop=F]
-
-      }
+      gr <- gr[order(gr[[col]]),, drop=F]
     }
 
     gr$group_order <- apply(gr, 1, paste, collapse=";")
@@ -444,7 +437,7 @@ layermap <- function(value.df,
 
 
   ## getting xy coordinates
-  groups$rows$yi <- (1:nrow(groups$rows))-1
+  groups$rows$yi <- (nrow(groups$rows):1)-1
   groups$rows$y <- groups$rows$yi + (groups$rows$group_order-1)*gap.y
 
   groups$cols$xi <- (1:nrow(groups$cols))-1
@@ -500,10 +493,10 @@ layermap <- function(value.df,
     m.df$color <- color_scale[m.df$color_i]
 
     if (zero_as_na) {
-      m.df$color_i[m.df$value == 0] <- na_color
+      m.df$color[m.df$value == 0] <- na_color
     }
 
-    m.df$color_i[is.na(m.df$value)] <- na_color
+    m.df$color[is.na(m.df$value)] <- na_color
 
 
   } else if (data_type == 'categorical') {
