@@ -14,6 +14,8 @@ layermap(
   palette = "PuOr",
   reverse_palette = T,
   zero_centered_colors = F,
+  zero_as_na = F,
+  na_color = NA,
   color_scale = NULL,
   cluster_cols = F,
   cluster_rows = T,
@@ -22,7 +24,8 @@ layermap(
   force_numeric = F,
   column.df = col.df,
   dend_cols = NULL,
-  dend_rows = NULL
+  dend_rows = NULL,
+  reorder = F
 )
 }
 \arguments{

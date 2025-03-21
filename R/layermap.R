@@ -147,6 +147,8 @@ layermap <- function(value.df,
                      palette='PuOr',
                      reverse_palette=T,
                      zero_centered_colors=F,
+                     zero_as_na=F,
+                     na_color = NA,
                      color_scale=NULL,
                      cluster_cols=F,
                      cluster_rows=T,
@@ -155,7 +157,8 @@ layermap <- function(value.df,
                      force_numeric=F,
                      column.df=col.df,
                      dend_cols=NULL,
-                     dend_rows=NULL) {
+                     dend_rows=NULL,
+                     reorder=F) {
 
 
   par(xpd=T)
@@ -292,7 +295,13 @@ layermap <- function(value.df,
       return(gr)
     }
     for (col in rev(unique(colnames(gr)))) {
-      gr <- gr[order(gr[[col]]),, drop=F]
+      if (reorder) {
+        gr <- gr[order(gr[[col]]),, drop=F]
+
+      } else {
+        gr <- gr[gr[[col]],, drop=F]
+
+      }
     }
 
     gr$group_order <- apply(gr, 1, paste, collapse=";")
@@ -488,8 +497,14 @@ layermap <- function(value.df,
     m.df$color_i[m.df$color_i < 1] <- 1
     m.df$color_i[m.df$color_i > color_n] <- color_n
 
-
     m.df$color <- color_scale[m.df$color_i]
+
+    if (zero_as_na) {
+      m.df$color_i[m.df$value == 0] <- na_color
+    }
+
+    m.df$color_i[is.na(m.df$value)] <- na_color
+
 
   } else if (data_type == 'categorical') {
 
