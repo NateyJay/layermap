@@ -366,7 +366,6 @@ layermap <- function(value.df,
   groups$cols <- order_by_groups(groups$cols)
 
 
-
   groups <- order_by_cluster(df, 1, groups, cluster=cluster_rows, dend_rows)
   groups <- order_by_cluster(df, 2, groups, cluster=cluster_cols, dend_cols)
 
@@ -414,6 +413,7 @@ layermap <- function(value.df,
   gap.x <- inchesToCoords(df, x=group_gap)
   gap.y <- inchesToCoords(df, y=group_gap)
 
+
   ymax = nrow(df) + gap.y * (max(groups$rows$group_order)-1)
   xmax = ncol(df) + gap.x * (max(groups$cols$group_order)-1)
 
@@ -438,7 +438,7 @@ layermap <- function(value.df,
 
   ## getting xy coordinates
   groups$rows$yi <- (nrow(groups$rows):1)-1
-  groups$rows$y <- groups$rows$yi + (groups$rows$group_order-1)*gap.y
+  groups$rows$y <- groups$rows$yi + (max(groups$rows$group_order) - groups$rows$group_order)*gap.y
 
   groups$cols$xi <- (1:nrow(groups$cols))-1
   groups$cols$x <- groups$cols$xi + (groups$cols$group_order-1)*gap.x
